@@ -18,8 +18,7 @@
   font-weight: 600;
 }
 
-.newsroomAgenda-container .newsroomAgenda-filterForm,
-.newsroomPage-container .newsroomPage-filterForm {
+.newsroomAgenda-container .newsroomAgenda-filterForm {
   border-top: solid 5px #ced9e4;
   border-bottom: solid 1px #ced9e4;
   background: #eff5fa;
@@ -30,7 +29,8 @@
 .newsroomPage-container .views-field-field-newsroom-item-type a,
 .node-type-newsroom-item .field-name-field-newsroom-item-type a,
 .node-type-newsroom-item .field-label,
-.newsroom_item_container .newsroom_type {
+.newsroom_item_container .newsroom_type,
+.newsroomPage-filterForm h3 {
   display: inline-block;
   background: #0065a2;
   padding: 0.2em 1em;
@@ -40,6 +40,65 @@
   text-transform: uppercase;
   font-size: 0.9em;
   position: relative;
+}
+
+.newsroomPage-filterForm h3 {
+  padding: 0.3em 1em;
+}
+
+.newsroomPage-filterForm form > div > .form-item,
+.newsroomPage-filterForm .container-inline-date {
+  width: 47%;
+  float: left;
+  margin-right: 6%;
+}
+
+.newsroomPage-filterForm div > .form-item:nth-child(2),
+.newsroomPage-filterForm .container-inline-date:nth-child(4) {
+  margin-right: 0;
+}
+
+.newsroomPage-filterForm .date-padding {
+  float: none;
+  width: 100%;
+}
+
+.newsroomPage-filterForm .form-item input,
+.newsroomPage-filterForm .form-item select.form-control {
+  background: #ececec;
+}
+
+.newsroomPage-filterForm .container-inline-date .form-item, 
+.newsroomPage-filterForm .container-inline-date .form-item input {
+  width: 100%;
+}
+
+.newsroomPage-filterForm .container-inline-date {
+  clear: none;
+}
+
+.newsroomPage-filterForm .container-inline-date .form-item input {
+  margin-right: 0;
+}
+
+.newsroomPage-filterForm .description {
+  margin-top: 0.5em;
+  font-style: italic;
+}
+
+.newsroomPage-filterForm #edit-button {
+  clear: left;
+  width: 100%;
+  margin: 1em 0;
+  background: #0065a2;
+  text-transform: uppercase;
+  color: #fff !important;
+  font-weight: bold;
+}
+
+.newsroomPage-filterForm #edit-button:hover {
+  background: #afd9ee;
+  color: #222 !important;
 }
 
 .node-type-newsroom-item .field-name-body {
@@ -61,14 +120,6 @@
   margin-bottom: 1em;
   margin-right: 1em;
   position: relative;
-}
-
-.newsroomPage-container .newsroomPage-filterForm {
-  margin: 10px 0;
-}
-
-.newsroomPage-container .container-inline-date {
-  margin: 5px 0;
 }
 
 .newsroomPage-container.node-sticky {
