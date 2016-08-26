@@ -1698,7 +1698,7 @@ function nexteuropa_newsroom_field_default_field_bases() {
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_selected_topics',
+    'field_name' => 'field_newsroom_selected_topics',
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
