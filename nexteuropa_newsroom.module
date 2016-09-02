@@ -35,7 +35,7 @@ define('NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER', 'newsroom_newsletter_multiling
 define('NEXTEUROPA_NEWSROOM_CACHE_TABLE', 'cache_newsroom');
 define('NEXTEUROPA_NEWSROOM_BASE_URL', 'http://ec.europa.eu/information_society/newsroom/cf/');
 define('NEXTEUROPA_NEWSROOM_ITEM_SCRIPT', 'fullrss-multilingual.cfm');
-define('NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT', 'rss-issue-multiligual.cfm');
+define('NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT', 'rss-issue-multilingual.cfm');
 define('NEXTEUROPA_NEWSROOM_UNPUBLISH', 'fullrss-unpublished.cfm');
 define('NEXTEUROPA_NEWSROOM_DELETE', 'fullrss-deleted.cfm');
 define('NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT', 'rss-service-multilingual.cfm');
@@ -667,7 +667,7 @@ function _nexteuropa_nexteuropa_newsroom_item_importer($newsroom_id = 0, $delete
     // Prepare URLs for importers and get feed importer ID.
     $url = NewsroomHelper::getImporterUrl(NEXTEUROPA_NEWSROOM_ITEM_IMPORTER) . variable_get('newsroom_single_item_import_segment', NEXTEUROPA_NEWSROOM_ITEM_SEGMENT) . $newsroom_id;
     NewsroomHelper::runFeedImporter(NEXTEUROPA_NEWSROOM_ITEM_IMPORTER, $url);
-    drupal_set_message('The item has been imported');
+    drupal_set_message(t('The item has been imported'));
     drupal_goto('news-redirect/' . $newsroom_id, array(), 301);
   }
 }
@@ -784,7 +784,7 @@ function nexteuropa_newsroom_views_pre_view(&$view, &$display_id, array &$args) 
         $has_newsroom_topic_argument = FALSE;
         // Check the current display.
         if (isset($view->display[$view->current_display]->handler->options['arguments'])) {
-          foreach ($view->display[$view->current_display]->handler->options['arguments'] as $key => $argument) {
+          foreach ($view->display[$view->current_display]->handler->options['arguments'] as $argument) {
             // Check if this field taxonomy ref to newsroom_topic vocabulary.
             if ($argument['default_argument_type'] == 'taxonomy_tid' && isset($argument['default_argument_options']['vocabularies']['newsroom_topic'])) {
               $has_newsroom_topic_argument = TRUE;
@@ -1099,7 +1099,7 @@ function nexteuropa_newsroom_feeds_after_parse(FeedsSource $source, FeedsParserR
     }
 
     // If end date is empty we change it to start date.
-    foreach ($result->items as $id => &$item) {
+    foreach ($result->items as &$item) {
       if (isset($item[$end_date_exp]) && empty($item[$end_date_exp])) {
         $item[$end_date_exp] = $item[$start_date_exp];
       }
