@@ -123,8 +123,7 @@ class NewsroomSummaryBlock {
       $selected_topics = array();
       $selected_types = array();
 
-      $entity = $this->getEntityFromRequest();
-      if ($entity) {
+      if ($entity = $this->getEntityFromRequest()) {
         if (isset($entity->type) && $entity->type == 'newsroom_selection') {
 
           if (NewsroomHelper::getFieldValue($entity, 'field_newsroom_topic_operator')) {
@@ -146,11 +145,9 @@ class NewsroomSummaryBlock {
             }
           }
         }
-        elseif (NewsroomHelper::getFieldValue($entity, 'field_newsroom_associated_topic', 'tid')) {
+        elseif ($associated_topic_id = NewsroomHelper::getFieldValue($entity, 'field_newsroom_associated_topic', 'tid')) {
           // If it has the associated field, try to load topic.
-          $selected_topics = array(
-            NewsroomHelper::getFieldValue($entity, 'field_newsroom_associated_topic', 'tid'),
-          );
+          $selected_topics[] = $associated_topic_id;
         }
       }
 
@@ -172,7 +169,9 @@ class NewsroomSummaryBlock {
 
       $topics = array();
       foreach ($selected_topics as $topic_id) {
-        $topics[] = NewsroomHelper::getNewsroomTopic($topic_id);
+        if ($topic_term = NewsroomHelper::getNewsroomTopic($topic_id)) {
+          $topics[] = $topic_term;
+        }
       }
 
       $config['topic'] = $topics;

@@ -340,7 +340,7 @@ class NewsroomPage {
     $query->orderBy('d.field_newsroom_item_date_value2', 'DESC');
 
     if ($this->getType()) {
-      $query->condition('type_field.field_newsroom_item_type_tid', $this->getType()->tid);
+      $query->condition('type_field.field_newsroom_item_type_tid', NewsroomHelper::getTypeChildren($this->getType()->tid));
     }
 
     if ($this->getTopic()) {
