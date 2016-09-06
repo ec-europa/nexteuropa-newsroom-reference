@@ -385,7 +385,7 @@ class NewsroomPage {
    */
   protected function getTypeFeaturedItem() {
     $content = NULL;
-    if ($featured_item_id = NewsroomHelper::getFieldValue($this->getType(), 'field_featured_item', 'target_id')) {
+    if ($featured_item_id = NewsroomHelper::getFieldValue($this->getType(), 'field_newsroom_featured_item', 'target_id')) {
       $cache_key = 'type_featured_item:' . $this->getType()->tid;
 
       if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
