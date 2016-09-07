@@ -184,12 +184,20 @@ class NewsroomPage {
    * Gets data from DB.
    */
   protected function getData() {
-    $cache_key = 'page_result:' . md5($this->getUniqueCachePart());
+    $key_hash_part = $this->getUniqueCachePart();
+    $cache_key = 'page_result:' . $key_hash_part;
+    $cache_total_number_key = 'page_total_number:' . $key_hash_part;
     if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
+      // for cached result, we set manually params for pager.
+      if ($total_number_cache = cache_get($cache_total_number_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
+        pager_default_initialize($total_number_cache->data, $this->getItemsNumber());
+      }
       $data = $cache->data;
     }
     else {
-      $items = $this->fetchData();
+      $query = $this->getQueryObject();
+      cache_set($cache_total_number_key, $query->extend('PagerDefault')->getCountQuery()->execute()->fetchField(), NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_page_result', 300));
+      $items = $query->extend('PagerDefault')->limit($this->getItemsNumber())->execute()->fetchAll();
       $data = array();
       if ($items) {
         foreach ($items as $item) {
@@ -316,13 +324,13 @@ class NewsroomPage {
     $end_date = $this->getEndDate() ? $this->getEndDate()->getTimestamp() : NULL;
     $page = isset($_GET['page']) ? $_GET['page'] : NULL;
 
-    return $type_id . $topic_id . $start_date . $end_date . $page;
+    return md5($type_id . $topic_id . $start_date . $end_date . $page);
   }
 
   /**
-   * Fetchs the data from DB.
+   * Gets query object.
    */
-  public function fetchData() {
+  public function getQueryObject() {
     $query = db_select('node', 'n');
     $query->distinct();
     $query->fields('n', array('nid', 'created'));
@@ -355,7 +363,7 @@ class NewsroomPage {
       $query->condition('n.created', $this->getEndDate()->getTimestamp(), '<=');
     }
 
-    return $query->extend('PagerDefault')->limit($this->getItemsNumber())->execute()->fetchAll();
+    return $query;
   }
 
   /**
