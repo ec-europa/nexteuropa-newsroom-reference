@@ -27,9 +27,9 @@ function nexteuropa_newsroom_views_default_views() {
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['cache']['type'] = 'time';
-  $handler->display->display_options['cache']['results_lifespan'] = '300';
+  $handler->display->display_options['cache']['results_lifespan'] = '3600';
   $handler->display->display_options['cache']['results_lifespan_custom'] = '0';
-  $handler->display->display_options['cache']['output_lifespan'] = '300';
+  $handler->display->display_options['cache']['output_lifespan'] = '3600';
   $handler->display->display_options['cache']['output_lifespan_custom'] = '0';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
@@ -57,6 +57,8 @@ function nexteuropa_newsroom_views_default_views() {
   $handler->display->display_options['arguments']['field_newsroom_topic_tid']['default_action'] = 'default';
   $handler->display->display_options['arguments']['field_newsroom_topic_tid']['default_argument_type'] = 'taxonomy_tid';
   $handler->display->display_options['arguments']['field_newsroom_topic_tid']['default_argument_options']['node'] = TRUE;
+  $handler->display->display_options['arguments']['field_newsroom_topic_tid']['default_argument_options']['anyall'] = '+';
+  $handler->display->display_options['arguments']['field_newsroom_topic_tid']['default_argument_options']['limit'] = TRUE;
   $handler->display->display_options['arguments']['field_newsroom_topic_tid']['default_argument_options']['vocabularies'] = array(
     'newsroom_topic' => 'newsroom_topic',
   );
@@ -68,7 +70,6 @@ function nexteuropa_newsroom_views_default_views() {
   $handler->display->display_options['arguments']['field_newsroom_topic_tid']['validate_options']['vocabularies'] = array(
     'newsroom_topic' => 'newsroom_topic',
   );
-  $handler->display->display_options['arguments']['field_newsroom_topic_tid']['validate_options']['type'] = 'tids';
   /* Filter criterion: Taxonomy vocabulary: Machine name */
   $handler->display->display_options['filters']['machine_name']['id'] = 'machine_name';
   $handler->display->display_options['filters']['machine_name']['table'] = 'taxonomy_vocabulary';
@@ -107,7 +108,11 @@ function nexteuropa_newsroom_views_default_views() {
   $handler->display->display_options['css_class'] = 'nav-panel block-menu-block';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
-  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['cache']['type'] = 'time';
+  $handler->display->display_options['cache']['results_lifespan'] = '3600';
+  $handler->display->display_options['cache']['results_lifespan_custom'] = '0';
+  $handler->display->display_options['cache']['output_lifespan'] = '3600';
+  $handler->display->display_options['cache']['output_lifespan_custom'] = '0';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['query']['options']['distinct'] = TRUE;
   $handler->display->display_options['query']['options']['pure_distinct'] = TRUE;

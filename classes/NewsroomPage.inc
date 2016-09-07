@@ -340,7 +340,7 @@ class NewsroomPage {
     $query->orderBy('d.field_newsroom_item_date_value2', 'DESC');
 
     if ($this->getType()) {
-      $query->condition('type_field.field_newsroom_item_type_tid', $this->getType()->tid);
+      $query->condition('type_field.field_newsroom_item_type_tid', NewsroomHelper::getTypeChildren($this->getType()->tid));
     }
 
     if ($this->getTopic()) {
@@ -385,7 +385,7 @@ class NewsroomPage {
    */
   protected function getTypeFeaturedItem() {
     $content = NULL;
-    if ($featured_item_id = NewsroomHelper::getFieldValue($this->getType(), 'field_featured_item', 'target_id')) {
+    if ($featured_item_id = NewsroomHelper::getFieldValue($this->getType(), 'field_newsroom_featured_item', 'target_id')) {
       $cache_key = 'type_featured_item:' . $this->getType()->tid;
 
       if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
