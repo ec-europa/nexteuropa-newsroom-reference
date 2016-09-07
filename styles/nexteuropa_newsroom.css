@@ -1,5 +1,5 @@
 /* Teaser view mode for the newsroom_item */
-.newsroomPage-container .views-row {
+.newsroom-item--teaser {
   padding: 0 !important;
   border: none !important;
   margin: 0;
@@ -14,7 +14,7 @@
   display: none;
 }
 
-.newsroomPage-container .views-field-field-newsroom-item-venue {
+.newsroom-item--teaser__venue {
   font-weight: 600;
 }
 
@@ -26,7 +26,9 @@
   margin-bottom: 25px;
 }
 
-.newsroomPage-container .views-field-field-newsroom-item-type a,
+.newsroom-item--teaser__type a,
+.newsroom-item--teaser__type a:link,
+.newsroom-item--teaser__type a:visited,
 .node-type-newsroom-item .field-name-field-newsroom-item-type a,
 .node-type-newsroom-item .field-label,
 .newsroom_item_container .newsroom_type,
@@ -105,14 +107,14 @@
   border-bottom: none !important;
 }
 
-.views-field-field-newsroom-item-short-title {
+.newsroom-item--teaser__title {
   margin-bottom: 1em !important;
   line-height: 130%;
   font-size: 1.2em;
   font-weight: 600;
 }
 
-.newsroomPage-container .views-field-field-newsroom-item-date {
+.newsroom-item--teaser__date {
   background: #ccc;
   padding: 0 1em;
   color: #0065a2;
@@ -126,18 +128,18 @@
   padding-bottom: 0.5em;
 }
 
-.newsroomPage-container .newsroom-read-more,
+.newsroom-read-more,
 .newsroom_date {
   font-style: italic;
 }
 
-.newsroomPage-container .newsroom-read-more {
+.newsroom-read-more {
   text-align: right;
   display: block;
   clear: both;
 }
 
-.newsroomPage-container .newsroom-read-more::after,
+.newsroom-read-more::after,
 .newsroom_more::after,
 .read-full-text::after {
   content: "";
@@ -159,7 +161,7 @@
   border-color: transparent transparent transparent #003556;
 }
 
-/* STyling the default view mode */
+/* Styling the default view mode */
 
 .node-type-newsroom-item .field-name-field-newsroom-teaser {
   background: #f9f9f9;
