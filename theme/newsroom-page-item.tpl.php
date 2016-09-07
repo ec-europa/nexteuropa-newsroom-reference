@@ -5,6 +5,7 @@
  * Page item.
  */
 ?>
+
 <div class="views-row clearfix">
   <?php if (!empty($type_title)): ?>
     <div class="views-field views-field-field-newsroom-item-type">
@@ -42,6 +43,6 @@
   <?php endif; ?>
   <div class="views-field-field-newsroom-teaser">        
     <?php echo $teaser; ?>
-    <?php echo l(t('Read more'), $node_url); ?>
+    <?php echo l(t('Read more'), $node_url, array('attributes' => array('class' => array('newsroom-read-more')))); ?>
   </div>
 </div>
