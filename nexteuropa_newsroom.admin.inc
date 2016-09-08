@@ -82,7 +82,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#title' => t('Use the stylesheets provided by this feature'),
     '#default_value' => variable_get('newsroom_use_css', 1),
   );
-  
+
   $form['newsroom_others']['newsroom_legacy'] = array(
     '#type' => 'checkbox',
     '#title' => t('If you have custom css code related to the newsroom maintain the legacy html code.'),

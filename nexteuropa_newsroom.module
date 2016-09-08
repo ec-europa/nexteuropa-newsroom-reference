@@ -1206,7 +1206,7 @@ function nexteuropa_newsroom_preprocess_node(&$variables) {
       $nr_contact_text = isset($nr_contact_field[0]['value']) ? $nr_contact_field[0]['value'] : $nr_contact_email_field[0]['value'];
       $variables['content']['field_newsroom_item_contact_mail'][0]['#markup'] = l($nr_contact_text, 'mailto:' . $nr_contact_email_field[0]['value'], array(
         'absolute' => TRUE,
-        'html' => TRUE
+        'html' => TRUE,
       ));
     }
     // Fix custom date visibility and label by type.

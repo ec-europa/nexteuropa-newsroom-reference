@@ -199,7 +199,7 @@ class NewsroomPage {
     $cache_key = 'page_result:' . $key_hash_part;
     $cache_total_number_key = 'page_total_number:' . $key_hash_part;
     if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
-      // for cached result, we set manually params for pager.
+      // For cached result, we set manually params for pager.
       if ($total_number_cache = cache_get($cache_total_number_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
         pager_default_initialize($total_number_cache->data, $this->getItemsNumber());
       }
