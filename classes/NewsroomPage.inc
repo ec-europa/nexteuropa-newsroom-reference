@@ -153,10 +153,21 @@ class NewsroomPage {
    */
   protected function getNodeImage($node, $field_name, $style_name = 'newsroom_style') {
     $image = NULL;
-    $display = array(
-      'type' => 'newsroom_zoomable_image',
-      'settings' => _nexteuropa_newsroom_zoomable_formatter_settings($style_name),
-    );
+    if ($style_name == 'newsroom_style') {
+      $display = array(
+        'type' => 'newsroom_zoomable_image',
+        'settings' => _nexteuropa_newsroom_zoomable_formatter_settings('newsroom_style'),
+      );
+    }
+    else {
+      $display = array(
+        'type' => 'image',
+        'settings' => array(
+          'image_style' => 'newsroom_style',
+          'image_link' => 'content',
+        ),
+      );
+    }
 
     $field_image = field_view_field('node', $node, $field_name, $display);
     if ($field_image) {
