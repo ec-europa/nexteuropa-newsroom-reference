@@ -15,26 +15,25 @@ module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.theme');
 module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.menu');
 
 define('NEXTEUROPA_NEWSROOM_ALL', 'all');
+define('NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR', 'OR');
+define('NEXTEUROPA_NEWSROOM_PROPOSAL_SCRIPT', 'propose-item.cfm');
+define('NEXTEUROPA_NEWSROOM_CLICKTHROUGH_FORCE', 'force');
+define('NEXTEUROPA_NEWSROOM_CACHE_TABLE', 'cache_newsroom');
+define('NEXTEUROPA_NEWSROOM_BASE_URL', 'http://ec.europa.eu/information_society/newsroom/cf/');
+
 define('NEXTEUROPA_NEWSROOM_CONTENT_TYPE', 'newsroom_item');
 define('NEXTEUROPA_NEWSROOM_ISSUE_CONTENT_TYPE', 'newsroom_newsletter_issue');
 define('NEXTEUROPA_NEWSROOM_NEWSLETTER_CONTENT_TYPE', 'newsroom_newsletter_issue');
 define('NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY', 'newsroom_item_type');
 define('NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY', 'newsroom_topic');
 define('NEXTEUROPA_NEWSROOM_SERVICE_VOCABULARY', 'newsroom_service');
-define('NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR', 'OR');
-define('NEXTEUROPA_NEWSROOM_PROPOSAL_ACCESS', 'send newsroom item proposal');
-define('NEXTEUROPA_NEWSROOM_PROPOSAL_SCRIPT', 'propose-item.cfm');
-define('NEXTEUROPA_NEWSROOM_IMPORT_ACCESS', 'import newsroom feeds');
-define('NEXTEUROPA_NEWSROOM_EDIT_ACCESS', 'edit remote newsroom item');
-define('NEXTEUROPA_NEWSROOM_ADVANCED_SETTINGS_ACCESS', 'administer newsroom advanced settings');
-define('NEXTEUROPA_NEWSROOM_CLICKTHROUGH_FORCE', 'force');
+
 define('NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER', 'newsroom_topics_multilingual');
 define('NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER', 'newsroom_services_multilingual');
 define('NEXTEUROPA_NEWSROOM_TYPE_IMPORTER', 'newsroom_types_multilingual');
 define('NEXTEUROPA_NEWSROOM_ITEM_IMPORTER', 'newsroom_items_multilingual');
 define('NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER', 'newsroom_newsletter_multilingual');
-define('NEXTEUROPA_NEWSROOM_CACHE_TABLE', 'cache_newsroom');
-define('NEXTEUROPA_NEWSROOM_BASE_URL', 'http://ec.europa.eu/information_society/newsroom/cf/');
+
 define('NEXTEUROPA_NEWSROOM_ITEM_SCRIPT', 'fullrss-multilingual.cfm');
 define('NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT', 'rss-issue-multilingual.cfm');
 define('NEXTEUROPA_NEWSROOM_UNPUBLISH', 'fullrss-unpublished.cfm');
@@ -46,6 +45,12 @@ define('NEXTEUROPA_NEWSROOM_TOPIC_SEGMENT', '?topic_id=');
 define('NEXTEUROPA_NEWSROOM_SERVICE_SEGMENT', '?service_id=');
 define('NEXTEUROPA_NEWSROOM_TYPE_SEGMENT', '?item_type_id=');
 define('NEXTEUROPA_NEWSROOM_ITEM_EDIT_SEGMENT', 'item.cfm?item_id=');
+
+define('NEXTEUROPA_NEWSROOM_PROPOSAL_ACCESS', 'send newsroom item proposal');
+define('NEXTEUROPA_NEWSROOM_IMPORT_ACCESS', 'import newsroom feeds');
+define('NEXTEUROPA_NEWSROOM_EDIT_ACCESS', 'edit remote newsroom item');
+define('NEXTEUROPA_NEWSROOM_ADMIN_ACCESS', 'administer newsroom settings');
+define('NEXTEUROPA_NEWSROOM_ADVANCED_SETTINGS_ACCESS', 'administer newsroom advanced settings');
 
 /**
  * Implements hook_page_build().
@@ -144,7 +149,7 @@ function nexteuropa_newsroom_help($path, $arg) {
  */
 function nexteuropa_newsroom_permission() {
   return array(
-    'administer newsroom settings' => array(
+    NEXTEUROPA_NEWSROOM_ADMIN_ACCESS => array(
       'title' => t('Administer Newsroom settings'),
     ),
     NEXTEUROPA_NEWSROOM_ADVANCED_SETTINGS_ACCESS => array(
