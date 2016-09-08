@@ -1191,3 +1191,40 @@ function nexteuropa_newsroom_entity_info_alter(&$entity_info) {
 
   return $entity_info;
 }
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function nexteuropa_newsroom_preprocess_node(&$variables) {
+  if ($variables['type'] == 'newsroom_item') {
+    $node = $variables['node'];
+    // Fix contact link.
+    $nr_contact_field = field_get_items('node', $node, 'field_newsroom_item_contact_text');
+    $nr_contact_email_field = field_get_items('node', $node, 'field_newsroom_item_contact_mail');
+    hide($variables['content']['field_newsroom_item_contact_text']);
+    if ($nr_contact_email_field) {
+      $nr_contact_text = isset($nr_contact_field[0]['value']) ? $nr_contact_field[0]['value'] : $nr_contact_email_field[0]['value'];
+      $variables['content']['field_newsroom_item_contact_mail'][0]['#markup'] = l($nr_contact_text, 'mailto:' . $nr_contact_email_field[0]['value'], array(
+        'absolute' => TRUE,
+        'html' => TRUE
+      ));
+    }
+    // Fix custom date visibility and label by type.
+    $nr_type_field = field_get_items('node', $node, 'field_newsroom_item_type');
+    $display_date = FALSE;
+
+    if ($nr_type_field && isset($nr_type_field[0]['taxonomy_term'])) {
+      $display_date_field = field_get_items('taxonomy_term', $nr_type_field[0]['taxonomy_term'], 'field_newsroom_display_date');
+      if ($display_date_field) {
+        $display_date = (bool) $display_date_field[0]['value'];
+      }
+      if ($display_date) {
+        $date_label_field = field_get_items('taxonomy_term', $nr_type_field[0]['taxonomy_term'], 'field_newsroom_date_label');
+        if ($date_label_field) {
+          $date_label = $date_label_field[0]['value'];
+          $variables['content']['field_newsroom_item_date']['#title'] = $date_label;
+        }
+      }
+    }
+  }
+}
