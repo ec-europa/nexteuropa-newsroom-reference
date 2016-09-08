@@ -7,7 +7,7 @@
 	$l = variable_get('newsroom_legacy', 1);
 ?>
 
-<div class="newsroom-item newsroom-item--featured-item">
+<div class="newsroom-item newsroom-item--featured">
   <div class="newsroom-item__type<?php if ($l) { echo ' newsroom-type'; } ?>">
   <?php echo $type; ?>
   </div>
