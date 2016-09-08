@@ -331,7 +331,7 @@ function _nexteuropa_newsroom_create_multilingual_items_importer() {
     'unique' => FALSE,
   );
 
-  $feeds_importer = _nexteuropa_newsroom_build_importer(NEXTEUROPA_NEWSROOM_ITEM_IMPORTER, 'Newsroom Items Multilanguage', 'Imports Newsroom Items from the Newsroom service', $importer_values, NEXTEUROPA_NEWSROOM_CONTENT_TYPE, 'node');
+  $feeds_importer = _nexteuropa_newsroom_build_importer(NEXTEUROPA_NEWSROOM_ITEM_IMPORTER, 'Newsroom Items Multilingual', 'Imports Newsroom Items from the Newsroom service', $importer_values, NEXTEUROPA_NEWSROOM_CONTENT_TYPE, 'node');
 
   // Create the tamper for the language.
   _nexteuropa_newsroom_dynamic_tamper(NULL);

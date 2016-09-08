@@ -178,8 +178,7 @@ class NewsroomBuilder {
    *   Taxonomy term object.
    */
   protected function getTopic($topic_url) {
-    $topic = $this->getTaxonomyTerm($topic_url, NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY);
-    if ($topic) {
+    if ($topic = $this->getTaxonomyTerm($topic_url, NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY)) {
       // Try to find active menu.
       if ($path = NewsroomHelper::fetchActiveMenuPath($topic->tid)) {
         menu_tree_set_path('main-menu', $path);
@@ -232,10 +231,10 @@ class NewsroomBuilder {
   /**
    * Builds newsroom page object.
    *
-   * @param string $type_url
-   *   Type URL part.
-   * @param string $topic_url
-   *   Topic URL part.
+   * @param string|int $type_url
+   *   Newsroom type url part or tid.
+   * @param string|int $topic_url
+   *   Newsroom topic url or tid.
    * @param string|null $start_date
    *   Start date.
    * @param string|null $end_date
@@ -244,30 +243,9 @@ class NewsroomBuilder {
    * @return NewsroomPage
    *   NewsroomPage object.
    */
-  public function buildPageNewsroomPage($type_url, $topic_url, $start_date = NULL, $end_date = NULL) {
+  public function buildNewsroomPage($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL) {
     $type = $this->getType($type_url);
     $topic = $this->getTopic($topic_url);
-    $start_date = $this->getDate($start_date);
-    $end_date = $this->getDate($end_date);
-    return new NewsroomPage($type, $topic, $start_date, $end_date);
-  }
-
-  /**
-   * Builds newsroom page object.
-   *
-   * @param object|null $type
-   *   Newsroom type taxonomy term.
-   * @param object|null $topic
-   *   Newsroom topic taxonomy term.
-   * @param string|null $start_date
-   *   Start date.
-   * @param string|null $end_date
-   *   End date.
-   *
-   * @return NewsroomPage
-   *   NewsroomPage object.
-   */
-  public function buildNewsroomPage($type = NULL, $topic = NULL, $start_date = NULL, $end_date = NULL) {
     $start_date = $this->getDate($start_date);
     $end_date = $this->getDate($end_date);
     return new NewsroomPage($type, $topic, $start_date, $end_date);

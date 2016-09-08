@@ -1421,10 +1421,8 @@ function nexteuropa_newsroom_newsroom_page_filter_form_submit(&$form, &$form_sta
   $type_id = isset($form_state['input']['type_id']) ? $form_state['input']['type_id'] : NULL;
   $start_date = isset($form_state['input']['start_date']['date']) ? $form_state['input']['start_date']['date'] : NULL;
   $end_date = isset($form_state['input']['end_date']['date']) ? $form_state['input']['end_date']['date'] : NULL;
-  $topic = NewsroomHelper::getNewsroomTopic($topic_id);
-  $type = NewsroomHelper::getNewsroomType($type_id);
   $builder = new NewsroomBuilder();
-  $newsroom_page = $builder->buildNewsroomPage($type, $topic, $start_date, $end_date);
+  $newsroom_page = $builder->buildNewsroomPage($type_id, $topic_id, $start_date, $end_date);
   // Redirect user to prepared URL.
   drupal_goto($newsroom_page->getNavigationUrl(), array(), 301);
 }

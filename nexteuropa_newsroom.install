@@ -38,6 +38,7 @@ function nexteuropa_newsroom_disable() {
  * Implements hook_install().
  */
 function nexteuropa_newsroom_install() {
+  $t = get_t();
   variable_set('newsroom_agenda_after_highlights', 1);
   variable_set('newsroom_display_highlights_begin', 1);
   variable_set('newsroom_base_url', NEXTEUROPA_NEWSROOM_BASE_URL);
@@ -61,6 +62,9 @@ function nexteuropa_newsroom_install() {
   variable_set('newsroom_agenda_after_highlights', 1);
   variable_set('newsroom_display_highlights_begin', 1);
   variable_set('newsroom_proposal_script', NEXTEUROPA_NEWSROOM_PROPOSAL_ACCESS);
+  variable_set('newsroom_central_newsletter_title', $t('Central newsletters'));
+  variable_set('newsroom_other_newsletter_title', $t('Other newsletters'));
+  variable_del('newsroom_days_number_for_new_user', 14);
 
   $bundles = array('newsroom_item', 'newsroom_selection');
   $backup = variable_get('nexteuropa_newsroom_view_modes_backup', FALSE);
@@ -128,6 +132,9 @@ function nexteuropa_newsroom_uninstall() {
   variable_del('newsroom_app_key');
   variable_del('newsroom_subscription_url');
   variable_del('newsroom_subsite');
+  variable_del('newsroom_central_newsletter_title');
+  variable_del('newsroom_other_newsletter_title');
+  variable_del('newsroom_days_number_for_new_user');
 }
 
 /**

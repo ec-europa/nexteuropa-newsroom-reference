@@ -426,7 +426,8 @@ class NewsroomHelper {
     }
     else {
       $taxonomy_term = NULL;
-      if (is_int($request_name)) {
+      // If it is tid load taxonomy term directly.
+      if ((int)$request_name) {
         $taxonomy_term = taxonomy_term_load($request_name);
       }
 
