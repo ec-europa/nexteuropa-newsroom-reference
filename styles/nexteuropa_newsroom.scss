@@ -28,7 +28,8 @@
 }
 
 // Exposed form in newsroom page.
-.newsroomPage-filterForm {
+.newsroomPage-filterForm,
+.newsroomAgenda-filterForm {
   border-top: solid 5px #ced9e4;
   border-bottom: solid 1px #ced9e4;
   background: #fff;
@@ -107,13 +108,22 @@
   }
 }
 
-.newsroom-item__type a,
-.newsroom-item__type a:link,
-.newsroom-item__type a:visited,
+.newsroomAgenda-filterForm {
+  form > div > .form-item {
+    width: 36%;
+  }
+
+  #edit-button {
+    margin-top: 2.8em;
+  }
+}
+
+.newsroom-item__type,
 .node-type-newsroom-item .field-name-field-newsroom-item-type a,
 .node-type-newsroom-item .field-label,
 .newsroom_item_container .newsroom_type,
-.newsroomPage-filterForm h3 {
+.newsroomPage-filterForm h3,
+.newsroomAgenda-filterForm h3 {
   display: inline-block;
   background: #0065a2;
   padding: 0.2em 1em;
@@ -125,6 +135,11 @@
   position: relative;
 }
 
+.newsroom-item__type a,
+.newsroom-item__type a:link,
+.newsroom-item__type a:visited {
+  color: #fff;
+}
 // Fields as elements.
 .newsroom-item__title {
   margin-bottom: 1em !important;
@@ -199,6 +214,18 @@
   display: inline-block;
   vertical-align: top;
 }
+
+.newsroomAgenda-container .date-date {
+    position: relative;
+    display: inline-block;
+    min-height: 5.556em;
+    min-width: 5.556em;
+    margin-right: 0.75em;
+    padding: 0.9em 0.5em 0.7em;
+    background: #f2f2f2;
+    border-bottom: 0.222em solid #FED437;
+    text-align: center;
+  }
 
 .newsroom_item_container {
   clear: right;
@@ -397,11 +424,10 @@
   }
 
   .date-date {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 60px;
+    float: left;
     text-align: center;
+    width: 7%;
+    margin-right: 3%;
 
     .day {
       display: block;
@@ -422,7 +448,23 @@
   }
 } 
 
+.newsroom-item--agenda {
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
 .newsroomAgenda-container {
+  .newsroom-item__type {
+    margin-left: 0;
+  }
+
+  .date-row:after {
+    display: block;
+    clear: both;
+    content: "";
+  } 
+
   h3 {
     border-color: #ddd;
   }
@@ -434,7 +476,7 @@
 
   .newsroom_title {
     display: block;
-    padding-bottom: 3px;
+    text-transform: uppercase;
     
     a {
       text-decoration: none;
@@ -446,7 +488,14 @@
   }
 
   .date-events {
-    margin-left: 80px;
+    float: left;
+    width: 89%;
+
+    &:after {
+      display: block;
+      clear: both;
+      content: "";
+    }
   
     .views-row {
       border-top: solid 1px #eee;
@@ -457,14 +506,6 @@
     .views-row:first-child {
       border-top: 0;
       padding-top: 0;
-    }
-  }
-
-  .furtherDates {
-    margin-top: 3em;
-    
-    .date-date {
-      color: #999;
     }
   }
 }
@@ -575,7 +616,7 @@
 }
 
 .date-row {
-  margin: 1em 0;
+  margin: 1.5em 0;
 }
 
 .newsroom_more {
