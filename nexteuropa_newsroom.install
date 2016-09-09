@@ -61,10 +61,34 @@ function nexteuropa_newsroom_install() {
   variable_set('newsroom_display_agenda', 1);
   variable_set('newsroom_agenda_after_highlights', 1);
   variable_set('newsroom_display_highlights_begin', 1);
+  variable_set('newsroom_order_by_last_update', 1);
   variable_set('newsroom_proposal_script', NEXTEUROPA_NEWSROOM_PROPOSAL_ACCESS);
   variable_set('newsroom_central_newsletter_title', $t('Central newsletters'));
   variable_set('newsroom_other_newsletter_title', $t('Other newsletters'));
-  variable_del('newsroom_days_number_for_new_user', 14);
+  variable_set('newsroom_days_number_for_new_user', 14);
+  variable_set('newsroom_allowed_ips', '127.0.0.1,158.167.165.192,158.167.165.191,158.167.209.222,158.167.240.147,158.167.209.223,158.167.210.159,158.167.210.158');
+  variable_set('newsroom_use_css', 1);
+  variable_set('newsroom_patterns', FALSE);
+
+  // Cache time variables in seconds.
+  variable_set('newsroom_ct_agenda_result', 3000);
+  variable_set('newsroom_ct_agenda_block', 180);
+  variable_set('newsroom_ct_agenda_build', 3600);
+  variable_set('newsroom_ct_current_items', 3600);
+  variable_set('newsroom_ct_result_topics', 86400);
+  variable_set('newsroom_ct_upcoming_date', 3600);
+  variable_set('newsroom_ct_previous_date', 3600);
+  variable_set('newsroom_ct_summary_block', 3600);
+  variable_set('newsroom_ct_get_menu_by_path', 86400);
+  variable_set('newsroom_ct_get_topic_entities', 3600);
+  variable_set('newsroom_ct_fetch_active_menu', 3600);
+  variable_set('newsroom_ct_term_from_request', 864000);
+  variable_set('newsroom_ct_node_related_to_topic', 3600);
+  variable_set('newsroom_ct_page_result_topics', 3600);
+  variable_set('newsroom_ct_type_featured_item', 300);
+  variable_set('newsroom_ct_summary_filter', 3600);
+  variable_set('newsroom_ct_summary_filter', 3600);
+
 
   $bundles = array('newsroom_item', 'newsroom_selection');
   $backup = variable_get('nexteuropa_newsroom_view_modes_backup', FALSE);
@@ -135,6 +159,27 @@ function nexteuropa_newsroom_uninstall() {
   variable_del('newsroom_central_newsletter_title');
   variable_del('newsroom_other_newsletter_title');
   variable_del('newsroom_days_number_for_new_user');
+  variable_del('newsroom_allowed_ips');
+  variable_del('newsroom_ct_agenda_result');
+
+  variable_del('newsroom_ct_agenda_result');
+  variable_del('newsroom_ct_agenda_block');
+  variable_del('newsroom_ct_agenda_build');
+  variable_del('newsroom_ct_current_items');
+  variable_del('newsroom_ct_result_topics');
+  variable_del('newsroom_ct_upcoming_date');
+  variable_del('newsroom_ct_previous_date');
+  variable_del('newsroom_ct_summary_block');
+  variable_del('newsroom_ct_get_menu_by_path');
+  variable_del('newsroom_ct_get_topic_entities');
+  variable_del('newsroom_ct_fetch_active_menu');
+  variable_del('newsroom_ct_term_from_request');
+  variable_del('newsroom_ct_node_related_to_topic');
+  variable_del('newsroom_ct_page_result_topics');
+  variable_del('newsroom_ct_type_featured_item');
+  variable_del('newsroom_ct_summary_filter');
+  variable_del('newsroom_ct_summary_filter');
+
 }
 
 /**
