@@ -576,8 +576,26 @@
 
 // Featured item 
 .newsroom-item--featured {
+  border-bottom: 2px solid #ececec;
+  margin-bottom:  2em;
+  padding-bottom: 1em;
+
   .newsroom-item__title {
-    font-size: 120%;
+    font-size: 150%;
+  }
+
+  .newsroom-item__featured {
+    display: inline-block;
+    background: #ffd617;
+    padding: 0.2em 1em;
+    color: #fff;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9em;
+  }
+
+  .newsroom-item__teaser {
+    font-size: 110%;
   }
 }
 
