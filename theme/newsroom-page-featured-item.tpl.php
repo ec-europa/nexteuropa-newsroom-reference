@@ -12,7 +12,7 @@
   <?php echo $type; ?>
   </div>
   <div class="newsroom-item__featured">
-  	<?php echo t('Featured'); ?>
+      <?php echo t('Featured'); ?>
   </div>
   <div class="newsroom-item__title<?php if ($l) {echo ' newsroom-title';} ?>"><?php echo $title; ?></div>
   <div class="newsroom-item__image<?php if ($l) {echo ' newsroom-image';} ?>"><?php echo $title; ?>"><?php echo $image; ?></div>

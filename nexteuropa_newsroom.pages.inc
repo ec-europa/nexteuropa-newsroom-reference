@@ -147,6 +147,7 @@ function _nexteuropa_newsroom_prepare_newsletters($newsletters = array(), $subsc
     $item = new stdClass();
     $item->title = $newsletter->taxonomy_term_data_name;
     $item->description = $newsletter->taxonomy_term_data_description;
+    $item->service_sample = isset($newsletter->field_field_newsroom_service_sample_et[0]) ? drupal_render($newsletter->field_field_newsroom_service_sample_et[0]['rendered']) : NULL;
     $item->service_id = isset($newsletter->field_field_newsroom_service_id[0]) ? $newsletter->field_field_newsroom_service_id[0]['raw']['value'] : NULL;
     $item->image = isset($newsletter->field_field_newsroom_service_image[0]) ? drupal_render($newsletter->field_field_newsroom_service_image[0]['rendered']) : NULL;
     $item->form = NULL;

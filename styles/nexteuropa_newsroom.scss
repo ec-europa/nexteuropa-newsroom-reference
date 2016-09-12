@@ -123,7 +123,8 @@
 .node-type-newsroom-item .field-label,
 .newsroom_item_container .newsroom_type,
 .newsroomPage-filterForm h3,
-.newsroomAgenda-filterForm h3 {
+.newsroomAgenda-filterForm h3,
+.sample a {
   display: inline-block;
   background: #0065a2;
   padding: 0.2em 1em;
@@ -136,10 +137,13 @@
 }
 
 .newsroom-item__type a,
-.newsroom-item__type a:link,
-.newsroom-item__type a:visited {
-  color: #fff;
+.sample a {
+  &:link,
+  &:visited {
+    color: #fff;
+  }
 }
+
 // Fields as elements.
 .newsroom-item__title {
   margin-bottom: 1em !important;
@@ -647,3 +651,45 @@
     font-style: normal;
   }
 } 
+
+// Newsletter list.
+.subscrNewsletterItem {
+  padding: 1em 0;
+  border-bottom: 2px solid #ececec;
+  
+  h4 {
+    font-weight: 600;
+  }
+
+  img {
+    float: right;
+    margin: 0 0 0 1em;
+  }
+
+  input[type="submit"] {
+    margin: 1.8em 0 0;
+    background: #0065a2;
+    text-transform: uppercase;
+    color: #fff !important;
+    font-weight: bold;
+    padding: 7px 12px 6px;
+  }
+}
+
+.newsroom-service-page {
+  h2 {
+    border-left: 2px solid #0065A2;
+    padding-left: 40px;
+
+    &:before {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px; 
+      background: #0065A2;
+    }
+  }
+}

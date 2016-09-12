@@ -319,6 +319,12 @@ function nexteuropa_newsroom_views_default_views() {
   $handler->display->display_options['fields']['description']['field'] = 'description';
   $handler->display->display_options['fields']['description']['label'] = '';
   $handler->display->display_options['fields']['description']['element_label_colon'] = FALSE;
+  /* Field: Entity translation: Sample: translated */
+  $handler->display->display_options['fields']['field_newsroom_service_sample_et']['id'] = 'field_newsroom_service_sample_et';
+  $handler->display->display_options['fields']['field_newsroom_service_sample_et']['table'] = 'field_data_field_newsroom_service_sample';
+  $handler->display->display_options['fields']['field_newsroom_service_sample_et']['field'] = 'field_newsroom_service_sample_et';
+  $handler->display->display_options['fields']['field_newsroom_service_sample_et']['label'] = 'Sample';
+  $handler->display->display_options['fields']['field_newsroom_service_sample_et']['click_sort_column'] = 'url';
   /* Filter criterion: Taxonomy vocabulary: Machine name */
   $handler->display->display_options['filters']['machine_name']['id'] = 'machine_name';
   $handler->display->display_options['filters']['machine_name']['table'] = 'taxonomy_vocabulary';

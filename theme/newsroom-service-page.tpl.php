@@ -14,11 +14,11 @@ global $user;
     </div>
   <?php else: ?>
     <h2><span><?php echo t('Step 1'); ?></span> - <?php echo t('Your e-mail'); ?></h2>
-    <div>
+    <div class="middle-step">
       <input type="text" class="newsroom-service-email" id="newsroom-service-email" />
-    </div>
-    <div class="newsroom-service-email-description">
-      <span><?php echo 'or'; ?></span> <?php echo l(t('login'), 'user/login'); ?> <?php echo t('to manage your subscriptions.'); ?>
+      <div class="newsroom-service-email-description">
+        <span><?php echo 'or'; ?></span> <?php echo l(t('login'), 'user/login'); ?> <?php echo t('to manage your subscriptions.'); ?>
+      </div>
     </div>
   <?php endif; ?>
 
