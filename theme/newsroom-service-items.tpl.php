@@ -18,10 +18,9 @@
         
       <?php if($item->image || $item->service_id): ?>
         <div class="image">
-          <img typeof="foaf:Image" src="https://ec.europa.eu/digital-single-market/sites/digital-agenda/files/newsroom-service/banner3_16.jpg" width="214" height="129">
-            <?php if ($item->image): ?>
-                <?php echo $item->image; ?>
-            <?php endif; ?>
+        <?php if ($item->image): ?>
+          <?php echo $item->image; ?>
+        <?php endif; ?>
         </div>
       <?php endif; ?>
 
