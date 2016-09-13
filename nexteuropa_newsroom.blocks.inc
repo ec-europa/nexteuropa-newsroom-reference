@@ -281,9 +281,7 @@ function _nexteuropa_newsroom_tools() {
  */
 function _nexteuropa_newsroom_newsletter_subscription() {
   $content = array();
-  $view = views_get_view('newsletter_subscription');
-
-  if ($view) {
+  if ($view = views_get_view('newsletter_subscription')) {
     $view->set_display('block');
     $view->pre_execute();
     $view->execute();
@@ -314,22 +312,18 @@ function _nexteuropa_newsroom_block_news_proposal() {
   $topic_id = NULL;
   $output = NULL;
   // Try to get Topic ID from the entity.
-  $node = menu_get_object();
-
-  if ($node) {
+  if ($node = menu_get_object()) {
     // First try to get topic from the current node.
     if ($associated_topic_id = NewsroomHelper::getFieldValue($node, 'field_newsroom_associated_topic', 'tid')) {
       $topic_id = $associated_topic_id;
     }
-    else {
+    else if ($group_id = NewsroomHelper::getFieldValue($node, 'og_group_ref', 'target_id')) {
       // Try get topic from Organic group, if it exists.
-      if ($group_id = NewsroomHelper::getFieldValue($node, 'og_group_ref', 'target_id')) {
-        $group_id = is_array($group_id) ? $group_id[0] : $group_id;
-        $group = node_load($group_id);
+      $group_id = is_array($group_id) ? $group_id[0] : $group_id;
+      $group = node_load($group_id);
 
-        if ($group_associated_topic_id = NewsroomHelper::getFieldValue($group, 'field_newsroom_associated_topic', 'tid')) {
-          $topic_id = $group_associated_topic_id;
-        }
+      if ($group && $group_associated_topic_id = NewsroomHelper::getFieldValue($group, 'field_newsroom_associated_topic', 'tid')) {
+        $topic_id = $group_associated_topic_id;
       }
     }
   }
@@ -345,7 +339,7 @@ function _nexteuropa_newsroom_block_news_proposal() {
       if (isset($url_tokens[2]) && is_numeric($url_tokens[2])) {
         $taxonomy_term = taxonomy_term_load($url_tokens[2]);
         // First try to get topic from the current taxonomy term.
-        if ($associated_topic_id = NewsroomHelper::getFieldValue($taxonomy_term, 'field_newsroom_associated_topic', 'tid')) {
+        if ($taxonomy_term && $associated_topic_id = NewsroomHelper::getFieldValue($taxonomy_term, 'field_newsroom_associated_topic', 'tid')) {
           $topic_id = $associated_topic_id;
         }
       }

@@ -178,7 +178,7 @@ function nexteuropa_newsroom_uninstall() {
   variable_del('newsroom_ct_page_result_topics');
   variable_del('newsroom_ct_type_featured_item');
   variable_del('newsroom_ct_summary_filter');
-  variable_del('newsroom_ct_summary_filter');
+  variable_del('nexteuropa_newsroom_view_modes_backup');
 
 }
 

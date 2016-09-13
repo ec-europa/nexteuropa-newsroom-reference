@@ -117,9 +117,6 @@ function _nexteuropa_newsroom_create_multilingual_items_importer() {
       'query' => 'infsonewsroom:PicCaption',
       'original_field' => 'field_caption',
     ),
-    'field_newsroom_illustrative_img:uri' => array(
-      'query' => 'enclosure[@type="image/jpeg" and @schema="Public"]/@url',
-    ),
     'field_newsroom_illustrative_img:title' => array(
       'query' => 'infsonewsroom:PicTitle',
       'original_field' => 'field_file_image_title_text',
@@ -600,22 +597,23 @@ function _nexteuropa_newsroom_prepare_dynamic_mapping(array $premapping, $type =
       // If fields are translatable,
       // we create a different mapping for each language.
       foreach ($lang_keys as $lang_key) {
+        $current_array_key = 'xpathparser:' . $i;
         $upper_key = drupal_strtoupper($lang_key);
         // Xpath queries.
-        $queries['xpathparser:' . $i] = $values['query'] . '[@lang="' . $upper_key . '"]/text()';
+        $queries[$current_array_key] = $values['query'] . '[@lang="' . $upper_key . '"]/text()';
 
         if (strpos($type, 'topic') && $upper_key != $default_language) {
-          $queries['xpathparser:' . $i] = '//channel/item[infsonewsroom:BasicSvType="Newsroom service"]/category[@domain!="Newsletter" and @lang="' . $upper_key . '" and @infsonewsroom:TopicId="$Temporary target 1"]/' . $values['query'];
+          $queries[$current_array_key] = '//channel/item[infsonewsroom:BasicSvType="Newsroom service"]/category[@domain!="Newsletter" and @lang="' . $upper_key . '" and @infsonewsroom:TopicId="$Temporary target 1"]/' . $values['query'];
         }
         elseif (strpos($type, 'topic') && $upper_key == $default_language) {
-          $queries['xpathparser:' . $i] = $values['query'];
+          $queries[$current_array_key] = $values['query'];
         }
         elseif (strpos($type, 'newsroom_types')) {
-          $queries['xpathparser:' . $i] = $values['query'] . '[@lang="' . $upper_key . '"]/text()';
+          $queries[$current_array_key] = $values['query'] . '[@lang="' . $upper_key . '"]/text()';
         }
         // Mapping arrays.
         $mapping[$i] = array(
-          'source' => 'xpathparser:' . $i,
+          'source' => $current_array_key,
           'target' => $field . ':et:' . $lang_key,
           'unique' => FALSE,
         );
@@ -634,11 +632,12 @@ function _nexteuropa_newsroom_prepare_dynamic_mapping(array $premapping, $type =
     }
     // Not translatable fields.
     else {
+      $current_array_key = 'xpathparser:' . $i;
       // Xpath queries.
-      $queries['xpathparser:' . $i] = $values['query'];
+      $queries[$current_array_key] = $values['query'];
       // Mapping arrays.
       $mapping[$i] = array(
-        'source' => 'xpathparser:' . $i,
+        'source' => $current_array_key,
         'target' => $field,
         'unique' => FALSE,
       );
@@ -709,16 +708,15 @@ function _nexteuropa_newsroom_save_importer($importer) {
  *   Tamper settings.
  */
 function _nexteuropa_newsroom_prepare_dynamic_tamper($settings, $i, $type = NULL) {
-  $str = 'xpathparser_' . $i;
   $tamper = array(
-    'id' => $type . '-' . $str . '-' . $settings['plugin_id'],
+    'id' => $type . '-' . 'xpathparser_' . $i . '-' . $settings['plugin_id'],
     'importer' => $type,
     'source' => 'xpathparser:' . $i,
     'plugin_id' => $settings['plugin_id'],
   );
 
-  // Prepare setting for Entity Field Query finder.
   if ($settings['plugin_id'] == 'efq_finder') {
+    // Prepare setting for Entity Field Query finder.
     $tamper += array(
       'settings' => array(
         'entity_type' => $settings['entity_type'],
@@ -731,9 +729,8 @@ function _nexteuropa_newsroom_prepare_dynamic_tamper($settings, $i, $type = NULL
       'description' => 'Entity Field Query finder',
     );
   }
-
-  // Prepare setting for Rewrite plugin.
-  if ($settings['plugin_id'] == 'rewrite') {
+  else if ($settings['plugin_id'] == 'rewrite') {
+    // Prepare setting for Rewrite plugin.
     $tamper += array(
       'settings' => array(
         'text' => $settings['prefix'] . '[xpathparser:' . $i . ']',
@@ -741,9 +738,8 @@ function _nexteuropa_newsroom_prepare_dynamic_tamper($settings, $i, $type = NULL
       'description' => 'Rewrite',
     );
   }
-
-  // String to timestamp plugin.
-  if ($settings['plugin_id'] == 'strtotime') {
+  else if ($settings['plugin_id'] == 'strtotime') {
+    // String to timestamp plugin.
     $tamper += array(
       'settings' => '',
       'description' => 'String to Unix timestamp',

@@ -52,6 +52,12 @@ define('NEXTEUROPA_NEWSROOM_EDIT_ACCESS', 'edit remote newsroom item');
 define('NEXTEUROPA_NEWSROOM_ADMIN_ACCESS', 'administer newsroom settings');
 define('NEXTEUROPA_NEWSROOM_ADVANCED_SETTINGS_ACCESS', 'administer newsroom advanced settings');
 
+define('NEXTEUROPA_NEWSROOM_ITEM', 'item');
+define('NEXTEUROPA_NEWSROOM_ISSUE', 'issue');
+define('NEXTEUROPA_NEWSROOM_TOPIC', 'topic');
+define('NEXTEUROPA_NEWSROOM_SERVICE', 'service');
+define('NEXTEUROPA_NEWSROOM_TYPE', 'type');
+
 /**
  * Implements hook_page_build().
  */
@@ -74,20 +80,20 @@ function nexteuropa_newsroom_page_build(&$page) {
  */
 function _nexteuropa_newsroom_delete_item($type, $newsroom_id) {
   switch ($type) {
-    case 'type':
+    case NEXTEUROPA_NEWSROOM_TYPE:
       _nexteuropa_newsroom_taxonomy_term_delete('field_newsroom_type_id', $newsroom_id);
       break;
 
-    case 'topic':
+    case NEXTEUROPA_NEWSROOM_TOPIC:
       _nexteuropa_newsroom_taxonomy_term_delete('field_newsroom_topic_id', $newsroom_id);
       break;
 
-    case 'service':
+    case NEXTEUROPA_NEWSROOM_SERVICE:
       _nexteuropa_newsroom_taxonomy_term_delete('field_newsroom_service_id', $newsroom_id);
       break;
 
-    case 'item':
-      _nexteuropa_nexteuropa_newsroom_item_importer($newsroom_id, TRUE);
+    case NEXTEUROPA_NEWSROOM_ITEM:
+      _nexteuropa_nexteuropa_newsroom_item_delete($newsroom_id);
       break;
 
     default:
@@ -107,19 +113,19 @@ function _nexteuropa_newsroom_delete_item($type, $newsroom_id) {
  */
 function _nexteuropa_newsroom_import_item($type, $newsroom_id) {
   switch ($type) {
-    case 'type':
+    case NEXTEUROPA_NEWSROOM_TYPE:
       _nexteuropa_newsroom_taxonomy_term_importer($type, $newsroom_id, NEXTEUROPA_NEWSROOM_TYPE_IMPORTER);
       break;
 
-    case 'topic':
+    case NEXTEUROPA_NEWSROOM_TOPIC:
       _nexteuropa_newsroom_taxonomy_term_importer($type, $newsroom_id, NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER);
       break;
 
-    case 'service':
+    case NEXTEUROPA_NEWSROOM_SERVICE:
       _nexteuropa_newsroom_taxonomy_term_importer($type, $newsroom_id, NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER);
       break;
 
-    case 'item':
+    case NEXTEUROPA_NEWSROOM_ITEM:
       _nexteuropa_nexteuropa_newsroom_item_importer($newsroom_id);
       break;
 
@@ -329,8 +335,7 @@ function _nexteuropa_newsroom_enable_translations() {
   );
 
   foreach ($field_names as $field_name) {
-    $field = field_read_field($field_name);
-    if ($field) {
+    if ($field = field_read_field($field_name)) {
       // Make the field translatable.
       $field['translatable'] = 1;
       field_update_field($field);
@@ -376,9 +381,9 @@ function nexteuropa_newsroom_node_presave($node) {
   if ($node->type == NEXTEUROPA_NEWSROOM_CONTENT_TYPE && variable_get('newsroom_patterns', FALSE)) {
     // Get all the types.
     if ($type_tid = NewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid')) {
-      $type = NewsroomHelper::getNewsroomType($type_tid);
+
       $conf = NULL;
-      if ($type) {
+      if ($type = NewsroomHelper::getNewsroomType($type_tid)) {
         $type_name = pathauto_cleanstring($type->name);
         $conf = variable_get('newsroom_' . $type_name . '_root', FALSE);
       }
@@ -548,13 +553,7 @@ function _nexteuropa_newsroom_taxonomy_term_importer($type, $newsroom_id, $impor
  *   Original newsroom id.
  */
 function _nexteuropa_newsroom_taxonomy_term_delete($field_name, $original_newsroom_id = 0) {
-  if ($original_newsroom_id == 0) {
-    drupal_not_found();
-    drupal_exit();
-  }
-
-  $terms = NewsroomHelper::getTaxonomyTermFromField($field_name, $original_newsroom_id);
-  if ($terms) {
+  if ($original_newsroom_id && $terms = NewsroomHelper::getTaxonomyTermFromField($field_name, $original_newsroom_id)) {
     taxonomy_term_delete($terms[0]);
     drupal_set_message(t('Item has been deleted'));
   }
@@ -565,36 +564,40 @@ function _nexteuropa_newsroom_taxonomy_term_delete($field_name, $original_newsro
 }
 
 /**
- * Imports or deletes a single news item based on the original newsroom ID.
+ * Imports a single newsroom item by the original newsroom ID.
  *
  * @param int $newsroom_id
  *   Original newsroom id.
- * @param bool $delete
- *   Delete or import item.
  */
-function _nexteuropa_nexteuropa_newsroom_item_importer($newsroom_id = 0, $delete = FALSE) {
-  if ($newsroom_id == 0) {
-    drupal_not_found();
-    drupal_exit();
-  }
-
-  if ($delete) {
-    if ($newsroom_item = NewsroomHelper::getNodeByNewsroomItemId($newsroom_id)) {
-      node_delete_multiple(array($newsroom_item->nid));
-      $message = t('Newsroom Item nid: %1 deleted', array('%1' => implode(', ', $newsroom_item->nid)));
-      drupal_set_message($message);
-    }
-    else {
-      drupal_not_found();
-      drupal_exit();
-    }
-  }
-  else {
+function _nexteuropa_nexteuropa_newsroom_item_importer($newsroom_id = 0) {
+  if ($newsroom_id) {
     // Prepare URLs for importers and get feed importer ID.
     $url = NewsroomHelper::getImporterUrl(NEXTEUROPA_NEWSROOM_ITEM_IMPORTER) . variable_get('newsroom_single_item_import_segment', NEXTEUROPA_NEWSROOM_ITEM_SEGMENT) . $newsroom_id;
     NewsroomHelper::runFeedImporter(NEXTEUROPA_NEWSROOM_ITEM_IMPORTER, $url);
     drupal_set_message(t('The item has been imported'));
     drupal_goto('news-redirect/' . $newsroom_id, array(), 301);
+  }
+  else {
+    drupal_not_found();
+    drupal_exit();
+  }
+}
+
+/**
+ * Deletes newsroom item by original newsroom ID.
+ *
+ * @param int $newsroom_id
+ *   Original newsroom id.
+ */
+function _nexteuropa_nexteuropa_newsroom_item_delete($newsroom_id) {
+  if ($newsroom_id && $newsroom_item = NewsroomHelper::getNodeByNewsroomItemId($newsroom_id)) {
+    node_delete_multiple(array($newsroom_item->nid));
+    $message = t('Newsroom Item nid: %1 deleted', array('%1' => implode(', ', $newsroom_item->nid)));
+    drupal_set_message($message);
+  }
+  else {
+    drupal_not_found();
+    drupal_exit();
   }
 }
 
@@ -624,14 +627,14 @@ function _nexteuropa_newsroom_redirect($redirect_type = 'item', $newsroom_entity
   $path = FALSE;
   switch ($redirect_type) {
     // Newsroom item based on original newsroom ID.
-    case 'item':
+    case NEXTEUROPA_NEWSROOM_ITEM:
       if ($item = NewsroomHelper::getNodeByFieldValue('field_newsroom_item_id', $newsroom_entity_id)) {
         $path = 'node/' . $item->nid;
       }
       break;
 
     // Newsroom newsletter issue.
-    case 'issue':
+    case NEXTEUROPA_NEWSROOM_ISSUE:
       if ($item = NewsroomHelper::getNodeByFieldValue('field_newsroom_newsletter_id', $newsroom_entity_id)) {
         $path = 'node/' . $item->nid;
       }
@@ -643,12 +646,12 @@ function _nexteuropa_newsroom_redirect($redirect_type = 'item', $newsroom_entity
       break;
 
     // Newsroom Topic based on original newsroom topic ID.
-    case 'topic':
+    case NEXTEUROPA_NEWSROOM_TOPIC:
       $path = _newsroom_nexteuropa_get_term_redirect_path('field_newsroom_topic_id', $newsroom_entity_id);
       break;
 
     // Newsroom service.
-    case 'service':
+    case NEXTEUROPA_NEWSROOM_SERVICE:
       $path = _newsroom_nexteuropa_get_term_redirect_path('field_newsroom_service_id', $newsroom_entity_id);
       break;
   }
@@ -674,10 +677,8 @@ function _nexteuropa_newsroom_redirect($redirect_type = 'item', $newsroom_entity
  */
 function _newsroom_nexteuropa_get_term_redirect_path($field_name, $newsroom_entity_id) {
   $path = FALSE;
-  $taxonomy_term_ids = NewsroomHelper::getTaxonomyTermFromField($field_name, $newsroom_entity_id);
-  if ($taxonomy_term_ids) {
-    $taxonomy_term = taxonomy_term_load($taxonomy_term_ids[0]);
-    if ($taxonomy_term) {
+  if ($taxonomy_term_ids = NewsroomHelper::getTaxonomyTermFromField($field_name, $newsroom_entity_id)) {
+    if ($taxonomy_term = taxonomy_term_load($taxonomy_term_ids[0])) {
       $path = 'taxonomy/term/' . $taxonomy_term->tid;
     }
   }
@@ -758,13 +759,10 @@ function nexteuropa_newsroom_feeds_after_save(FeedsSource $source, $entity, $ite
     $node = node_load($entity_id);
     $node->status = 0;
     node_save($node);
-  }
-  if ($source->importer()->fetcher->id == 'newsroom_deleted_items') {
+  } else if ($source->importer()->fetcher->id == 'newsroom_deleted_items') {
     NewsroomHelper::deleteEntityTranslations($entity, $entity_id);
     entity_delete('node', $entity_id);
-  }
-
-  if ($source->importer()->fetcher->id == 'newsroom_items_multilingual') {
+  } else if ($source->importer()->fetcher->id == 'newsroom_items_multilingual') {
     // TODO : find a better way to remove translation.
     $languages = language_list();
     $default_language = language_default()->language;
@@ -814,15 +812,16 @@ function nexteuropa_newsroom_feeds_after_save(FeedsSource $source, $entity, $ite
  */
 function _nexteuropa_newsroom_set_image_meta_info($image_field, $entity, $source, $item, $languages, $default_language) {
   if ($fid = NewsroomHelper::getFieldValue($entity, $image_field, 'fid')) {
-    $fields = array(
-      'field_file_image_title_text' => 'title',
-      'field_newsroom_copyrights' => 'copyright',
-      'field_caption' => 'caption',
-      'field_file_image_alt_text' => 'alt',
-    );
 
-    $file = file_load($fid);
-    if ($file) {
+    if ($file = file_load($fid)) {
+
+      $fields = array(
+        'field_file_image_title_text' => 'title',
+        'field_newsroom_copyrights' => 'copyright',
+        'field_caption' => 'caption',
+        'field_file_image_alt_text' => 'alt',
+      );
+
       $config = $source->importer()->processor->getConfig();
       if (isset($config['mappings'])) {
         // Save default language at first.
@@ -1091,10 +1090,8 @@ function nexteuropa_newsroom_block_view_alter(&$data, $block) {
   if ($block->module == 'easy_breadcrumb') {
     if (isset($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url']) && $data['content']['easy_breadcrumb']['#breadcrumb'][0]['url'] == 'newsroom-agenda') {
       foreach ($data['content']['easy_breadcrumb']['#breadcrumb'] as $key => $item) {
-        if (isset($item['url'])) {
-          if ($item['url'] != 'newsroom-agenda') {
-            unset($data['content']['easy_breadcrumb']['#breadcrumb'][$key]);
-          }
+        if (isset($item['url']) && $item['url'] != 'newsroom-agenda') {
+          unset($data['content']['easy_breadcrumb']['#breadcrumb'][$key]);
         }
         else {
           unset($data['content']['easy_breadcrumb']['#breadcrumb'][$key]);

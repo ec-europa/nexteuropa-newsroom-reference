@@ -322,20 +322,17 @@ function nexteuropa_newsroom_field_group_info() {
       3 => 'field_newsroom_registration_link',
       4 => 'field_newsroom_ted_link',
     ),
-    'format_type' => 'div',
+    'format_type' => 'tab',
     'format_settings' => array(
-      'formatter' => 'open',
+      'formatter' => 'closed',
       'instance_settings' => array(
         'description' => '',
-        'show_label' => 0,
-        'label_element' => 'h3',
-        'effect' => 'none',
-        'speed' => 'fast',
-        'classes' => 'group-newsroom-item-links field-group-div',
-        'id' => '',
+        'classes' => '',
+        'required_fields' => 1,
       ),
     ),
   );
+
   $field_groups['group_newsroom_item_links|node|newsroom_item|default'] = $field_group;
 
   $field_group = new stdClass();
