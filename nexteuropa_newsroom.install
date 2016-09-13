@@ -87,7 +87,7 @@ function nexteuropa_newsroom_install() {
   variable_set('newsroom_ct_page_result_topics', 3600);
   variable_set('newsroom_ct_type_featured_item', 300);
   variable_set('newsroom_ct_summary_filter', 3600);
-  variable_set('newsroom_ct_summary_filter', 3600);
+  variable_set('newsroom_ct_node_relative_items', 86400);
 
 
   $bundles = array('newsroom_item', 'newsroom_selection');
@@ -161,6 +161,7 @@ function nexteuropa_newsroom_uninstall() {
   variable_del('newsroom_days_number_for_new_user');
   variable_del('newsroom_allowed_ips');
   variable_del('newsroom_ct_agenda_result');
+  variable_del('nexteuropa_newsroom_view_modes_backup');
 
   variable_del('newsroom_ct_agenda_result');
   variable_del('newsroom_ct_agenda_block');
@@ -178,7 +179,7 @@ function nexteuropa_newsroom_uninstall() {
   variable_del('newsroom_ct_page_result_topics');
   variable_del('newsroom_ct_type_featured_item');
   variable_del('newsroom_ct_summary_filter');
-  variable_del('nexteuropa_newsroom_view_modes_backup');
+  variable_del('newsroom_ct_node_relative_items');
 
 }
 
