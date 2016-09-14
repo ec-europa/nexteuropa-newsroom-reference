@@ -84,13 +84,7 @@ function _nexteuropa_newsroom_check_backup($form, &$form_state) {
   $voc = $form['#vocabulary']->machine_name;
   // Get the current variable for the specific vocubulary.
   $backup = variable_get($voc . '_backup', array());
-
-  if (empty($backup)) {
-    return FALSE;
-  }
-  else {
-    return TRUE;
-  }
+  return empty($backup);
 }
 
 /**
@@ -251,7 +245,7 @@ function nexteuropa_newsroom_date_popup_process_alter(&$element, &$form_state, $
     unset($element['date']['#title']);
     unset($element['date']['#description']);
   }
-  if ($form_state['build_info']['form_id'] == 'nexteuropa_newsroom_newsroom_page_filter_form') {
+  else if ($form_state['build_info']['form_id'] == 'nexteuropa_newsroom_newsroom_page_filter_form') {
     unset($element['date']['#title']);
   }
 }
@@ -385,8 +379,8 @@ function nexteuropa_newsroom_form_field_ui_display_overview_form_alter(&$form, &
  */
 function nexteuropa_newsroom_form_newsroom_item_node_form_alter(&$form, &$form_state, $form_id) {
   // Build language aware options list for taxonomy reference fields.
-  $terms = array();
   global $language;
+  $terms = array();
   $def_lang = language_default()->language;
   $curr_lang = $language->language;
 

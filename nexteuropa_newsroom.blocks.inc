@@ -186,17 +186,9 @@ function _nexteuropa_newsroom_get_related_children($field_name, $parent_nid, $cu
         ->execute();
       $result = $query->execute();
       if (isset($result['node'])) {
-        $ids = array_keys($result['node']);
-
-        foreach ($ids as $id) {
-          // We exclude the current item.
-          if ($id != $current_nid) {
-            $std = new stdClass();
-            $std->id = $id;
-            $std->title = NewsroomHelper::getNodeTitle($id);
-            $items[] = $std;
-          }
-        }
+        // Exclude the current item ID from array.
+        $ids = array_diff(array_keys($result['node']), array($current_nid));
+        $items = _nexteuropa_nexteuropa_prepare_related_content_array($ids);
       }
       cache_set($cache_key, $items, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_node_relative_items', 86400));
     }
@@ -221,10 +213,26 @@ function _nexteuropa_nexteuropa_get_related_content($field_name, $node) {
   $node_ids = NewsroomHelper::getFieldValue($node, $field_name, 'target_id');
   if ($node_ids) {
     $node_ids = is_array($node_ids) ? $node_ids : array($node_ids);
-    foreach ($node_ids as $nid) {
+    $items = _nexteuropa_nexteuropa_prepare_related_content_array($node_ids);
+  }
+  return $items;
+}
+
+/**
+ * Prepares related content array.
+ *
+ * @param array $ids
+ *   Array of newsroom item ids.
+ * @return array
+ *   Array of objects to display.
+ */
+function _nexteuropa_nexteuropa_prepare_related_content_array($ids) {
+  $items = array();
+  if (is_array($ids) && count($ids) > 0) {
+    foreach ($ids as $id) {
       $std = new stdClass();
-      $std->id = $nid;
-      $std->title = NewsroomHelper::getNodeTitle($nid);
+      $std->id = $id;
+      $std->title = NewsroomHelper::getNodeTitle($id);
       $items[] = $std;
     }
   }
