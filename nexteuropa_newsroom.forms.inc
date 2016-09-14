@@ -379,11 +379,6 @@ function nexteuropa_newsroom_form_field_ui_display_overview_form_alter(&$form, &
  */
 function nexteuropa_newsroom_form_newsroom_item_node_form_alter(&$form, &$form_state, $form_id) {
   // Build language aware options list for taxonomy reference fields.
-  global $language;
-  $terms = array();
-  $def_lang = language_default()->language;
-  $curr_lang = $language->language;
-
   $taxonomy_fields = array(
     'field_newsroom_item_type',
     'field_newsroom_primary_topic',
@@ -391,22 +386,12 @@ function nexteuropa_newsroom_form_newsroom_item_node_form_alter(&$form, &$form_s
     'field_newsroom_highlighted_topic',
   );
 
-  $type_vid = NewsroomHelper::getNewsroomTypeVocabulary()->vid;
-  $topic_vid = NewsroomHelper::getNewsroomTopicVocabulary()->vid;
-
-  $terms[NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY] = i18n_taxonomy_get_tree($type_vid, $def_lang);
-  $terms[NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY] = i18n_taxonomy_get_tree($topic_vid, $def_lang);
+  $type_options = NewsroomHelper::getNewsroomTypeOptions(FALSE, FALSE);
+  $topic_options = NewsroomHelper::getNewsroomTopicOptions(array(), FALSE);
 
   // Fields with wrong translation in node edit form.
   foreach ($taxonomy_fields as $taxonomy_field) {
-    $tree = $taxonomy_field == 'field_newsroom_item_type' ? $terms[NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY] : $terms[NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY];
-
-    foreach ($tree as $key => $value) {
-      $i18n_object = i18n_get_object('taxonomy_term', $value->tid);
-      $t_term = $i18n_object->localize($curr_lang);
-      $pref = $value->parents[0] != 0 ? '- ' : '';
-      $form[$taxonomy_field][LANGUAGE_NONE]['#options'][$value->tid] = $pref . $t_term->name;
-    }
+    $form[$taxonomy_field][LANGUAGE_NONE]['#options'] = $taxonomy_field == 'field_newsroom_item_type' ? $type_options : $topic_options;
 
     // The default value is lost in the translations,
     // so we need to set it this way.
@@ -415,13 +400,10 @@ function nexteuropa_newsroom_form_newsroom_item_node_form_alter(&$form, &$form_s
       $value_array = $form['#node']->$taxonomy_field;
       foreach ($value_array[LANGUAGE_NONE] as $value) {
         $values[] = $value['tid'];
-        $form[$taxonomy_field][LANGUAGE_NONE]['#default_value'] = $values;
       }
+      $form[$taxonomy_field][LANGUAGE_NONE]['#default_value'] = $values;
     }
   }
-
-  // The widget will loose this settings, otherwise.
-  $form['field_newsroom_topics'][LANGUAGE_NONE]['#multiple'] = TRUE;
 }
 
 /**

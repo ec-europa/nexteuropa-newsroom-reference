@@ -477,11 +477,13 @@ class NewsroomHelper {
    *
    * @param bool $events_only
    *   Display only event types.
+   * @param bool $add_empty_value
+   *   Add none value in the begining of array.
    *
    * @return array
    *   Drop down options array.
    */
-  public static function getNewsroomTypeOptions($events_only = FALSE) {
+  public static function getNewsroomTypeOptions($events_only = FALSE, $add_empty_value = TRUE) {
     $type_options = NewsroomHelper::getTaxonomyTermOptions(NewsroomHelper::getNewsroomTypes());
     if ($events_only) {
       $events_types = NewsroomHelper::getEventsTermsIds();
@@ -492,8 +494,10 @@ class NewsroomHelper {
         }
       }
     }
-    $empty = array(t('- None -'));
-    return $empty + $type_options;
+    if ($add_empty_value) {
+      $type_options = array(t('- None -')) + $type_options;
+    }
+    return $type_options;
   }
 
   /**
@@ -501,19 +505,24 @@ class NewsroomHelper {
    *
    * @param array $used_topics
    *   Used topics.
+   * @param bool $add_empty_value
+   *   Add none value in the begining of array.
    *
    * @return array
    *   Drop down options array.
    */
-  public static function getNewsroomTopicOptions($used_topics = array()) {
+  public static function getNewsroomTopicOptions($used_topics = array(), $add_empty_value = TRUE) {
     $topic_options = NewsroomHelper::getTaxonomyTermOptions(NewsroomHelper::getNewsroomTopics());
+    $used_count = count($used_topics);
     foreach ($topic_options as $key => $topic) {
-      if (!in_array($key, $used_topics)) {
+      if ($used_count > 0 && !in_array($key, $used_topics)) {
         unset($topic_options[$key]);
       }
     }
-    $empty = array(t('- None -'));
-    return $empty + $topic_options;
+    if ($add_empty_value) {
+      $topic_options = array(t('- None -')) + $topic_options;
+    }
+    return $topic_options;
   }
 
   /**
