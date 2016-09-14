@@ -540,6 +540,9 @@ function _nexteuropa_newsroom_create_multilingual_services_importer() {
     'field_newsroom_service_active' => array(
       'query' => 'infsonewsroom:BasicSvStatus/text()',
     ),
+    'field_newsroom_service_sample:url' => array(
+      'query' => 'infsonewsroom:archivesLink',
+    ),
     'field_newsroom_service_type' => array(
       'query' => 'infsonewsroom:BasicSvType',
     ),
@@ -551,9 +554,6 @@ function _nexteuropa_newsroom_create_multilingual_services_importer() {
     ),
     'field_newsroom_service_image:uri' => array(
       'query' => 'infsonewsroom:BasicSvVisuUrl/text()',
-    ),
-    'field_newsroom_service_sample:uri' => array(
-      'query' => 'infsonewsroom:archivesLink',
     ),
     'parentguid' => array(
       'query' => '@infsonewsroom:parentTopicId',
