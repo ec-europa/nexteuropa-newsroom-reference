@@ -62,6 +62,12 @@ function _nexteuropa_newsroom_create_multilingual_newsletter_importer() {
 
   $importer_values = _nexteuropa_newsroom_prepare_dynamic_mapping($premapping, NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER);
 
+  $importer_values['mapping'][] = array(
+    'source' => 'Blank source 1',
+    'target' => 'language',
+    'unique' => FALSE,
+  );
+
   $feeds_importer = _nexteuropa_newsroom_build_importer(NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER, 'Newsroom Newsletter issues', 'Imports newsletter issues', $importer_values, NEXTEUROPA_NEWSROOM_NEWSLETTER_CONTENT_TYPE, 'node');
 
   // Create the tamper for the language.
@@ -805,14 +811,10 @@ function _nexteuropa_newsroom_check_translations(array $premapping) {
     // Sanitize fieldname.
     $attribute = strrchr($fieldname, ':');
     $sanitized_name = isset($values['original_field']) ? $values['original_field'] : str_replace($attribute, '', $fieldname);
-    $field = field_info_field($sanitized_name);
-    $language = field_is_translatable('node', $field);
-    $premapping[$fieldname]['language'] = $language;
     if (isset($fields[$sanitized_name])) {
       $language = field_is_translatable('node', $fields[$sanitized_name]);
       $premapping[$fieldname]['language'] = $language;
     }
   }
-
   return $premapping;
 }
