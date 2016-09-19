@@ -609,7 +609,7 @@ function _nexteuropa_nexteuropa_newsroom_item_import_access() {
 function _nexteuropa_newsroom_taxonomy_term_importer($type, $newsroom_id, $importer_id) {
   $url = NewsroomHelper::getImporterUrl($importer_id) . variable_get('newsroom_single_' . $type . '_import_segment') . $newsroom_id;
   NewsroomHelper::runFeedImporter($importer_id, $url);
-  drupal_set_message(t('The item has been imported'));
+  drupal_set_message(t('The item has been imported.'));
   drupal_goto('newsroom-redirect/' . $type . '/' . $newsroom_id, array(), 301);
 }
 
