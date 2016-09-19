@@ -689,7 +689,7 @@ function _nexteuropa_newsroom_admin_add_fields($type = 'topic', $sel_ct = array(
         // Call the field_group helper function, we surely have to update it.
         _nexteuropa_newsroom_admin_field_group($machine_name, $field_name);
         // Set a message to inform the user about the field instance creation.
-        drupal_set_message(t('Created instance of @field in the @bundle content type', array('@field' => $field_name, '@bundle' => $machine_name)));
+        drupal_set_message(t('Created instance of @field in the @bundle content type.', array('@field' => $field_name, '@bundle' => $machine_name)));
       }
     }
   }
@@ -755,7 +755,7 @@ function _nexteuropa_newsroom_admin_field_group($machine_name, $field_name) {
   }
   // Remove the group since we don't have fields to show.
   else {
-    drupal_set_message(t('Removed the fieldgroup @name from the @content_type content type', array('@name' => $group_name, '@content_type' => $machine_name)), 'status');
+    drupal_set_message(t('Removed the fieldgroup @name from the @content_type content type.', array('@name' => $group_name, '@content_type' => $machine_name)), 'status');
   }
 }
 
@@ -789,7 +789,7 @@ function _nexteuropa_newsroom_admin_remove_fields($type = 'topic', $sel_ct = arr
       // Call the field_group helper function, we could have to delete it.
       _nexteuropa_newsroom_admin_field_group($instance['bundle'], $field_name);
       // Add the message to queue.
-      drupal_set_message(t('Deleted instance of @field in the @bundle content type', array('@field' => $field_name, '@bundle' => $instance['bundle'])));
+      drupal_set_message(t('Deleted instance of @field in the @bundle content type.', array('@field' => $field_name, '@bundle' => $instance['bundle'])));
     }
   }
 }

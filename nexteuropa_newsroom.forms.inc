@@ -144,7 +144,7 @@ function nexteuropa_newsroom_form_nexteuropa_newsroom_admin_settings_alter(&$for
 
   // If we are in a confimation step, change the form visualization.
   if (isset($form_state['storage']['confirm'])) {
-    drupal_set_message(t('You are in a confirmation page, to submit all the form settings check the box below'), 'warning');
+    drupal_set_message(t('You are in a confirmation page, to submit all the form settings check the box below.'), 'warning');
     $form['newsroom_universe']['#collapsible'] = TRUE;
     $form['newsroom_universe']['#collapsed'] = TRUE;
     $form['newsroom_fields']['#collapsed'] = FALSE;
