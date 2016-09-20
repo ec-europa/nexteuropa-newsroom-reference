@@ -119,7 +119,7 @@ function _nexteuropa_newsroom_newsletters_page() {
     $build['#markup'] = $content;
     $build['#attached']['js'][] = array(
       'type' => 'setting',
-      'data' => array('nexteuropa_newsroom' => array('error_message' => t('Wrong e-mail address'), 'user_is_logged_in' => user_is_logged_in())),
+      'data' => array('nexteuropa_newsroom' => array('error_message' => t('Wrong e-mail address.'), 'user_is_logged_in' => user_is_logged_in())),
     );
     $build['#attached']['js'][] = array(
       'type' => 'file',

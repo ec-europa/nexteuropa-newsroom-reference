@@ -39,7 +39,7 @@ class nexteuropa_newsroom_views_handler_field_taxonomy extends views_handler_fie
   public function options_form(&$form, &$form_state) {
     $form['convert_path_auto'] = array(
       '#title' => t('Convert URL with pathauto'),
-      '#description' => t('Use pathauto clean function to get proper URL'),
+      '#description' => t('Use pathauto clean function to get proper URL.'),
       '#type' => 'checkbox',
       '#default_value' => !empty($this->options['convert_path_auto']),
     );

@@ -83,15 +83,9 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#default_value' => variable_get('newsroom_use_css', 1),
   );
 
-  $form['newsroom_others']['newsroom_use_css'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Use the stylesheets provided by this feature'),
-    '#default_value' => variable_get('newsroom_use_css', 1),
-  );
-
   $form['newsroom_others']['newsroom_order_by_last_update'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Sort newsroom boxes chronologically in the summary blocks'),
+    '#title' => t('Sort newsroom boxes chronologically in the summary blocks.'),
     '#default_value' => variable_get('newsroom_order_by_last_update', 0),
   );
 
@@ -103,7 +97,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
 
   $form['newsroom_others']['newsroom_agenda_after_highlights'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Display Agenda after the highlights'),
+    '#title' => t('Display Agenda after the highlights.'),
     '#default_value' => variable_get('newsroom_agenda_after_highlights', 1),
   );
 
@@ -143,7 +137,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
         '#type' => 'textfield',
         '#title' => t('Pattern for %type', array('%type' => $type_name)),
         '#required' => FALSE,
-        '#description' => t('aliases pattern for the %type_name topic', array('%type_name' => $type_name)),
+        '#description' => t('Aliases pattern for the %type_name topic.', array('%type_name' => $type_name)),
         '#default_value' => variable_get('newsroom_' . $type_name . '_root', $parent . $type_name),
         '#element_validate' => array('_nexteuropa_newsroom_admin_type_root_validate'),
       );
@@ -182,7 +176,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
 
   $form['newsroom_fields']['newsroom_content_types_delete_topic'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Delete all the topic relation fields in your content types'),
+    '#title' => t('Delete all the topic relation fields in your content types.'),
     '#description' => t('If you want to delete all the instance of the topic field together check this.'),
     '#default_value' => 0,
     '#collapsible' => TRUE,
@@ -191,7 +185,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
 
   $form['newsroom_fields']['newsroom_content_types_select'] = array(
     '#type' => 'checkboxes',
-    '#title' => t('Advanced and configurable reference with newsroom items'),
+    '#title' => t('Advanced and configurable reference with newsroom items.'),
     '#description' => t('Choose the content types in which you want to activate a complex relationship with the newsroom items.'),
     '#options' => NewsroomHelper::prepareOptions('ct'),
     '#multiple' => TRUE,
@@ -200,7 +194,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
 
   $form['newsroom_fields']['newsroom_content_types_delete_select'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Delete all the newsroom select fields in your content types'),
+    '#title' => t('Delete all the newsroom select fields in your content types.'),
     '#description' => t('If you want to delete all the instance of the select field together check this.'),
     '#default_value' => 0,
   );
@@ -547,7 +541,7 @@ function _nexteuropa_newsroom_admin_delete_confirm($form, &$form_state) {
   $desc = '<div class="messages error"><h3>' . t('Part of the form has not been submitted yet. You have:') . '</h3></br><i>';
   foreach ($values as $field => $nodes) {
     for ($i = 0; $i < count($values[$field]); $i++) {
-      $desc .= t('@num nodes containing values for the field @field in the content type @ct',
+      $desc .= t('@num nodes containing values for the field @field in the content type @ct.',
           array(
             '@num' => $values[$field][$i]['nodes'],
             '@field' => $field,
