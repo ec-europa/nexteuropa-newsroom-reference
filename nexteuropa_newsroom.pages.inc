@@ -84,7 +84,7 @@ function _nexteuropa_newsroom_newsletters_page() {
     global $user;
 
     if (user_access(NEXTEUROPA_NEWSROOM_ADVANCED_SETTINGS_ACCESS, $user) && (empty(variable_get('newsroom_subscription_url')) || empty(variable_get('newsroom_app')) || empty(variable_get('newsroom_app_key')))) {
-      drupal_set_message(t('Please setup newsroom settings: app, key and subscription URL. !url', array('!url' => l(t('Newsroom settings'), 'admin/config/content/newsroom'))), 'warning');
+      drupal_set_message(t('Please setup newsroom settings: app, key and subscription URL !url.', array('!url' => l(t('Newsroom settings'), 'admin/config/content/newsroom'))), 'warning');
     }
 
     $view->set_display($basic_display);
@@ -119,7 +119,7 @@ function _nexteuropa_newsroom_newsletters_page() {
     $build['#markup'] = $content;
     $build['#attached']['js'][] = array(
       'type' => 'setting',
-      'data' => array('nexteuropa_newsroom' => array('error_message' => t('Wrong e-mail address'), 'user_is_logged_in' => user_is_logged_in())),
+      'data' => array('nexteuropa_newsroom' => array('error_message' => t('Wrong e-mail address.'), 'user_is_logged_in' => user_is_logged_in())),
     );
     $build['#attached']['js'][] = array(
       'type' => 'file',
