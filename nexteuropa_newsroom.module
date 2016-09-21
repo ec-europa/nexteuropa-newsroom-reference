@@ -166,6 +166,7 @@ function _nexteuropa_newsroom_delete_item($type, $newsroom_id) {
 
     default:
       drupal_not_found();
+      drupal_exit();
   }
 
   return NULL;
@@ -203,6 +204,7 @@ function _nexteuropa_newsroom_import_item($type, $newsroom_id) {
 
     default:
       drupal_not_found();
+      drupal_exit();
   }
 
   drupal_set_message(t('The item has been imported.'));
@@ -698,6 +700,7 @@ function _nexteuropa_newsroom_item_redirect($newsroom_id = 0) {
 function _nexteuropa_newsroom_redirect($redirect_type = 'item', $newsroom_entity_id = 0) {
   if (!$newsroom_entity_id) {
     drupal_not_found();
+    drupal_exit();
   }
 
   $path = FALSE;
@@ -737,6 +740,7 @@ function _nexteuropa_newsroom_redirect($redirect_type = 'item', $newsroom_entity
   }
   else {
     drupal_not_found();
+    drupal_exit();
   }
 }
 
