@@ -89,24 +89,6 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#default_value' => variable_get('newsroom_legacy', 1),
   );
 
-  $form['newsroom_others']['newsroom_order_by_last_update'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Sort newsroom boxes chronologically in the summary blocks.'),
-    '#default_value' => variable_get('newsroom_order_by_last_update', 0),
-  );
-
-  $form['newsroom_others']['newsroom_display_highlights_begin'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Highlighted topics are displayed at the begining of the list.'),
-    '#default_value' => variable_get('newsroom_display_highlights_begin', 1),
-  );
-
-  $form['newsroom_others']['newsroom_agenda_after_highlights'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Display Agenda after the highlights.'),
-    '#default_value' => variable_get('newsroom_agenda_after_highlights', 1),
-  );
-
   $types = NewsroomHelper::getNewsroomTypes();
 
   if (!empty($types)) {
@@ -329,6 +311,24 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#collapsed' => TRUE,
   );
 
+  $form['newsroom_blocks']['newsroom_order_by_last_update'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Sort newsroom boxes chronologically in the summary blocks.'),
+    '#default_value' => variable_get('newsroom_order_by_last_update', 0),
+  );
+
+  $form['newsroom_blocks']['newsroom_display_highlights_begin'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Highlighted topics are displayed at the begining of the list.'),
+    '#default_value' => variable_get('newsroom_display_highlights_begin', 1),
+  );
+
+  $form['newsroom_blocks']['newsroom_agenda_after_highlights'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Display Agenda after the highlights.'),
+    '#default_value' => variable_get('newsroom_agenda_after_highlights', 1),
+  );
+
   $form['newsroom_blocks']['newsroom_summary_block_num_items'] = array(
     '#type' => 'select',
     '#title' => t('Number of items in boxes in the summary blocks'),
@@ -364,12 +364,6 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#default_value' => variable_get('newsroom_summary_home_block_num_highlighted_items', 3),
   );
 
-  $form['newsroom_blocks']['home_blocks']['newsroom_summary_home_block_num_agenda'] = array(
-    '#type' => 'select',
-    '#title' => t('Number of days to list in the Agenda block on the homepage'),
-    '#options' => NewsroomHelper::prepareOptions(6),
-    '#default_value' => variable_get('newsroom_summary_home_block_num_agenda', 3),
-  );
   $form['newsroom_blocks']['home_blocks']['newsroom_days_number_for_new_user'] = array(
     '#type' => 'textfield',
     '#title' => t('Number of days from now where we check new newsroom items'),

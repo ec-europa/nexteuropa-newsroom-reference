@@ -44,7 +44,7 @@ class NewsroomPage {
    *   Number of items.
    */
   public function getItemsNumber() {
-    return variable_get('newsroom_agenda_page_items_number', 10);
+    return variable_get('newsroom_page_items_number', 10);
   }
 
   /**
