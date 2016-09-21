@@ -171,21 +171,18 @@ class NewsroomHelper {
    *   Newsroom item.
    */
   public static function getNodeByFieldValue($field_name, $newsroom_id = 0) {
-    $newsroom_data = &drupal_static(__FUNCTION__);
     $cache_key = 'newsroom_item_by_id:' . $newsroom_id;
-    if (!isset($newsroom_data)) {
-      if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
-        $newsroom_data = $cache->data;
-      }
-      else {
-        $query = new EntityFieldQuery();
-        $newsroom_item = $query
-          ->entityCondition('entity_type', 'node')
-          ->fieldCondition($field_name, 'value', $newsroom_id, '=')
-          ->execute();
-        $newsroom_data = isset($newsroom_item['node']) ? array_shift($newsroom_item['node']) : FALSE;
-        cache_set($cache_key, $newsroom_data, NEXTEUROPA_NEWSROOM_CACHE_TABLE);
-      }
+    if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
+      $newsroom_data = $cache->data;
+    }
+    else {
+      $query = new EntityFieldQuery();
+      $newsroom_item = $query
+        ->entityCondition('entity_type', 'node')
+        ->fieldCondition($field_name, 'value', $newsroom_id, '=')
+        ->execute();
+      $newsroom_data = isset($newsroom_item['node']) ? array_shift($newsroom_item['node']) : FALSE;
+      cache_set($cache_key, $newsroom_data, NEXTEUROPA_NEWSROOM_CACHE_TABLE);
     }
     return $newsroom_data;
   }

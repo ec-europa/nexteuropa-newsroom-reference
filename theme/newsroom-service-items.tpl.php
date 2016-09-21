@@ -18,7 +18,7 @@
                   <?php echo $item->image; ?>
               <?php endif; ?>
               <?php if ($item->service_id && $universe_id): ?>
-                <div class="sample"><?php echo l(t('sample'), 'http://ec.europa.eu/information_society/newsroom/cf/' . $universe_id . '/newsletter-specific-archive.cfm?serviceId=' . $item->service_id, array('external' => TRUE)); ?></div>
+                <div class="sample"><?php echo l(t('library'), 'http://ec.europa.eu/information_society/newsroom/cf/' . $universe_id . '/newsletter-specific-archive.cfm?serviceId=' . $item->service_id, array('external' => TRUE)); ?></div>
               <?php endif; ?>
             </div>
         <?php endif; ?>
