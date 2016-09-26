@@ -26,7 +26,6 @@ function _nexteuropa_newsroom_create_multilingual_newsletter_importer() {
     ),
     'field_newsroom_newsletter_id' => array(
       'query' => 'infsonewsroom:BasicIssueId/text()',
-      'unique' => 1,
     ),
     'field_newsroom_item_main_link:url' => array(
       'query' => 'link',
@@ -608,8 +607,6 @@ function _nexteuropa_newsroom_prepare_dynamic_mapping(array $premapping, $type =
       foreach ($lang_keys as $lang_key) {
         $upper_key = drupal_strtoupper($lang_key);
         // Xpath queries.
-        $queries['xpathparser:' . $i] = $values['query'] . '[@lang="' . $upper_key . '"]/text()';
-
         if (strpos($type, 'topic') && $upper_key != $default_language) {
           $queries['xpathparser:' . $i] = '//channel/item[infsonewsroom:BasicSvType="Newsroom service"]/category[@domain!="Newsletter" and @lang="' . $upper_key . '" and @infsonewsroom:TopicId="$Temporary target 1"]/' . $values['query'];
         }
@@ -619,11 +616,14 @@ function _nexteuropa_newsroom_prepare_dynamic_mapping(array $premapping, $type =
         elseif (strpos($type, 'newsroom_types')) {
           $queries['xpathparser:' . $i] = $values['query'] . '[@lang="' . $upper_key . '"]/text()';
         }
+        else {
+          $queries['xpathparser:' . $i] = $values['query'] . '[@lang="' . $upper_key . '"]/text()';
+        }
         // Mapping arrays.
         $mapping[$i] = array(
           'source' => 'xpathparser:' . $i,
           'target' => $field . ':et:' . $lang_key,
-          'unique' => FALSE,
+          'unique' => isset($values['unique']),
         );
         // Additional values.
         if (isset($values['options'])) {
@@ -631,10 +631,7 @@ function _nexteuropa_newsroom_prepare_dynamic_mapping(array $premapping, $type =
             $mapping[$i][$key] = $option;
           }
         }
-        // Guid is the "unique" field but let's do this "dinamically".
-        if (isset($values['unique'])) {
-          $mapping[$i]['unique'] = TRUE;
-        }
+
         $i++;
       }
     }
@@ -646,16 +643,13 @@ function _nexteuropa_newsroom_prepare_dynamic_mapping(array $premapping, $type =
       $mapping[$i] = array(
         'source' => 'xpathparser:' . $i,
         'target' => $field,
-        'unique' => FALSE,
+        'unique' => isset($values['unique']),
       );
 
       if (isset($values['options'])) {
         foreach ($values['options'] as $key => $option) {
           $mapping[$i][$key] = $option;
         }
-      }
-      if (isset($values['unique'])) {
-        $mapping[$i]['unique'] = TRUE;
       }
       $i++;
     }
