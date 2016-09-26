@@ -552,6 +552,9 @@ function _nexteuropa_newsroom_create_multilingual_services_importer() {
     'field_newsroom_basic_mailing' => array(
       'query' => 'infsonewsroom:BasicSvMailing/text()',
     ),
+    'field_newsroom_mailing_exists' => array(
+      'query' => 'infsonewsroom:mailingExists/text()',
+    ),
     'field_newsroom_service_image:uri' => array(
       'query' => 'infsonewsroom:BasicSvVisuUrl/text()',
     ),

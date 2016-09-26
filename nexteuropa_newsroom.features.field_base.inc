@@ -457,8 +457,8 @@ function nexteuropa_newsroom_field_default_field_bases() {
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
-        0 => 'Central mailing',
-        1 => 'Basic mailing',
+        0 => 'Basic mailing',
+        1 => 'Central mailing',
       ),
       'allowed_values_function' => '',
       'entity_translation_sync' => FALSE,
@@ -1081,6 +1081,32 @@ function nexteuropa_newsroom_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'geofield',
+  );
+
+  // Exported field_base: 'field_newsroom_mailing_exists'.
+  $field_bases['field_newsroom_mailing_exists'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_newsroom_mailing_exists',
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 1,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        0 => ' Mailing does not exist',
+        1 => ' Mailing exists',
+      ),
+      'allowed_values_function' => '',
+      'entity_translation_sync' => FALSE,
+    ),
+    'translatable' => 0,
+    'type' => 'list_boolean',
   );
 
   // Exported field_base: 'field_newsroom_organiser'.

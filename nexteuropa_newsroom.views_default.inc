@@ -347,6 +347,34 @@ function nexteuropa_newsroom_views_default_views() {
 
   /* Display: Central newsletters */
   $handler = $view->new_display('block', 'Central newsletters', 'basic');
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Taxonomy vocabulary: Machine name */
+  $handler->display->display_options['filters']['machine_name']['id'] = 'machine_name';
+  $handler->display->display_options['filters']['machine_name']['table'] = 'taxonomy_vocabulary';
+  $handler->display->display_options['filters']['machine_name']['field'] = 'machine_name';
+  $handler->display->display_options['filters']['machine_name']['value'] = array(
+    'newsroom_service' => 'newsroom_service',
+  );
+  /* Filter criterion: Taxonomy term: Service active (field_newsroom_service_active) */
+  $handler->display->display_options['filters']['field_newsroom_service_active_value']['id'] = 'field_newsroom_service_active_value';
+  $handler->display->display_options['filters']['field_newsroom_service_active_value']['table'] = 'field_data_field_newsroom_service_active';
+  $handler->display->display_options['filters']['field_newsroom_service_active_value']['field'] = 'field_newsroom_service_active_value';
+  $handler->display->display_options['filters']['field_newsroom_service_active_value']['value'] = 'Active';
+  /* Filter criterion: Taxonomy term: Basic mailing (field_newsroom_basic_mailing) */
+  $handler->display->display_options['filters']['field_newsroom_basic_mailing_value']['id'] = 'field_newsroom_basic_mailing_value';
+  $handler->display->display_options['filters']['field_newsroom_basic_mailing_value']['table'] = 'field_data_field_newsroom_basic_mailing';
+  $handler->display->display_options['filters']['field_newsroom_basic_mailing_value']['field'] = 'field_newsroom_basic_mailing_value';
+  $handler->display->display_options['filters']['field_newsroom_basic_mailing_value']['value'] = array(
+    1 => '1',
+  );
+  /* Filter criterion: Taxonomy term: Mailing exists (field_newsroom_mailing_exists) */
+  $handler->display->display_options['filters']['field_newsroom_mailing_exists_value']['id'] = 'field_newsroom_mailing_exists_value';
+  $handler->display->display_options['filters']['field_newsroom_mailing_exists_value']['table'] = 'field_data_field_newsroom_mailing_exists';
+  $handler->display->display_options['filters']['field_newsroom_mailing_exists_value']['field'] = 'field_newsroom_mailing_exists_value';
+  $handler->display->display_options['filters']['field_newsroom_mailing_exists_value']['value'] = array(
+    1 => '1',
+  );
   $handler->display->display_options['block_caching'] = '8';
 
   /* Display: Basic newsletters */
@@ -373,6 +401,13 @@ function nexteuropa_newsroom_views_default_views() {
   $handler->display->display_options['filters']['field_newsroom_basic_mailing_value']['field'] = 'field_newsroom_basic_mailing_value';
   $handler->display->display_options['filters']['field_newsroom_basic_mailing_value']['value'] = array(
     0 => '0',
+  );
+  /* Filter criterion: Taxonomy term: Mailing exists (field_newsroom_mailing_exists) */
+  $handler->display->display_options['filters']['field_newsroom_mailing_exists_value']['id'] = 'field_newsroom_mailing_exists_value';
+  $handler->display->display_options['filters']['field_newsroom_mailing_exists_value']['table'] = 'field_data_field_newsroom_mailing_exists';
+  $handler->display->display_options['filters']['field_newsroom_mailing_exists_value']['field'] = 'field_newsroom_mailing_exists_value';
+  $handler->display->display_options['filters']['field_newsroom_mailing_exists_value']['value'] = array(
+    1 => '1',
   );
   $export['newsroom_services'] = $view;
 

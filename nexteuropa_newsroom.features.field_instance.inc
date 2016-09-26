@@ -3726,6 +3726,51 @@ function nexteuropa_newsroom_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance:
+  // 'taxonomy_term-newsroom_service-field_newsroom_mailing_exists'.
+  $field_instances['taxonomy_term-newsroom_service-field_newsroom_mailing_exists'] = array(
+    'bundle' => 'newsroom_service',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 8,
+      ),
+      'mini_teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'taxonomy_term',
+    'field_name' => 'field_newsroom_mailing_exists',
+    'label' => 'Mailing exists',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 0,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 43,
+    ),
+  );
+
   // Exported field_instance: 'taxonomy_term-newsroom_service-name_field'.
   $field_instances['taxonomy_term-newsroom_service-name_field'] = array(
     'bundle' => 'newsroom_service',
