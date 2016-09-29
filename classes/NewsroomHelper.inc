@@ -171,21 +171,18 @@ class NewsroomHelper {
    *   Newsroom item.
    */
   public static function getNodeByFieldValue($field_name, $newsroom_id = 0) {
-    $newsroom_data = &drupal_static(__FUNCTION__);
     $cache_key = 'newsroom_item_by_id:' . $newsroom_id;
-    if (!isset($newsroom_data)) {
-      if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
-        $newsroom_data = $cache->data;
-      }
-      else {
-        $query = new EntityFieldQuery();
-        $newsroom_item = $query
-          ->entityCondition('entity_type', 'node')
-          ->fieldCondition($field_name, 'value', $newsroom_id, '=')
-          ->execute();
-        $newsroom_data = isset($newsroom_item['node']) ? array_shift($newsroom_item['node']) : FALSE;
-        cache_set($cache_key, $newsroom_data, NEXTEUROPA_NEWSROOM_CACHE_TABLE);
-      }
+    if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
+      $newsroom_data = $cache->data;
+    }
+    else {
+      $query = new EntityFieldQuery();
+      $newsroom_item = $query
+        ->entityCondition('entity_type', 'node')
+        ->fieldCondition($field_name, 'value', $newsroom_id, '=')
+        ->execute();
+      $newsroom_data = isset($newsroom_item['node']) ? array_shift($newsroom_item['node']) : FALSE;
+      cache_set($cache_key, $newsroom_data, NEXTEUROPA_NEWSROOM_CACHE_TABLE);
     }
     return $newsroom_data;
   }
@@ -662,7 +659,7 @@ class NewsroomHelper {
       $data = $cache->data;
     }
     else {
-      $data = i18n_taxonomy_get_tree($vocabulary_id, language_default()->language, 0, NULL, TRUE);
+      $data = i18n_taxonomy_get_tree($vocabulary_id, NewsroomHelper::getDefaultLanguage(), 0, NULL, TRUE);
       foreach ($data as $key => $taxonomy_term) {
         $i18n_object = i18n_get_object('taxonomy_term', $taxonomy_term->tid);
         $data[$key] = $i18n_object->localize($language->language);
@@ -756,26 +753,6 @@ class NewsroomHelper {
    */
   public static function getNewsroomUrl($url_part) {
     return NewsroomHelper::getUniverseUrl() . $url_part;
-  }
-
-  /**
-   * Gets the enabled languages.
-   *
-   * @return array
-   *   Languages array.
-   */
-  public static function getEnabledLanguages() {
-    $lang_keys = &drupal_static(__FUNCTION__);
-    if (!isset($lang_keys)) {
-      $lang = locale_language_list();
-      $lang_keys = array_keys($lang);
-      $eng = array_search('en', $lang_keys);
-      if ($eng) {
-        unset($lang_keys[$eng]);
-        array_unshift($lang_keys, 'en');
-      }
-    }
-    return $lang_keys;
   }
 
   /**
@@ -1061,6 +1038,26 @@ class NewsroomHelper {
       $date->setTimestamp(strtotime($value));
     }
     return $date;
+  }
+
+  /**
+   * Gets default language.
+   *
+   * @return string
+   *   Default language code.
+   */
+  public static function getDefaultLanguage() {
+    return language_default()->language;
+  }
+
+  /**
+   * Gets default language in uppercase.
+   *
+   * @return string
+   *   Default language code.
+   */
+  public static function getDefaultLanguageUppercase() {
+    return drupal_strtoupper(language_default()->language);
   }
 
 }

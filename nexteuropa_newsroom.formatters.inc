@@ -53,7 +53,7 @@ function nexteuropa_newsroom_field_formatter_settings_form($field, $instance, $v
         '#default_value' => $settings['zoomable'],
       );
       $element['display_title'] = array(
-        '#title' => t('Display title'),
+        '#title' => t('Display title.'),
         '#type' => 'checkbox',
         '#default_value' => $settings['display_title'],
       );

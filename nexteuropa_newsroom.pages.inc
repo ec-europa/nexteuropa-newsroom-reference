@@ -25,8 +25,7 @@
  *   Agenda content,
  */
 function _nexteuropa_newsroom_agenda($view = NewsroomAgenda::AGENDA_VIEW_SCHEDULE, $type = NULL, $topic = NULL, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
-  $builder = new NewsroomBuilder();
-  return $builder->buildPageAgenda($view, $type, $topic, $arg1, $arg2, $arg3)->getAgenda();
+  return NewsroomBuilder::buildPageAgenda($view, $type, $topic, $arg1, $arg2, $arg3)->getAgenda();
 }
 
 /**
@@ -45,8 +44,7 @@ function _nexteuropa_newsroom_agenda($view = NewsroomAgenda::AGENDA_VIEW_SCHEDUL
  *   Newsroom page content,
  */
 function _nexteuropa_newsroom_newsroom_page($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL) {
-  $builder = new NewsroomBuilder();
-  $newsroom_page = $builder->buildNewsroomPage($type_url, $topic_url, $start_date, $end_date);
+  $newsroom_page = NewsroomBuilder::buildNewsroomPage($type_url, $topic_url, $start_date, $end_date);
   $output = $newsroom_page->getContent();
   $output .= theme('pager');
   $build['#markup'] = $output;
@@ -62,8 +60,7 @@ function _nexteuropa_newsroom_newsroom_page($type_url = NULL, $topic_url = NULL,
  *   Topic url part.
  */
 function _nexteuropa_newsroom_newsroom_rss($type_url = NULL, $topic_url = NULL) {
-  $builder = new NewsroomBuilder();
-  $newsroom_page = $builder->buildNewsroomPage($type_url, $topic_url);
+  $newsroom_page = NewsroomBuilder::buildNewsroomPage($type_url, $topic_url);
   drupal_add_http_header('Content-Type', 'application/rss+xml; charset=utf-8');
   echo $newsroom_page->getRssContent();
   module_invoke_all('exit');
@@ -87,7 +84,7 @@ function _nexteuropa_newsroom_newsletters_page() {
     global $user;
 
     if (user_access(NEXTEUROPA_NEWSROOM_ADVANCED_SETTINGS_ACCESS, $user) && (empty(variable_get('newsroom_subscription_url')) || empty(variable_get('newsroom_app')) || empty(variable_get('newsroom_app_key')))) {
-      drupal_set_message(t('Please setup newsroom settings: app, key and subscription URL. !url', array('!url' => l(t('Newsroom settings'), 'admin/config/content/newsroom'))), 'warning');
+      drupal_set_message(t('Please setup newsroom settings: app, key and subscription URL !url.', array('!url' => l(t('Newsroom settings'), 'admin/config/content/newsroom'))), 'warning');
     }
 
     $view->set_display($basic_display);
@@ -122,7 +119,7 @@ function _nexteuropa_newsroom_newsletters_page() {
     $build['#markup'] = $content;
     $build['#attached']['js'][] = array(
       'type' => 'setting',
-      'data' => array('nexteuropa_newsroom' => array('error_message' => t('Wrong e-mail address'), 'user_is_logged_in' => user_is_logged_in())),
+      'data' => array('nexteuropa_newsroom' => array('error_message' => t('Wrong e-mail address.'), 'user_is_logged_in' => user_is_logged_in())),
     );
     $build['#attached']['js'][] = array(
       'type' => 'file',
@@ -150,6 +147,7 @@ function _nexteuropa_newsroom_prepare_newsletters($newsletters = array(), $subsc
     $item = new stdClass();
     $item->title = $newsletter->taxonomy_term_data_name;
     $item->description = $newsletter->taxonomy_term_data_description;
+    $item->service_sample = isset($newsletter->field_field_newsroom_service_sample_et[0]) ? drupal_render($newsletter->field_field_newsroom_service_sample_et[0]['rendered']) : NULL;
     $item->service_id = isset($newsletter->field_field_newsroom_service_id[0]) ? $newsletter->field_field_newsroom_service_id[0]['raw']['value'] : NULL;
     $item->image = isset($newsletter->field_field_newsroom_service_image[0]) ? drupal_render($newsletter->field_field_newsroom_service_image[0]['rendered']) : NULL;
     $item->form = NULL;
