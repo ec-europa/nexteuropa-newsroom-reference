@@ -879,23 +879,25 @@ function _nexteuropa_newsroom_admin_prepare_check(array $previous, array $input)
  * Rebuilds multilingual importers.
  */
 function _nexteuropa_newsroom_admin_rebuild_importers() {
+
   // Remove importers.
   $importers = array(
-    'items' => NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
-    'services' => NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
-    'topics' => NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
-    'types' => NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
-    'newsletter' => NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
+    NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
+    NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
+    NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
+    NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
+    NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
   );
 
-  foreach ($importers as $key => $importer) {
+  foreach ($importers as $importer) {
     // WE drop all tampers for the current importer.
     db_delete('feeds_tamper')
       ->condition('importer', $importer)
       ->execute();
     feeds_importer($importer)->delete();
     // Recreate them.
-    call_user_func('_nexteuropa_newsroom_create_multilingual_' . $key . '_importer');
+    $importer = NewsroomBuilder::buildImporter($importer);
+    $importer->generateImporter();
   }
 
   drupal_set_message(t('Newsroom importers have been successfully recreated.'));

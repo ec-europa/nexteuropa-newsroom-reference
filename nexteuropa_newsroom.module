@@ -8,7 +8,6 @@
 module_load_include('inc', 'pathauto', 'pathauto');
 module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.formatters');
 module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.forms');
-module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.multilingual');
 module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.features');
 module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.blocks');
 module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.theme');
@@ -842,20 +841,18 @@ function nexteuropa_newsroom_feeds_after_save(FeedsSource $source, $entity, $ite
     $node->status = 0;
     node_save($node);
   }
-  if ($source->importer()->fetcher->id == 'newsroom_deleted_items') {
+  elseif ($source->importer()->fetcher->id == 'newsroom_deleted_items') {
     NewsroomHelper::deleteEntityTranslations($entity, $entity_id);
     entity_delete('node', $entity_id);
   }
-
-  if ($source->importer()->fetcher->id == 'newsroom_items_multilingual') {
+  elseif ($source->importer()->fetcher->id == 'newsroom_items_multilingual') {
     // TODO : find a better way to remove translation.
     $languages = language_list();
-    $default_language = language_default()->language;
 
     // Try to remove disabled translations, check the title for translation.
     foreach ($languages as $language) {
       // Check only active and skip the default language.
-      if ($language->enabled && $language->language != $default_language) {
+      if ($language->enabled && $language->language != NewsroomHelper::getDefaultLanguage()) {
         $config = $source->importer()->processor->getConfig();
         if (isset($config['mappings'])) {
           $xpath_expression = NULL;
@@ -874,8 +871,8 @@ function nexteuropa_newsroom_feeds_after_save(FeedsSource $source, $entity, $ite
       }
     }
 
-    _nexteuropa_newsroom_set_image_meta_info('field_newsroom_illustrative_img', $entity, $source, $item, $languages, $default_language);
-    _nexteuropa_newsroom_set_image_meta_info('field_newsroom_private_img', $entity, $source, $item, $languages, $default_language);
+    _nexteuropa_newsroom_set_image_meta_info('field_newsroom_illustrative_img', $entity, $source, $item, $languages, NewsroomHelper::getDefaultLanguage());
+    _nexteuropa_newsroom_set_image_meta_info('field_newsroom_private_img', $entity, $source, $item, $languages, NewsroomHelper::getDefaultLanguage());
   }
 }
 
@@ -976,13 +973,16 @@ function nexteuropa_newsroom_feeds_processor_targets_alter(&$targets, $entity_ty
     'callback' => 'newsroom_feeds_set_target',
   );
 
-  // We expose image additional fields to feeds mapper. So later we can use
-  // these values to save them to file's fields.
+  // Add custom targets for file fields: copyrights, caption, title, alt.
   $field_names = array(
-    'field_file_image_title_text' => 'field_newsroom_illustrative_img:title:et:',
-    'field_newsroom_copyrights' => 'field_newsroom_illustrative_img:copyright:et:',
-    'field_caption' => 'field_newsroom_illustrative_img:caption:et:',
-    'field_file_image_alt_text' => 'field_newsroom_illustrative_img:alt:et:',
+    'field_newsroom_illustrative_img:title:et:' => 'field_file_image_title_text',
+    'field_newsroom_illustrative_img:copyright:et:' => 'field_newsroom_copyrights',
+    'field_newsroom_illustrative_img:caption:et:' => 'field_caption',
+    'field_newsroom_illustrative_img:alt:et:' => 'field_file_image_alt_text',
+    'field_newsroom_private_img:title:et:' => 'field_file_image_title_text',
+    'field_newsroom_private_img:copyright:et:' => 'field_newsroom_copyrights',
+    'field_newsroom_private_img:caption:et:' => 'field_caption',
+    'field_newsroom_private_img:alt:et:' => 'field_file_image_alt_text',
   );
 
   $fields = array();
@@ -990,14 +990,14 @@ function nexteuropa_newsroom_feeds_processor_targets_alter(&$targets, $entity_ty
   foreach ($languages as $language) {
     // Check only active and skip the default language.
     if ($language->enabled) {
-      foreach ($field_names as $field_name) {
+      foreach (array_keys($field_names) as $field_name) {
         $fields[] = $field_name . $language->language;
       }
     }
   }
 
   foreach (field_info_instances('file', 'image') as $name => $instance) {
-    if (in_array($name, array_keys($field_names))) {
+    if (in_array($name, $field_names)) {
       foreach ($fields as $field) {
         $targets[$field] = array(
           'name' => t('Image:@name', array('@name' => $field)),
@@ -1235,5 +1235,14 @@ function nexteuropa_newsroom_preprocess_node(&$variables) {
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function nexteuropa_newsroom_ctools_plugin_directory($owner, $plugin_type) {
+  if ($owner == 'feeds_tamper' && $plugin_type == 'plugins') {
+    return 'tamper_plugins';
   }
 }

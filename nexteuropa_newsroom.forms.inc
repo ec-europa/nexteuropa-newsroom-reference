@@ -17,7 +17,6 @@
  *   Form submit result.
  */
 function nexteuropa_newsroom_restore_conf($form, &$form_state) {
-  $def_lang = language_default()->language;
   $voc = $form['vocabulary_machine_name']['#value'];
   // Get the id coming from the newsroom.
   $id = _nexteuropa_newsroom_get_ids($voc, $form['#term']);
@@ -53,7 +52,7 @@ function nexteuropa_newsroom_restore_conf($form, &$form_state) {
           break;
 
         case 'field_newsroom_category_domain':
-          $form_state['values'][$propname][$def_lang][$i]['value'] = $prop[$i];
+          $form_state['values'][$propname][NewsroomHelper::getDefaultLanguage()][$i]['value'] = $prop[$i];
           break;
 
         default:
@@ -388,7 +387,6 @@ function nexteuropa_newsroom_form_newsroom_item_node_form_alter(&$form, &$form_s
   // Build language aware options list for taxonomy reference fields.
   $terms = array();
   global $language;
-  $def_lang = language_default()->language;
   $curr_lang = $language->language;
 
   $taxonomy_fields = array(
@@ -401,8 +399,8 @@ function nexteuropa_newsroom_form_newsroom_item_node_form_alter(&$form, &$form_s
   $type_vid = NewsroomHelper::getNewsroomTypeVocabulary()->vid;
   $topic_vid = NewsroomHelper::getNewsroomTopicVocabulary()->vid;
 
-  $terms[NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY] = i18n_taxonomy_get_tree($type_vid, $def_lang);
-  $terms[NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY] = i18n_taxonomy_get_tree($topic_vid, $def_lang);
+  $terms[NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY] = i18n_taxonomy_get_tree($type_vid, NewsroomHelper::getDefaultLanguage());
+  $terms[NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY] = i18n_taxonomy_get_tree($topic_vid, NewsroomHelper::getDefaultLanguage());
 
   // Fields with wrong translation in node edit form.
   foreach ($taxonomy_fields as $taxonomy_field) {
@@ -990,8 +988,7 @@ function _nexteuropa_newsroom_agenda_ajax_form_submit(&$form, &$form_state) {
 
   $topic = NewsroomHelper::getNewsroomTopic($topic_id);
   $type = NewsroomHelper::getNewsroomType($type_id);
-  $builder = new NewsroomBuilder();
-  $agenda = $builder->buildAgenda($view, $type, $topic, new DateTime($date));
+  $agenda = NewsroomBuilder::buildAgenda($view, $type, $topic, new DateTime($date));
 
   ctools_include('ajax');
   $commands[] = ctools_ajax_command_redirect($agenda->getNavigationUrl($agenda->getCurrentDate()));
@@ -1158,8 +1155,6 @@ function _nexteuropa_nexteuropa_newsletter_unsubscription_form_ajax($form, &$for
  *   Array of values.
  */
 function nexteuropa_newsroom_restore_batch(array $chunk, $voc, array $operation_details) {
-  $def_lang = language_default()->language;
-
   // Get the id coming from the newsroom.
   $id = _nexteuropa_newsroom_get_ids($voc, $form['#term']);
   // The name of the variable contains the id.
@@ -1424,8 +1419,7 @@ function nexteuropa_newsroom_newsroom_page_filter_form_submit(&$form, &$form_sta
   $end_date = isset($form_state['input']['end_date']['date']) ? $form_state['input']['end_date']['date'] : NULL;
   $topic = NewsroomHelper::getNewsroomTopic($topic_id);
   $type = NewsroomHelper::getNewsroomType($type_id);
-  $builder = new NewsroomBuilder();
-  $newsroom_page = $builder->buildNewsroomPage($type, $topic, $start_date, $end_date);
+  $newsroom_page = NewsroomBuilder::buildNewsroomPage($type, $topic, $start_date, $end_date);
   // Redirect user to prepared URL.
   drupal_goto($newsroom_page->getNavigationUrl(), array(), 301);
 }
