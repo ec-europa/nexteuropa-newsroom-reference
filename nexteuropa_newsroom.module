@@ -439,18 +439,6 @@ function nexteuropa_newsroom_url_inbound_alter(&$path, $original_path, $path_lan
 }
 
 /**
- * Implements hook_url_outbound_alter().
- */
-function nexteuropa_newsroom_url_outbound_alter(&$path, &$options, $original_path) {
-  // Resolves alias from node language if the content is not translated.
-  if (preg_match('/^node\/\d+$/', $path) && $node = menu_get_object('node', 1, $path)) {
-    if ($alias = drupal_get_path_alias($path, $node->language)) {
-      $path = $alias;
-    }
-  }
-}
-
-/**
  * Implements hook_node_presave().
  */
 function nexteuropa_newsroom_node_presave($node) {
