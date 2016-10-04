@@ -544,6 +544,9 @@ function _nexteuropa_nexteuropa_newsroom_item_import_access() {
  *   Original newsroom ID.
  * @param string $importer_id
  *   Importer ID.
+ *
+ * @return string
+ *    Taxonomy term redirect URL.
  */
 function _nexteuropa_newsroom_taxonomy_term_importer($type, $newsroom_id, $importer_id) {
   $url = NewsroomHelper::getImporterUrl($importer_id) . variable_get('newsroom_single_' . $type . '_import_segment') . $newsroom_id;

@@ -578,10 +578,7 @@ function _nexteuropa_newsroom_admin_universe_id_validate($element, &$form_state)
  *   Form state.
  */
 function _nexteuropa_newsroom_admin_subsite_validate($element, &$form_state) {
-  $subsite = $form_state['values']['newsroom_subsite'];
-  $universe_id = $form_state['values']['newsroom_universe_id'];
-
-  if (!NewsroomHelper::validateSubsite($universe_id, $subsite)) {
+  if (!NewsroomHelper::validateSubsite($form_state['values']['newsroom_subsite'])) {
     form_error($element, t("This subsite doesn't seem to exist, please check the value you entered."));
   }
 }
@@ -633,8 +630,7 @@ function _nexteuropa_newsroom_admin_type_root_validate($element, &$form_state) {
  *   Pathes.
  */
 function _nexteuropa_newsroom_admin_reset_paths($form, &$form_state) {
-  $types = NewsroomHelper::getNewsroomTypes();
-  foreach ($types as $tid => $type) {
+  foreach (NewsroomHelper::getNewsroomTypes() as $tid => $type) {
     $type_name = pathauto_cleanstring($type->name);
     $parents = taxonomy_get_parents($type->tid);
     $parent = '';

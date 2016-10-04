@@ -315,6 +315,8 @@ class NewsroomHelper {
    *   The mapping field.
    * @param string $field_value
    *   The mapping field value.
+   * @param string $bundle
+   *   Bundle name.
    *
    * @return array
    *   Taxonomy ids.
@@ -819,22 +821,20 @@ class NewsroomHelper {
   /**
    * Validates if a given subsite exists.
    *
-   * @param string $subsite
-   *   Newsroom Universe subsite.
+   * @param string $universe_id
+   *   Universe ID.
    *
    * @return bool
    *   Newsroom Universe subsite exists or not.
    */
-  public static function validateSubsite($universe_id = NULL, $subsite = NULL) {
+  public static function validateSubsite($subsite = NULL) {
     // The subsite is not mandatory.
     if (empty($subsite)) {
       return TRUE;
     }
     else {
-      if ($universe_id) {
-        $test = drupal_http_request(NewsroomHelper::getUniverseUrl() . '?subsite=' . $subsite);
-        return $test->code == 200;
-      }
+      $test = drupal_http_request(NewsroomHelper::getUniverseUrl() . '?subsite=' . $subsite);
+      return $test->code == 200;
     }
 
     return FALSE;
