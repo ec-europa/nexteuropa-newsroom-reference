@@ -89,7 +89,7 @@ function _nexteuropa_newsroom_agenda_block() {
   $content = '';
   if ($type = _nexteuropa_nexteuropa_get_type_from_agenda_block_context()) {
     $agenda_block = new NewsroomBlockAgenda($type, array(), NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR);
-    $content =  $agenda_block->generateContent();
+    $content = $agenda_block->generateContent();
   }
 
   return $content;
@@ -223,6 +223,7 @@ function _nexteuropa_nexteuropa_get_related_content($field_name, $node) {
  *
  * @param array $ids
  *   Array of newsroom item ids.
+ *
  * @return array
  *   Array of objects to display.
  */
@@ -329,7 +330,7 @@ function _nexteuropa_newsroom_block_news_proposal() {
     if ($associated_topic_id = NewsroomHelper::getFieldValue($node, 'field_newsroom_associated_topic', 'tid')) {
       $topic_id = $associated_topic_id;
     }
-    else if ($group_id = NewsroomHelper::getFieldValue($node, 'og_group_ref', 'target_id')) {
+    elseif ($group_id = NewsroomHelper::getFieldValue($node, 'og_group_ref', 'target_id')) {
       // Try get topic from Organic group, if it exists.
       $group_id = is_array($group_id) ? $group_id[0] : $group_id;
       $group = node_load($group_id);

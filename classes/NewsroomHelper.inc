@@ -426,7 +426,7 @@ class NewsroomHelper {
     else {
       $taxonomy_term = NULL;
       // If it is tid load taxonomy term directly.
-      if ((int)$request_name) {
+      if ((int) $request_name) {
         $taxonomy_term = taxonomy_term_load($request_name);
       }
 
@@ -821,8 +821,8 @@ class NewsroomHelper {
   /**
    * Validates if a given subsite exists.
    *
-   * @param string $universe_id
-   *   Universe ID.
+   * @param string $subsite
+   *   Subsite name.
    *
    * @return bool
    *   Newsroom Universe subsite exists or not.

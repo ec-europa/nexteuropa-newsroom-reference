@@ -245,7 +245,7 @@ function nexteuropa_newsroom_date_popup_process_alter(&$element, &$form_state, $
     unset($element['date']['#title']);
     unset($element['date']['#description']);
   }
-  else if ($form_state['build_info']['form_id'] == 'nexteuropa_newsroom_newsroom_page_filter_form') {
+  elseif ($form_state['build_info']['form_id'] == 'nexteuropa_newsroom_newsroom_page_filter_form') {
     unset($element['date']['#title']);
   }
 }
