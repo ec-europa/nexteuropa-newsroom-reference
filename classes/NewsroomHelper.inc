@@ -108,13 +108,6 @@ class NewsroomHelper {
     }
 
     $source->startImport();
-
-    if (!empty($url)) {
-      // Restore the default URL in order to run importers manually or via cron.
-      $config['FeedsHTTPFetcher']['source'] = NewsroomHelper::getImporterUrl($importer_id);
-      $source->setConfig($config);
-      $source->save();
-    }
   }
 
   /**

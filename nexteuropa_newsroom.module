@@ -403,6 +403,17 @@ function _nexteuropa_newsroom_import_importers() {
 }
 
 /**
+ * Implements hook_feeds_after_import().
+ */
+function nexteuropa_newsroom_feeds_after_import(FeedsSource $source) {
+  // Restore the default URL in order to run importers manually or via cron.
+  $config = $source->getConfig();
+  $config['FeedsHTTPFetcher']['source'] = NewsroomHelper::getImporterUrl($source->importer->fetcher->id);
+  $source->setConfig($config);
+  $source->save();
+}
+
+/**
  * Implements hook_views_data_alter().
  */
 function nexteuropa_newsroom_views_data_alter(&$data) {
