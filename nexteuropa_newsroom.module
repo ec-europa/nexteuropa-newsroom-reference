@@ -407,10 +407,13 @@ function _nexteuropa_newsroom_import_importers() {
  */
 function nexteuropa_newsroom_feeds_after_import(FeedsSource $source) {
   // Restore the default URL in order to run importers manually or via cron.
-  $config = $source->getConfig();
-  $config['FeedsHTTPFetcher']['source'] = NewsroomHelper::getImporterUrl($source->importer->fetcher->id);
-  $source->setConfig($config);
-  $source->save();
+  $url = NewsroomHelper::getImporterUrl($source->importer->fetcher->id);
+  if (!empty($url)) {
+    $config = $source->getConfig();
+    $config['FeedsHTTPFetcher']['source'] = $url;
+    $source->setConfig($config);
+    $source->save();
+  }
 }
 
 /**
