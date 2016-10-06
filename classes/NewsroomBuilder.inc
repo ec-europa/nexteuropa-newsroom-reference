@@ -850,10 +850,10 @@ class NewsroomBuilder {
   /**
    * Builds newsroom page object.
    *
-   * @param string $type_url
-   *   Type URL part.
-   * @param string $topic_url
-   *   Topic URL part.
+   * @param string|int $type_url
+   *   Newsroom type url part or tid.
+   * @param string|int $topic_url
+   *   Newsroom topic url or tid.
    * @param string|null $start_date
    *   Start date.
    * @param string|null $end_date
@@ -862,30 +862,9 @@ class NewsroomBuilder {
    * @return NewsroomPage
    *   NewsroomPage object.
    */
-  public static function buildPageNewsroomPage($type_url, $topic_url, $start_date = NULL, $end_date = NULL) {
+  public static function buildNewsroomPage($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL) {
     $type = NewsroomBuilder::getType($type_url);
     $topic = NewsroomBuilder::getTopic($topic_url);
-    $start_date = NewsroomBuilder::getDate($start_date);
-    $end_date = NewsroomBuilder::getDate($end_date);
-    return new NewsroomPage($type, $topic, $start_date, $end_date);
-  }
-
-  /**
-   * Builds newsroom page object.
-   *
-   * @param object|null $type
-   *   Newsroom type taxonomy term.
-   * @param object|null $topic
-   *   Newsroom topic taxonomy term.
-   * @param string|null $start_date
-   *   Start date.
-   * @param string|null $end_date
-   *   End date.
-   *
-   * @return NewsroomPage
-   *   NewsroomPage object.
-   */
-  public static function buildNewsroomPage($type = NULL, $topic = NULL, $start_date = NULL, $end_date = NULL) {
     $start_date = NewsroomBuilder::getDate($start_date);
     $end_date = NewsroomBuilder::getDate($end_date);
     return new NewsroomPage($type, $topic, $start_date, $end_date);
