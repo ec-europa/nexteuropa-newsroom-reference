@@ -481,6 +481,21 @@ function _nexteuropa_newsroom_admin_settings_form_submit($form, &$form_state) {
   // Create default importers if new Newsroom Universe ID detected.
   if ($form_state['values']['newsroom_universe_id']) {
     variable_set('newsroom_universe_id', $form_state['values']['newsroom_universe_id']);
+
+    $importers = array(
+      NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
+      NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
+      NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
+      NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
+      NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
+    );
+
+    foreach ($importers as $importer) {
+      $importer = NewsroomBuilder::buildImporter($importer);
+      $importer->generateImporter();
+    }
+
+    drupal_set_message(t('Newsroom importers have been successfully generated.'));
   }
 
   // If the validation returns the confirm request.
