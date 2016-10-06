@@ -1605,6 +1605,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
+        'weight' => 41,
       ),
     ),
     'entity_type' => 'node',
@@ -3288,6 +3289,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
       'teaser' => array(
         'label' => 'above',
         'type' => 'hidden',
+        'weight' => 1,
       ),
     ),
     'entity_type' => 'node',
