@@ -83,13 +83,7 @@ function _nexteuropa_newsroom_check_backup($form, &$form_state) {
   $voc = $form['#vocabulary']->machine_name;
   // Get the current variable for the specific vocubulary.
   $backup = variable_get($voc . '_backup', array());
-
-  if (empty($backup)) {
-    return FALSE;
-  }
-  else {
-    return TRUE;
-  }
+  return empty($backup);
 }
 
 /**
@@ -251,7 +245,7 @@ function nexteuropa_newsroom_date_popup_process_alter(&$element, &$form_state, $
     unset($element['date']['#title']);
     unset($element['date']['#description']);
   }
-  if ($form_state['build_info']['form_id'] == 'nexteuropa_newsroom_newsroom_page_filter_form') {
+  else if ($form_state['build_info']['form_id'] == 'nexteuropa_newsroom_newsroom_page_filter_form') {
     unset($element['date']['#title']);
   }
 }
@@ -385,10 +379,6 @@ function nexteuropa_newsroom_form_field_ui_display_overview_form_alter(&$form, &
  */
 function nexteuropa_newsroom_form_newsroom_item_node_form_alter(&$form, &$form_state, $form_id) {
   // Build language aware options list for taxonomy reference fields.
-  $terms = array();
-  global $language;
-  $curr_lang = $language->language;
-
   $taxonomy_fields = array(
     'field_newsroom_item_type',
     'field_newsroom_primary_topic',
@@ -396,22 +386,12 @@ function nexteuropa_newsroom_form_newsroom_item_node_form_alter(&$form, &$form_s
     'field_newsroom_highlighted_topic',
   );
 
-  $type_vid = NewsroomHelper::getNewsroomTypeVocabulary()->vid;
-  $topic_vid = NewsroomHelper::getNewsroomTopicVocabulary()->vid;
-
-  $terms[NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY] = i18n_taxonomy_get_tree($type_vid, NewsroomHelper::getDefaultLanguage());
-  $terms[NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY] = i18n_taxonomy_get_tree($topic_vid, NewsroomHelper::getDefaultLanguage());
+  $type_options = NewsroomHelper::getNewsroomTypeOptions(FALSE, FALSE);
+  $topic_options = NewsroomHelper::getNewsroomTopicOptions(array(), FALSE);
 
   // Fields with wrong translation in node edit form.
   foreach ($taxonomy_fields as $taxonomy_field) {
-    $tree = $taxonomy_field == 'field_newsroom_item_type' ? $terms[NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY] : $terms[NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY];
-
-    foreach ($tree as $key => $value) {
-      $i18n_object = i18n_get_object('taxonomy_term', $value->tid);
-      $t_term = $i18n_object->localize($curr_lang);
-      $pref = $value->parents[0] != 0 ? '- ' : '';
-      $form[$taxonomy_field][LANGUAGE_NONE]['#options'][$value->tid] = $pref . $t_term->name;
-    }
+    $form[$taxonomy_field][LANGUAGE_NONE]['#options'] = $taxonomy_field == 'field_newsroom_item_type' ? $type_options : $topic_options;
 
     // The default value is lost in the translations,
     // so we need to set it this way.
@@ -420,13 +400,10 @@ function nexteuropa_newsroom_form_newsroom_item_node_form_alter(&$form, &$form_s
       $value_array = $form['#node']->$taxonomy_field;
       foreach ($value_array[LANGUAGE_NONE] as $value) {
         $values[] = $value['tid'];
-        $form[$taxonomy_field][LANGUAGE_NONE]['#default_value'] = $values;
       }
+      $form[$taxonomy_field][LANGUAGE_NONE]['#default_value'] = $values;
     }
   }
-
-  // The widget will loose this settings, otherwise.
-  $form['field_newsroom_topics'][LANGUAGE_NONE]['#multiple'] = TRUE;
 }
 
 /**
@@ -1417,9 +1394,7 @@ function nexteuropa_newsroom_newsroom_page_filter_form_submit(&$form, &$form_sta
   $type_id = isset($form_state['input']['type_id']) ? $form_state['input']['type_id'] : NULL;
   $start_date = isset($form_state['input']['start_date']['date']) ? $form_state['input']['start_date']['date'] : NULL;
   $end_date = isset($form_state['input']['end_date']['date']) ? $form_state['input']['end_date']['date'] : NULL;
-  $topic = NewsroomHelper::getNewsroomTopic($topic_id);
-  $type = NewsroomHelper::getNewsroomType($type_id);
-  $newsroom_page = NewsroomBuilder::buildNewsroomPage($type, $topic, $start_date, $end_date);
+  $newsroom_page = NewsroomBuilder::buildNewsroomPage($type_id, $topic_id, $start_date, $end_date);
   // Redirect user to prepared URL.
   drupal_goto($newsroom_page->getNavigationUrl(), array(), 301);
 }
