@@ -588,7 +588,7 @@ function _nexteuropa_nexteuropa_newsroom_item_delete($newsroom_id) {
  *   Original newsroom ID.
  */
 function _nexteuropa_newsroom_item_redirect($newsroom_id = 0) {
-  _nexteuropa_newsroom_redirect('item', $newsroom_id);
+  _nexteuropa_newsroom_redirect(NEXTEUROPA_NEWSROOM_ITEM, $newsroom_id);
 }
 
 /**
@@ -599,7 +599,7 @@ function _nexteuropa_newsroom_item_redirect($newsroom_id = 0) {
  * @param int $newsroom_entity_id
  *   ID of entity from newsroom side.
  */
-function _nexteuropa_newsroom_redirect($redirect_type = 'item', $newsroom_entity_id = 0) {
+function _nexteuropa_newsroom_redirect($redirect_type = NEXTEUROPA_NEWSROOM_ITEM, $newsroom_entity_id = 0) {
   if (!$newsroom_entity_id) {
     drupal_not_found();
     drupal_exit();
@@ -622,7 +622,7 @@ function _nexteuropa_newsroom_redirect($redirect_type = 'item', $newsroom_entity
       break;
 
     // Newsroom Item Type based on original import name.
-    case 'type':
+    case NEXTEUROPA_NEWSROOM_TYPE:
       $path = _newsroom_nexteuropa_get_term_redirect_path('field_newsroom_type_id', $newsroom_entity_id);
       break;
 
@@ -1105,7 +1105,7 @@ function nexteuropa_newsroom_entity_info_alter(&$entity_info) {
  * Implements hook_preprocess_node().
  */
 function nexteuropa_newsroom_preprocess_node(&$variables) {
-  if ($variables['type'] == 'newsroom_item') {
+  if ($variables['type'] == NEXTEUROPA_NEWSROOM_CONTENT_TYPE) {
     $node = $variables['node'];
     // Fix contact link.
     $nr_contact_field = field_get_items('node', $node, 'field_newsroom_item_contact_text');
