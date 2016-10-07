@@ -100,14 +100,16 @@ class NewsroomHelper {
    */
   public static function runFeedImporter($importer_id, $url = NULL) {
     $source = feeds_source($importer_id);
-    $config = $source->getConfig();
-
     if (!empty($url)) {
       $config['FeedsHTTPFetcher']['source'] = $url;
-      $source->setConfig($config);
+      $source->addConfig($config);
+      $source->save();
+      $source->import();
     }
-
-    $source->startImport();
+    else {
+      // For normal import we need batch, so we call startImport.
+      $source->startImport();
+    }
   }
 
   /**

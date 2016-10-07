@@ -118,19 +118,19 @@ function _nexteuropa_newsroom_import_item($type, $newsroom_id) {
   $path = NULL;
   switch ($type) {
     case NEXTEUROPA_NEWSROOM_TYPE:
-      _nexteuropa_newsroom_taxonomy_term_importer($type, $newsroom_id, NEXTEUROPA_NEWSROOM_TYPE_IMPORTER);
+      $path = _nexteuropa_newsroom_taxonomy_term_importer($type, $newsroom_id, NEXTEUROPA_NEWSROOM_TYPE_IMPORTER);
       break;
 
     case NEXTEUROPA_NEWSROOM_TOPIC:
-      _nexteuropa_newsroom_taxonomy_term_importer($type, $newsroom_id, NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER);
+      $path = _nexteuropa_newsroom_taxonomy_term_importer($type, $newsroom_id, NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER);
       break;
 
     case NEXTEUROPA_NEWSROOM_SERVICE:
-      _nexteuropa_newsroom_taxonomy_term_importer($type, $newsroom_id, NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER);
+      $path = _nexteuropa_newsroom_taxonomy_term_importer($type, $newsroom_id, NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER);
       break;
 
     case NEXTEUROPA_NEWSROOM_ITEM:
-      _nexteuropa_nexteuropa_newsroom_item_importer($newsroom_id);
+      $path = _nexteuropa_nexteuropa_newsroom_item_importer($newsroom_id);
       break;
 
     default:
@@ -552,17 +552,15 @@ function _nexteuropa_newsroom_taxonomy_term_delete($field_name, $original_newsro
  *   Original newsroom id.
  */
 function _nexteuropa_nexteuropa_newsroom_item_importer($newsroom_id = 0) {
+  $path = NULL;
   if ($newsroom_id) {
     // Prepare URLs for importers and get feed importer ID.
     $url = NewsroomHelper::getImporterUrl(NEXTEUROPA_NEWSROOM_ITEM_IMPORTER) . variable_get('newsroom_single_item_import_segment', NEXTEUROPA_NEWSROOM_ITEM_SEGMENT) . $newsroom_id;
     NewsroomHelper::runFeedImporter(NEXTEUROPA_NEWSROOM_ITEM_IMPORTER, $url);
-    drupal_set_message(t('The item has been imported'));
-    drupal_goto('news-redirect/' . $newsroom_id, array(), 301);
+    $path = 'news-redirect/' . $newsroom_id;
   }
-  else {
-    drupal_not_found();
-    drupal_exit();
-  }
+
+  return $path;
 }
 
 /**
