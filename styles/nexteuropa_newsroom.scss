@@ -30,10 +30,9 @@
 // Exposed form in newsroom page.
 .newsroomPage-filterForm,
 .newsroomAgenda-filterForm {
-  border-top: solid 5px #ced9e4;
   border-bottom: solid 1px #ced9e4;
   background: #fff;
-  padding: 10px 15px 12px;
+  padding: 0 15px 12px;
   margin: -15px -15px 25px -15px;
 
   &:after {
@@ -124,7 +123,8 @@
 .newsroom_item_container .newsroom_type,
 .newsroomPage-filterForm h3,
 .newsroomAgenda-filterForm h3,
-.sample a {
+.sample a,
+.furtherDates > .newsroom_title {
   display: inline-block;
   background: #0065a2;
   padding: 0.2em 15px;
@@ -469,18 +469,7 @@
     content: "";
   } 
 
-  h3 {
-    border-color: #ddd;
-  }
-
-  .newsroom_item_metadata {
-    display: block;
-    padding: 0 0 0 2em;
-  }
-
   .newsroom_title {
-    display: block;
-    text-transform: uppercase;
     
     a {
       text-decoration: none;
@@ -503,8 +492,8 @@
   
     .views-row {
       border-top: solid 1px #eee;
-      padding-top: 10px;
-      margin-bottom: 15px;
+      padding-top: 15px;
+      margin: 0;
     }
 
     .views-row:first-child {
@@ -516,10 +505,6 @@
 
 .block-nexteuropa-newsroom .newsroom_item_container.agenda .newsroom_type,
 .newsroomAgenda-container .newsroom_type {
-  color: #999;
-  font-style: italic;
-  padding-bottom: 3px;
-  display: block;
   font-size: 85%;
 }
 
