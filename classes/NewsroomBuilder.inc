@@ -858,16 +858,18 @@ class NewsroomBuilder {
    *   Start date.
    * @param string|null $end_date
    *   End date.
+   * @param string $ec_content
+   *   EC content.
    *
    * @return NewsroomPage
    *   NewsroomPage object.
    */
-  public static function buildNewsroomPage($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL) {
+  public static function buildNewsroomPage($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL, $ec_content = NEXTEUROPA_NEWSROOM_EC) {
     $type = NewsroomBuilder::getType($type_url);
     $topic = NewsroomBuilder::getTopic($topic_url);
     $start_date = NewsroomBuilder::getDate($start_date);
     $end_date = NewsroomBuilder::getDate($end_date);
-    return new NewsroomPage($type, $topic, $start_date, $end_date);
+    return new NewsroomPage($type, $topic, $start_date, $end_date, $ec_content);
   }
 
 }
