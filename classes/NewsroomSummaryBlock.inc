@@ -236,6 +236,7 @@ class NewsroomSummaryBlock {
     $output = NULL;
 
     foreach ($this->getTypes() as $key => $type) {
+      // We exclude event content types, because we display them as agenda.
       if (in_array($type->tid, $events_terms)) {
         continue;
       }
@@ -262,10 +263,7 @@ class NewsroomSummaryBlock {
     $display_highlights_begin = variable_get('newsroom_display_highlights_begin', 0);
     $agenda_after_highlights = variable_get('newsroom_agenda_after_highlights', 0);
     $order_by_last_update = variable_get('newsroom_order_by_last_update', 0);
-    if ($a->getHighlighted() < $b->getHighlighted()) {
-      return $display_highlights_begin ? 1 : -1;
-    }
-    elseif ($a->getHighlighted() > $b->getHighlighted()) {
+    if ($a->getHighlighted() > $b->getHighlighted()) {
       return $display_highlights_begin ? -1 : 1;
     }
     elseif ($a->getIsAgenda() < $b->getIsAgenda()) {
@@ -274,11 +272,20 @@ class NewsroomSummaryBlock {
     elseif ($a->getIsAgenda() > $b->getIsAgenda()) {
       return $agenda_after_highlights ? -1 : 1;
     }
-    elseif ($a->getLatestDate() < $b->getLatestDate()) {
-      return $order_by_last_update ? 1 : -1;
+    elseif ($order_by_last_update) {
+      return $a->getLatestDate() < $b->getLatestDate() ? 1 : -1;
     }
-    elseif ($a->getLatestDate() > $b->getLatestDate()) {
-      return $order_by_last_update ? -1 : 1;
+    elseif ($a->getType()->depth > $b->getType()->depth) {
+      return 1;
+    }
+    elseif ($a->getType()->depth < $b->getType()->depth) {
+      return -1;
+    }
+    elseif ($a->getType()->weight > $b->getType()->weight) {
+      return 1;
+    }
+    elseif ($a->getType()->weight < $b->getType()->weight) {
+      return -1;
     }
     else {
       return 0;

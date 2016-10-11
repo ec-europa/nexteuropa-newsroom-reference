@@ -35,8 +35,7 @@ class NewsroomBlockAgenda extends NewsroomBlockBase {
    *   Agenda block content.
    */
   public function generateContent() {
-    $builder = new NewsroomBuilder();
-    $agenda = $builder->buildAgenda(NewsroomAgenda::AGENDA_VIEW_SCHEDULE_BLOCK, $this->getType(), $this->getTopics(), new DateTime(), $this->getOperator());
+    $agenda = NewsroomBuilder::buildAgenda(NewsroomAgenda::AGENDA_VIEW_SCHEDULE_BLOCK, $this->getType(), $this->getTopics(), new DateTime(), $this->getOperator());
     $content = theme('newsroom_summary_block_wrapper', array(
       'content' => $agenda->getBlockAgenda(),
       'css_classes' => $this->getCssClasses(),

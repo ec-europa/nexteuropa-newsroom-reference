@@ -44,7 +44,7 @@ class NewsroomPage {
    *   Number of items.
    */
   public function getItemsNumber() {
-    return variable_get('newsroom_agenda_page_items_number', 10);
+    return variable_get('newsroom_page_items_number', 10);
   }
 
   /**
@@ -199,7 +199,7 @@ class NewsroomPage {
     $cache_key = 'page_result:' . $key_hash_part;
     $cache_total_number_key = 'page_total_number:' . $key_hash_part;
     if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
-      // for cached result, we set manually params for pager.
+      // For cached result, we set manually params for pager.
       if ($total_number_cache = cache_get($cache_total_number_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
         pager_default_initialize($total_number_cache->data, $this->getItemsNumber());
       }
@@ -352,9 +352,16 @@ class NewsroomPage {
     $query->leftJoin('field_data_field_newsroom_item_type', 'type_field', 'type_field.entity_id = n.nid');
     $query->leftJoin('field_data_field_newsroom_topics', 'topic_field', 'topic_field.entity_id = n.nid');
     $query->leftJoin('field_data_field_newsroom_item_date', 'd', 'd.entity_id = n.nid');
+    $query->leftJoin('field_data_field_newsroom_newsletter_only', 'newsletter_item', 'newsletter_item.entity_id = n.nid');
 
     $query->condition('n.status', 1);
     $query->condition('n.type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
+
+    $db_or = db_or();
+    $db_or->condition('newsletter_item.field_newsroom_newsletter_only_value', 1, '<>');
+    $db_or->isNull('newsletter_item.field_newsroom_newsletter_only_value');
+
+    $query->condition($db_or);
     $query->orderBy('d.field_newsroom_item_date_value', 'DESC');
     $query->orderBy('d.field_newsroom_item_date_value2', 'DESC');
 

@@ -322,20 +322,17 @@ function nexteuropa_newsroom_field_group_info() {
       3 => 'field_newsroom_registration_link',
       4 => 'field_newsroom_ted_link',
     ),
-    'format_type' => 'div',
+    'format_type' => 'tab',
     'format_settings' => array(
-      'formatter' => 'open',
+      'formatter' => 'closed',
       'instance_settings' => array(
         'description' => '',
-        'show_label' => 0,
-        'label_element' => 'h3',
-        'effect' => 'none',
-        'speed' => 'fast',
-        'classes' => 'group-newsroom-item-links field-group-div',
-        'id' => '',
+        'classes' => '',
+        'required_fields' => 1,
       ),
     ),
   );
+
   $field_groups['group_newsroom_item_links|node|newsroom_item|default'] = $field_group;
 
   $field_group = new stdClass();
@@ -734,6 +731,7 @@ function nexteuropa_newsroom_field_group_info() {
       1 => 'field_newsroom_service_active',
       2 => 'field_newsroom_service_type',
       3 => 'field_newsroom_topic',
+      4 => 'field_newsroom_service_sample',
     ),
     'format_type' => 'tab',
     'format_settings' => array(
@@ -752,7 +750,7 @@ function nexteuropa_newsroom_field_group_info() {
   $field_group->identifier = 'group_newsroom_technical|taxonomy_term|newsroom_topic|form';
   $field_group->group_name = 'group_newsroom_technical';
   $field_group->entity_type = 'taxonomy_term';
-  $field_group->bundle = 'newsroom_service';
+  $field_group->bundle = 'newsroom_topic';
   $field_group->mode = 'form';
   $field_group->parent_name = '';
   $field_group->data = array(
