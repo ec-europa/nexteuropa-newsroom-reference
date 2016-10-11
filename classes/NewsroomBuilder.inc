@@ -492,6 +492,10 @@ class NewsroomBuilder {
         ),
       ),
       array(
+        'field' => 'field_newsroom_newsletter_only',
+        'query' => 'infsonewsroom:itemDisplay/text()',
+      ),
+      array(
         'field' => 'language',
         'source' => 'Blank source 1',
         'tamper' => array(

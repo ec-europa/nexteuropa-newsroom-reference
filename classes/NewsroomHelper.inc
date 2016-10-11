@@ -219,15 +219,17 @@ class NewsroomHelper {
   public static function getNodesAssociatedToTopics($topic_ids) {
     $topic_ids = is_array($topic_ids) ? $topic_ids : array($topic_ids);
     $cache_key = 'get_topic_entities' . md5(implode('', $topic_ids));
+    $data = NULL;
     if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
       $data = $cache->data;
     }
     else {
-      $query = db_select('field_data_field_newsroom_associated_topic', 'f')
-        ->fields('f')
-        ->condition('f.field_newsroom_associated_topic_tid', $topic_ids)
-        ->execute();
-      $data = $query->fetchAll();
+      $query = db_select('field_data_field_newsroom_associated_topic', 'f');
+      $query->fields('f');
+      $query->leftJoin('node', 'n', 'f.entity_id = n.nid');
+      $query->condition('n.status', 1);
+      $query->condition('f.field_newsroom_associated_topic_tid', $topic_ids);
+      $data = $query->execute()->fetchAll();
 
       cache_set($cache_key, $data, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_get_topic_entities', 3600));
     }
