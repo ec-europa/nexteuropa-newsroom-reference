@@ -39,12 +39,14 @@ function _nexteuropa_newsroom_agenda($view = NewsroomAgenda::AGENDA_VIEW_SCHEDUL
  *   Start date.
  * @param string $end_date
  *   End date.
+ * @param string $ec_content
+ *   EC content.
  *
  * @return string
  *   Newsroom page content,
  */
-function _nexteuropa_newsroom_newsroom_page($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL) {
-  $newsroom_page = NewsroomBuilder::buildNewsroomPage($type_url, $topic_url, $start_date, $end_date);
+function _nexteuropa_newsroom_newsroom_page($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL, $ec_content = NEXTEUROPA_NEWSROOM_EC) {
+  $newsroom_page = NewsroomBuilder::buildNewsroomPage($type_url, $topic_url, $start_date, $end_date, $ec_content);
   $output = $newsroom_page->getContent();
   $output .= theme('pager');
   $build['#markup'] = $output;

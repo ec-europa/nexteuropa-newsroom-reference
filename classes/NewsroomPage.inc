@@ -17,6 +17,7 @@ class NewsroomPage {
   protected $topic = NULL;
   protected $startDate = NULL;
   protected $endDate = NULL;
+  protected $ecContent = NEXTEUROPA_NEWSROOM_EC;
 
   /**
    * NewsroomPage constructor.
@@ -29,12 +30,15 @@ class NewsroomPage {
    *   Start date.
    * @param Datetime|null $end_date
    *   End date.
+   * @param string $ec_content
+   *   EC content.
    */
-  public function __construct($type = NULL, $topic = NULL, $start_date = NULL, $end_date = NULL) {
+  public function __construct($type = NULL, $topic = NULL, $start_date = NULL, $end_date = NULL, $ec_content = NEXTEUROPA_NEWSROOM_EC) {
     $this->setTopic($topic);
     $this->setType($type);
     $this->setStartDate($start_date);
     $this->setEndDate($end_date);
+    $this->setEcContent($ec_content);
   }
 
   /**
@@ -138,6 +142,26 @@ class NewsroomPage {
    */
   public function getTopic() {
     return $this->topic;
+  }
+
+  /**
+   * Sets EC content.
+   *
+   * @param string $value
+   *   EC content.
+   */
+  public function setEcContent($value) {
+    $this->ecContent = $value;
+  }
+
+  /**
+   * Gets EC content.
+   *
+   * @return string
+   *   EC content.
+   */
+  public function getEcContent() {
+    return $this->ecContent;
   }
 
   /**
@@ -251,7 +275,7 @@ class NewsroomPage {
    */
   public function getContent() {
     drupal_set_title($this->generateTitle());
-    $filter_form = drupal_get_form('nexteuropa_newsroom_newsroom_page_filter_form', $this->getType(), $this->getTopic(), $this->getStartDate(), $this->getEndDate());
+    $filter_form = drupal_get_form('nexteuropa_newsroom_newsroom_page_filter_form', $this->getType(), $this->getTopic(), $this->getStartDate(), $this->getEndDate(), $this->getEcContent());
     $content = theme('newsroom_page', array(
       'filter_form' => drupal_render($filter_form),
       'featured_item' => $this->getTypeFeaturedItem(),
@@ -333,9 +357,10 @@ class NewsroomPage {
     $topic_id = $this->getTopic() ? $this->getTopic()->tid : NULL;
     $start_date = $this->getStartDate() ? $this->getStartDate()->getTimestamp() : NULL;
     $end_date = $this->getEndDate() ? $this->getEndDate()->getTimestamp() : NULL;
+    $ec_content = $this->getEcContent();
     $page = isset($_GET['page']) ? $_GET['page'] : NULL;
 
-    return md5($type_id . $topic_id . $start_date . $end_date . $page);
+    return md5($type_id . $topic_id . $start_date . $end_date . $page . $ec_content);
   }
 
   /**
@@ -352,16 +377,19 @@ class NewsroomPage {
     $query->leftJoin('field_data_field_newsroom_item_type', 'type_field', 'type_field.entity_id = n.nid');
     $query->leftJoin('field_data_field_newsroom_topics', 'topic_field', 'topic_field.entity_id = n.nid');
     $query->leftJoin('field_data_field_newsroom_item_date', 'd', 'd.entity_id = n.nid');
+    $query->leftJoin('field_data_field_newsroom_ec_content', 'ec', 'ec.entity_id = n.nid');
     $query->leftJoin('field_data_field_newsroom_newsletter_only', 'newsletter_item', 'newsletter_item.entity_id = n.nid');
 
     $query->condition('n.status', 1);
     $query->condition('n.type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
+    $query->condition('ec.field_newsroom_ec_content_value', $this->getEcContent() == NEXTEUROPA_NEWSROOM_EC ? 1 : 0);
 
     $db_or = db_or();
     $db_or->condition('newsletter_item.field_newsroom_newsletter_only_value', 1, '<>');
     $db_or->isNull('newsletter_item.field_newsroom_newsletter_only_value');
 
     $query->condition($db_or);
+
     $query->orderBy('d.field_newsroom_item_date_value', 'DESC');
     $query->orderBy('d.field_newsroom_item_date_value2', 'DESC');
 
@@ -399,6 +427,7 @@ class NewsroomPage {
     $url_parts[] = $this->getTermUrl($this->getTopic() ? $this->getTopic()->name : NULL);
     $url_parts[] = $this->getStartDate() ? $this->getStartDate()->format(NewsroomPage::MYSQL_DATE_FORMAT) : NEXTEUROPA_NEWSROOM_ALL;
     $url_parts[] = $this->getEndDate() ? $this->getEndDate()->format(NewsroomPage::MYSQL_DATE_FORMAT) : NEXTEUROPA_NEWSROOM_ALL;
+    $url_parts[] = $this->getEcContent() == NEXTEUROPA_NEWSROOM_EC ? NEXTEUROPA_NEWSROOM_EC : NEXTEUROPA_NEWSROOM_NONEC;
 
     return $is_rss ? NewsroomHelper::getNewsroomRssUrl($url_parts) : NewsroomHelper::getNewsroomPageUrl($url_parts);
   }

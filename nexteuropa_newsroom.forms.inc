@@ -1328,11 +1328,13 @@ function _nexteuropa_newsroom_get_term_from_id($id, $voc) {
  *   Start date.
  * @param string $end_date
  *   End date.
+ * @param string $ec_content
+ *   Is EC content.
  *
  * @return array
  *   Rendable form array.
  */
-function nexteuropa_newsroom_newsroom_page_filter_form($form, &$form_state, $type = NULL, $topic = NULL, $start_date = NULL, $end_date = NULL) {
+function nexteuropa_newsroom_newsroom_page_filter_form($form, &$form_state, $type = NULL, $topic = NULL, $start_date = NULL, $end_date = NULL, $ec_content = NEXTEUROPA_NEWSROOM_EC) {
   $topic_options = NewsroomHelper::getNewsroomTopicOptions(NewsroomHelper::getPageUsedTopicsIds());
 
   $form = array();
@@ -1370,6 +1372,11 @@ function nexteuropa_newsroom_newsroom_page_filter_form($form, &$form_state, $typ
     '#date_year_range' => '-2:+2',
     '#element_validate' => NULL,
   );
+  $form['ec_content'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('EC content'),
+    '#default_value' => $ec_content == NEXTEUROPA_NEWSROOM_EC ? 1 : 0,
+  );
   $form['button'] = array(
     '#type' => 'submit',
     '#submit' => array('nexteuropa_newsroom_newsroom_page_filter_form_submit'),
@@ -1394,7 +1401,9 @@ function nexteuropa_newsroom_newsroom_page_filter_form_submit(&$form, &$form_sta
   $type_id = isset($form_state['input']['type_id']) ? $form_state['input']['type_id'] : NULL;
   $start_date = isset($form_state['input']['start_date']['date']) ? $form_state['input']['start_date']['date'] : NULL;
   $end_date = isset($form_state['input']['end_date']['date']) ? $form_state['input']['end_date']['date'] : NULL;
-  $newsroom_page = NewsroomBuilder::buildNewsroomPage($type_id, $topic_id, $start_date, $end_date);
+  $ec_content = isset($form_state['input']['ec_content']);
+
+  $newsroom_page = NewsroomBuilder::buildNewsroomPage($type_id, $topic_id, $start_date, $end_date, $ec_content);
   // Redirect user to prepared URL.
   drupal_goto($newsroom_page->getNavigationUrl(), array(), 301);
 }
