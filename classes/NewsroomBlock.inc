@@ -112,7 +112,14 @@ class NewsroomBlock extends NewsroomBlockBase {
       $query->join('taxonomy_term_data', 'tt', 'tt.tid = tf.field_newsroom_item_type_tid');
       $query->leftJoin('field_data_field_newsroom_topics', 'topic_field', 'topic_field.entity_id = n.nid');
       $query->leftJoin('taxonomy_term_data', 'topic_data', 'topic_data.tid = topic_field.field_newsroom_topics_tid');
+      $query->leftJoin('field_data_field_newsroom_newsletter_only', 'newsletter_item', 'newsletter_item.entity_id = n.nid');
+
       $query->condition('n.status', 1);
+
+      $db_or = db_or();
+      $db_or->condition('newsletter_item.field_newsroom_newsletter_only_value', 1, '<>');
+      $db_or->isNull('newsletter_item.field_newsroom_newsletter_only_value');
+
       $query->condition('n.type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
 
       if (count($topic_ids) > 0) {

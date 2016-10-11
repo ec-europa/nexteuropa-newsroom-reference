@@ -388,24 +388,6 @@ function nexteuropa_newsroom_date_formats() {
 }
 
 /**
- * Creates default set of importers.
- */
-function _nexteuropa_newsroom_import_importers() {
-  // Run the multilingual imports if required.
-  $importers = array(
-    NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
-    NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
-    NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
-    NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
-    NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
-  );
-
-  foreach ($importers as $importer) {
-    NewsroomHelper::runFeedImporter($importer);
-  }
-}
-
-/**
  * Implements hook_feeds_after_import().
  */
 function nexteuropa_newsroom_feeds_after_import(FeedsSource $source) {

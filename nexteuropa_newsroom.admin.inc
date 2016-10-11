@@ -913,3 +913,21 @@ function _nexteuropa_newsroom_admin_rebuild_importers() {
 
   drupal_set_message(t('Newsroom importers have been successfully recreated.'));
 }
+
+/**
+ * Runs all importers.
+ */
+function _nexteuropa_newsroom_import_importers() {
+  // Run the multilingual imports if required.
+  $importers = array(
+    NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
+    NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
+    NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
+    NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
+    NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
+  );
+
+  foreach ($importers as $importer) {
+    NewsroomHelper::runFeedImporter($importer);
+  }
+}

@@ -378,10 +378,18 @@ class NewsroomPage {
     $query->leftJoin('field_data_field_newsroom_topics', 'topic_field', 'topic_field.entity_id = n.nid');
     $query->leftJoin('field_data_field_newsroom_item_date', 'd', 'd.entity_id = n.nid');
     $query->leftJoin('field_data_field_newsroom_ec_content', 'ec', 'ec.entity_id = n.nid');
+    $query->leftJoin('field_data_field_newsroom_newsletter_only', 'newsletter_item', 'newsletter_item.entity_id = n.nid');
 
     $query->condition('n.status', 1);
     $query->condition('n.type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
     $query->condition('ec.field_newsroom_ec_content_value', $this->getEcContent() == NEXTEUROPA_NEWSROOM_EC ? 1 : 0);
+
+    $db_or = db_or();
+    $db_or->condition('newsletter_item.field_newsroom_newsletter_only_value', 1, '<>');
+    $db_or->isNull('newsletter_item.field_newsroom_newsletter_only_value');
+
+    $query->condition($db_or);
+
     $query->orderBy('d.field_newsroom_item_date_value', 'DESC');
     $query->orderBy('d.field_newsroom_item_date_value2', 'DESC');
 
