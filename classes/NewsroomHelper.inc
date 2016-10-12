@@ -334,20 +334,22 @@ class NewsroomHelper {
    *   Newsroom type taxonomy terms array.
    */
   public static function getEventsTermsIds() {
-    $event_type_ids = array();
-    $types = NewsroomHelper::getNewsroomTypes();
-    $behavior_types = array(
-      'consultation_funding',
-      'events',
-      'agenda',
-      'call',
-    );
-    foreach ($types as $type) {
-      if (in_array(NewsroomHelper::getFieldValue($type, 'field_newsroom_type'), $behavior_types)) {
-        $event_type_ids[] = $type->tid;
+    $event_type_ids = &drupal_static(__FUNCTION__);
+    if (!isset($event_type_ids)) {
+      var_dump('getEventsTermsIds');
+      $types = NewsroomHelper::getNewsroomTypes();
+      $behavior_types = array(
+        'consultation_funding',
+        'events',
+        'agenda',
+        'call',
+      );
+      foreach ($types as $type) {
+        if (in_array(NewsroomHelper::getFieldValue($type, 'field_newsroom_type'), $behavior_types)) {
+          $event_type_ids[] = $type->tid;
+        }
       }
     }
-
     return $event_type_ids;
   }
 

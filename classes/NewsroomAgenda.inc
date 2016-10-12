@@ -558,11 +558,7 @@ abstract class NewsroomAgenda {
     $db_or->isNull('newsletter_item.field_newsroom_newsletter_only_value');
 
     $query->condition('n.type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
-    $events_term_ids = NewsroomHelper::getEventsTermsIds();
-    if ($events_term_ids) {
-      $query->condition('tf.field_newsroom_item_type_tid', $events_term_ids);
-    }
-
+    $query->condition('tf.field_newsroom_item_type_tid', NewsroomHelper::getEventsTermsIds());
     $query->orderBy('d.field_newsroom_item_date_value');
     $query->orderBy('d.field_newsroom_item_date_value2');
 
@@ -837,10 +833,7 @@ abstract class NewsroomAgenda {
       $db_or->condition('newsletter_item.field_newsroom_newsletter_only_value', 1, '<>');
       $db_or->isNull('newsletter_item.field_newsroom_newsletter_only_value');
 
-      $events_term_ids = NewsroomHelper::getEventsTermsIds();
-      if ($events_term_ids) {
-        $query->condition('tf.field_newsroom_item_type_tid', $events_term_ids);
-      }
+      $query->condition('tf.field_newsroom_item_type_tid', NewsroomHelper::getEventsTermsIds());
       $tids = $query->execute()->fetchAllKeyed(0, 0);
       cache_set($cache_key, $tids, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_result_topics', 86400));
     }
