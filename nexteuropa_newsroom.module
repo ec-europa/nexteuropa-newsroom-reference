@@ -635,8 +635,7 @@ function _nexteuropa_newsroom_taxonomy_term_delete($field_name, $original_newsro
     drupal_exit();
   }
 
-  $terms = NewsroomHelper::getTaxonomyTermFromField($field_name, $original_newsroom_id);
-  if ($terms) {
+  if ($terms = NewsroomHelper::getTaxonomyTermFromField($field_name, $original_newsroom_id)) {
     taxonomy_term_delete($terms[0]);
     drupal_set_message(t('Item has been deleted.'));
   }
@@ -757,8 +756,7 @@ function _nexteuropa_newsroom_redirect($redirect_type = 'item', $newsroom_entity
  */
 function _newsroom_nexteuropa_get_term_redirect_path($field_name, $newsroom_entity_id) {
   $path = FALSE;
-  $taxonomy_term_ids = NewsroomHelper::getTaxonomyTermFromField($field_name, $newsroom_entity_id);
-  if ($taxonomy_term_ids) {
+  if ($taxonomy_term_ids = NewsroomHelper::getTaxonomyTermFromField($field_name, $newsroom_entity_id)) {
     $taxonomy_term = taxonomy_term_load($taxonomy_term_ids[0]);
     if ($taxonomy_term) {
       $path = 'taxonomy/term/' . $taxonomy_term->tid;

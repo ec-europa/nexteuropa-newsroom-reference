@@ -12,7 +12,6 @@ dependencies[] = feeds_tamper_ui
 dependencies[] = feeds_xpathparser
 dependencies[] = i18n_taxonomy
 configure = admin/config/content/newsroom
-features[context][] = newsroom
 features[context][] = newsroom_item
 features[ctools][] = context:context:3
 features[ctools][] = feeds:feeds_importer_default:1

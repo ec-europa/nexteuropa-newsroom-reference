@@ -171,20 +171,12 @@ class NewsroomHelper {
    *   Newsroom item.
    */
   public static function getNodeByFieldValue($field_name, $newsroom_id = 0) {
-    $cache_key = 'newsroom_item_by_id:' . $newsroom_id;
-    if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
-      $newsroom_data = $cache->data;
-    }
-    else {
-      $query = new EntityFieldQuery();
-      $newsroom_item = $query
-        ->entityCondition('entity_type', 'node')
-        ->fieldCondition($field_name, 'value', $newsroom_id, '=')
-        ->execute();
-      $newsroom_data = isset($newsroom_item['node']) ? array_shift($newsroom_item['node']) : FALSE;
-      cache_set($cache_key, $newsroom_data, NEXTEUROPA_NEWSROOM_CACHE_TABLE);
-    }
-    return $newsroom_data;
+    $query = new EntityFieldQuery();
+    $newsroom_item = $query
+      ->entityCondition('entity_type', 'node')
+      ->fieldCondition($field_name, 'value', $newsroom_id, '=')
+      ->execute();
+    return isset($newsroom_item['node']) ? array_shift($newsroom_item['node']) : FALSE;
   }
 
   /**
@@ -320,27 +312,19 @@ class NewsroomHelper {
    *   Taxonomy ids.
    */
   public static function getTaxonomyTermFromField($field_name, $field_value, $bundle = NULL) {
+    $term_ids = array();
     $field_value = is_array($field_value) ? $field_value : array($field_value);
-    $cache_key = 'tech_field_tid:' . md5($field_name . implode('', $field_value) . $bundle);
-
-    if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
-      $term_ids = $cache->data;
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'taxonomy_term')
+      ->fieldCondition($field_name, 'value', $field_value);
+    if ($bundle) {
+      $query->entityCondition('bundle', $bundle);
     }
-    else {
-      $term_ids = array();
-      $query = new EntityFieldQuery();
-      $query->entityCondition('entity_type', 'taxonomy_term')
-        ->fieldCondition($field_name, 'value', $field_value);
-      if ($bundle) {
-        $query->entityCondition('bundle', $bundle);
-      }
-      $result = $query->execute();
-      if (isset($result['taxonomy_term'])) {
-        $term_ids = array_keys($result['taxonomy_term']);
-      }
-
-      cache_set($cache_key, $term_ids, NEXTEUROPA_NEWSROOM_CACHE_TABLE);
+    $result = $query->execute();
+    if (isset($result['taxonomy_term'])) {
+      $term_ids = array_keys($result['taxonomy_term']);
     }
+
     return $term_ids;
   }
 
