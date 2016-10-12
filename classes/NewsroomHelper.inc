@@ -336,7 +336,6 @@ class NewsroomHelper {
   public static function getEventsTermsIds() {
     $event_type_ids = &drupal_static(__FUNCTION__);
     if (!isset($event_type_ids)) {
-      var_dump('getEventsTermsIds');
       $types = NewsroomHelper::getNewsroomTypes();
       $behavior_types = array(
         'consultation_funding',
