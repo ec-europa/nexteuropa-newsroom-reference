@@ -1372,11 +1372,6 @@ function nexteuropa_newsroom_newsroom_page_filter_form($form, &$form_state, $typ
     '#date_year_range' => '-2:+2',
     '#element_validate' => NULL,
   );
-  $form['ec_content'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('EC content'),
-    '#default_value' => $ec_content == NEXTEUROPA_NEWSROOM_EC ? 1 : 0,
-  );
   $form['button'] = array(
     '#type' => 'submit',
     '#submit' => array('nexteuropa_newsroom_newsroom_page_filter_form_submit'),
@@ -1384,7 +1379,11 @@ function nexteuropa_newsroom_newsroom_page_filter_form($form, &$form_state, $typ
     '#button_type' => 'button',
     '#value' => t('Filter'),
   );
-
+  $form['ec_content'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('EC content'),
+    '#default_value' => $ec_content == NEXTEUROPA_NEWSROOM_EC ? 1 : 0,
+  );
   return $form;
 }
 
