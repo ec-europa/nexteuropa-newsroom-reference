@@ -100,20 +100,15 @@ class NewsroomHelper {
    */
   public static function runFeedImporter($importer_id, $url = NULL) {
     $source = feeds_source($importer_id);
-    $config = $source->getConfig();
-
     if (!empty($url)) {
       $config['FeedsHTTPFetcher']['source'] = $url;
-      $source->setConfig($config);
-    }
-
-    $source->import();
-
-    if (!empty($url)) {
-      // Restore the default URL in order to run importers manually or via cron.
-      $config['FeedsHTTPFetcher']['source'] = NewsroomHelper::getImporterUrl($importer_id);
-      $source->setConfig($config);
+      $source->addConfig($config);
       $source->save();
+      $source->import();
+    }
+    else {
+      // For normal import we need batch, so we call startImport.
+      $source->startImport();
     }
   }
 
@@ -216,15 +211,17 @@ class NewsroomHelper {
   public static function getNodesAssociatedToTopics($topic_ids) {
     $topic_ids = is_array($topic_ids) ? $topic_ids : array($topic_ids);
     $cache_key = 'get_topic_entities' . md5(implode('', $topic_ids));
+    $data = NULL;
     if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
       $data = $cache->data;
     }
     else {
-      $query = db_select('field_data_field_newsroom_associated_topic', 'f')
-        ->fields('f')
-        ->condition('f.field_newsroom_associated_topic_tid', $topic_ids)
-        ->execute();
-      $data = $query->fetchAll();
+      $query = db_select('field_data_field_newsroom_associated_topic', 'f');
+      $query->fields('f');
+      $query->leftJoin('node', 'n', 'f.entity_id = n.nid');
+      $query->condition('n.status', 1);
+      $query->condition('f.field_newsroom_associated_topic_tid', $topic_ids);
+      $data = $query->execute()->fetchAll();
 
       cache_set($cache_key, $data, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_get_topic_entities', 3600));
     }
@@ -307,6 +304,8 @@ class NewsroomHelper {
    *   The mapping field.
    * @param string $field_value
    *   The mapping field value.
+   * @param string $bundle
+   *   Bundle name.
    *
    * @return array
    *   Taxonomy ids.
@@ -407,7 +406,8 @@ class NewsroomHelper {
     }
     else {
       $taxonomy_term = NULL;
-      if (is_int($request_name)) {
+      // If it is tid load taxonomy term directly.
+      if ((int) $request_name) {
         $taxonomy_term = taxonomy_term_load($request_name);
       }
 
@@ -457,11 +457,13 @@ class NewsroomHelper {
    *
    * @param bool $events_only
    *   Display only event types.
+   * @param bool $add_empty_value
+   *   Add none value in the begining of array.
    *
    * @return array
    *   Drop down options array.
    */
-  public static function getNewsroomTypeOptions($events_only = FALSE) {
+  public static function getNewsroomTypeOptions($events_only = FALSE, $add_empty_value = TRUE) {
     $type_options = NewsroomHelper::getTaxonomyTermOptions(NewsroomHelper::getNewsroomTypes());
     if ($events_only) {
       $events_types = NewsroomHelper::getEventsTermsIds();
@@ -472,8 +474,10 @@ class NewsroomHelper {
         }
       }
     }
-    $empty = array(t('- None -'));
-    return $empty + $type_options;
+    if ($add_empty_value) {
+      $type_options = array(t('- None -')) + $type_options;
+    }
+    return $type_options;
   }
 
   /**
@@ -481,19 +485,24 @@ class NewsroomHelper {
    *
    * @param array $used_topics
    *   Used topics.
+   * @param bool $add_empty_value
+   *   Add none value in the begining of array.
    *
    * @return array
    *   Drop down options array.
    */
-  public static function getNewsroomTopicOptions($used_topics = array()) {
+  public static function getNewsroomTopicOptions($used_topics = array(), $add_empty_value = TRUE) {
     $topic_options = NewsroomHelper::getTaxonomyTermOptions(NewsroomHelper::getNewsroomTopics());
+    $used_count = count($used_topics);
     foreach ($topic_options as $key => $topic) {
-      if (!in_array($key, $used_topics)) {
+      if ($used_count > 0 && !in_array($key, $used_topics)) {
         unset($topic_options[$key]);
       }
     }
-    $empty = array(t('- None -'));
-    return $empty + $topic_options;
+    if ($add_empty_value) {
+      $topic_options = array(t('- None -')) + $topic_options;
+    }
+    return $topic_options;
   }
 
   /**
@@ -633,7 +642,7 @@ class NewsroomHelper {
       $data = $cache->data;
     }
     else {
-      $data = i18n_taxonomy_get_tree($vocabulary_id, language_default()->language, 0, NULL, TRUE);
+      $data = i18n_taxonomy_get_tree($vocabulary_id, NewsroomHelper::getDefaultLanguage(), 0, NULL, TRUE);
       foreach ($data as $key => $taxonomy_term) {
         $i18n_object = i18n_get_object('taxonomy_term', $taxonomy_term->tid);
         $data[$key] = $i18n_object->localize($language->language);
@@ -730,26 +739,6 @@ class NewsroomHelper {
   }
 
   /**
-   * Gets the enabled languages.
-   *
-   * @return array
-   *   Languages array.
-   */
-  public static function getEnabledLanguages() {
-    $lang_keys = &drupal_static(__FUNCTION__);
-    if (!isset($lang_keys)) {
-      $lang = locale_language_list();
-      $lang_keys = array_keys($lang);
-      $eng = array_search('en', $lang_keys);
-      if ($eng) {
-        unset($lang_keys[$eng]);
-        array_unshift($lang_keys, 'en');
-      }
-    }
-    return $lang_keys;
-  }
-
-  /**
    * Returns the current formated date.
    *
    * @param string $format
@@ -814,21 +803,19 @@ class NewsroomHelper {
    * Validates if a given subsite exists.
    *
    * @param string $subsite
-   *   Newsroom Universe subsite.
+   *   Subsite name.
    *
    * @return bool
    *   Newsroom Universe subsite exists or not.
    */
-  public static function validateSubsite($universe_id = NULL, $subsite = NULL) {
+  public static function validateSubsite($subsite = NULL) {
     // The subsite is not mandatory.
     if (empty($subsite)) {
       return TRUE;
     }
     else {
-      if ($universe_id) {
-        $test = drupal_http_request(NewsroomHelper::getUniverseUrl() . '?subsite=' . $subsite);
-        return $test->code == 200;
-      }
+      $test = drupal_http_request(NewsroomHelper::getUniverseUrl() . '?subsite=' . $subsite);
+      return $test->code == 200;
     }
 
     return FALSE;
@@ -1032,6 +1019,26 @@ class NewsroomHelper {
       $date->setTimestamp(strtotime($value));
     }
     return $date;
+  }
+
+  /**
+   * Gets default language.
+   *
+   * @return string
+   *   Default language code.
+   */
+  public static function getDefaultLanguage() {
+    return language_default()->language;
+  }
+
+  /**
+   * Gets default language in uppercase.
+   *
+   * @return string
+   *   Default language code.
+   */
+  public static function getDefaultLanguageUppercase() {
+    return drupal_strtoupper(language_default()->language);
   }
 
 }
