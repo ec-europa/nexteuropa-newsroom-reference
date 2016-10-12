@@ -11,12 +11,15 @@
 .newsroomPage-container.node-sticky {
   padding-bottom: 0.5em;
 }
+
 .newsroomPage-container .views-field {
   margin: 0.3em 0;
 }
+
 .newsroomPage-container .newsroom-read-more:hover::after {
   border-color: transparent transparent transparent #003556;
 }
+
 .newsroomPage-container .node-info-submitted,
 .newsroomPage-container h2 {
   display: none;
@@ -29,16 +32,19 @@
   padding: 0 15px 12px;
   margin: -15px -15px 25px -15px;
 }
+
 .newsroomPage-filterForm:after,
 .newsroomAgenda-filterForm:after {
   clear: both;
   content: "";
   display: block;
 }
+
 .newsroomPage-filterForm h3,
 .newsroomAgenda-filterForm h3 {
   padding: 0.3em 1em;
 }
+
 .newsroomPage-filterForm form > div > .form-item,
 .newsroomPage-filterForm .container-inline-date,
 .newsroomAgenda-filterForm form > div > .form-item,
@@ -47,47 +53,67 @@
   float: left;
   margin-right: 6%;
 }
+
+.newsroomPage-filterForm form > div > .checkbox,
+.newsroomAgenda-filterForm form > div > .checkbox {
+  width: 100%;
+  clear: both;
+}
+
+.newsroomPage-filterForm form > div > .checkbox > label,
+.newsroomAgenda-filterForm form > div > .checkbox > label {
+  font-weight: bold;
+}
+
 .newsroomPage-filterForm .date-padding,
 .newsroomAgenda-filterForm .date-padding {
   float: none;
   width: 100%;
 }
+
 .newsroomPage-filterForm .container-inline-date:nth-child(4),
 .newsroomAgenda-filterForm .container-inline-date:nth-child(4) {
   float: left;
   width: 25%;
 }
+
 .newsroomPage-filterForm div > .form-item:nth-child(2),
 .newsroomPage-filterForm .container-inline-date:nth-child(4),
 .newsroomAgenda-filterForm div > .form-item:nth-child(2),
 .newsroomAgenda-filterForm .container-inline-date:nth-child(4) {
   margin-right: 0;
 }
+
 .newsroomPage-filterForm .container-inline-date .form-item,
 .newsroomPage-filterForm .container-inline-date .form-item input,
 .newsroomAgenda-filterForm .container-inline-date .form-item,
 .newsroomAgenda-filterForm .container-inline-date .form-item input {
   width: 100%;
 }
+
 .newsroomPage-filterForm .form-item input,
 .newsroomPage-filterForm .form-item select.form-control,
 .newsroomAgenda-filterForm .form-item input,
 .newsroomAgenda-filterForm .form-item select.form-control {
   background: #ececec;
 }
+
 .newsroomPage-filterForm .container-inline-date,
 .newsroomAgenda-filterForm .container-inline-date {
   clear: none;
 }
+
 .newsroomPage-filterForm .container-inline-date .form-item input,
 .newsroomAgenda-filterForm .container-inline-date .form-item input {
   margin-right: 0;
 }
+
 .newsroomPage-filterForm .description,
 .newsroomAgenda-filterForm .description {
   margin-top: 0.5em;
   font-style: italic;
 }
+
 .newsroomPage-filterForm #edit-button,
 .newsroomAgenda-filterForm #edit-button {
   float: left;
@@ -99,6 +125,7 @@
   font-weight: bold;
   padding: 7px 12px 6px;
 }
+
 .newsroomPage-filterForm #edit-button:hover,
 .newsroomAgenda-filterForm #edit-button:hover {
   background: #afd9ee;
@@ -108,6 +135,7 @@
 .newsroomAgenda-filterForm form > div > .form-item {
   width: 36%;
 }
+
 .newsroomAgenda-filterForm #edit-button {
   margin-top: 2.8em;
 }
@@ -163,6 +191,7 @@
 .node-type-newsroom-item .field-name-body {
   border-bottom: none !important;
 }
+
 .node-type-newsroom-item .field-name-field-newsroom-teaser {
   background: #f9f9f9;
   border-left: 10px solid #ccc;
@@ -171,6 +200,7 @@
   quotes: "\201C" "\201D" "\2018" "\2019";
   font-family: monospace;
 }
+
 .node-type-newsroom-item .field-name-field-newsroom-teaser:before {
   color: #ccc;
   content: open-quote;
@@ -179,6 +209,7 @@
   margin-right: 0.25em;
   vertical-align: -0.4em;
 }
+
 .node-type-newsroom-item .field-name-field-newsroom-teaser p {
   display: inline;
 }
@@ -186,6 +217,7 @@
 .node-newsroom-item .field-group-div {
   padding-bottom: 1em;
 }
+
 .node-newsroom-item .field-name-body {
   border: none;
 }
@@ -219,20 +251,24 @@
 .newsroom_item_container {
   clear: right;
 }
+
 .newsroom_item_container .newsroom_type {
   margin: 0 0 0.5em;
   font-size: 0.8em;
 }
+
 .newsroom_item_container .views-row .newsroom_title {
   font-size: 1.2em;
   font-weight: 600;
   margin-bottom: 0.3em;
   width: 100%;
 }
+
 .newsroom_item_container .newsroom_item_metadata {
   font-style: italic;
   margin-bottom: 0.5em;
 }
+
 .newsroom_item_container h3 {
   margin-left: -15px;
   background: #ececec;
@@ -243,23 +279,28 @@
   color: #0065a2;
   font-weight: 600;
 }
+
 .newsroom_item_container .views-row {
   margin-bottom: 1em;
   border-bottom: 2px solid #ececec;
 }
+
 .newsroom_item_container.agenda .date-date .day {
   font-size: 2em;
   font-weight: bold;
   line-height: 1.2;
 }
+
 .newsroom_item_container.agenda .date-date .month {
   font-size: 1em;
   line-height: 1;
 }
+
 .newsroom_item_container.agenda .date-events {
   display: inline-block;
   width: 89%;
 }
+
 .newsroom_item_container.agenda .date-date::after,
 .newsroom_item_container h3::after {
   content: " ";
@@ -281,6 +322,7 @@
     width: 79%;
   }
 }
+
 @media screen and (min-width: 320px) and (max-width: 640px) {
   .newsroom_item_container.agenda .date-events {
     width: 70%;
@@ -292,6 +334,7 @@
     white-space: nowrap;
   }
 }
+
 .block-nexteuropa-newsroom > .newsroom_rss {
   position: relative;
   top: 4.5em;
@@ -300,9 +343,11 @@
   float: right;
   padding: 0.4em 0.5em;
 }
+
 .block-nexteuropa-newsroom > .newsroom_rss a.feed-icon {
   padding: 0 0.5em 0 0;
 }
+
 .block-nexteuropa-newsroom > .newsroom_rss:after {
   clear: both;
 }
@@ -318,22 +363,27 @@
   min-width: 90px;
   width: 20%;
 }
+
 .newsroom-image .picContainer {
   position: relative;
   border-bottom: 1px solid #f3f3f3;
   text-align: center;
   display: block;
 }
+
 .newsroom-image .picContainer img {
   width: 100%;
   height: auto;
 }
+
 .newsroom-image .picContainer .zoomIcon {
   display: none;
 }
+
 .newsroom-image .picContainer.zoomable {
   cursor: pointer;
 }
+
 .newsroom-image .picContainer.zoomable .zoomIcon {
   display: block;
   position: absolute;
@@ -350,6 +400,7 @@
   text-align: center;
   background: #fff;
 }
+
 .newsroom-image figcaption .legend {
   font-size: 11px;
   line-height: 12px;
@@ -358,6 +409,7 @@
   display: inline-block;
   text-align: left;
 }
+
 .newsroom-image figcaption .copyright {
   font-size: 10px;
   line-height: 11px;
@@ -366,6 +418,7 @@
   display: block;
   text-align: right;
 }
+
 .newsroom-image figcaption .copyright a {
   color: #999;
 }
@@ -385,22 +438,26 @@
   padding-bottom: 0;
   margin-bottom: 15px;
 }
+
 .newsroomAgenda-container .date-date {
   float: left;
   text-align: center;
   width: 7%;
   margin-right: 3%;
 }
+
 .newsroomAgenda-container .date-date .day {
   display: block;
   font-size: 250%;
   line-height: 1.0em;
 }
+
 .newsroomAgenda-container .date-date .month {
   display: block;
   font-size: 110%;
   letter-spacing: 0.15em;
 }
+
 .newsroomAgenda-container .date-date .year {
   display: block;
   font-size: 90%;
@@ -413,31 +470,38 @@
 .newsroomAgenda-container .newsroom-item__type {
   margin-left: 0;
 }
+
 .newsroomAgenda-container .date-row:after {
   display: block;
   clear: both;
   content: "";
 }
+
 .newsroomAgenda-container .newsroom_title a {
   text-decoration: none;
 }
+
 .newsroomAgenda-container .newsroom_title a:hover {
   text-decoration: underline;
 }
+
 .newsroomAgenda-container .date-events {
   float: left;
   width: 89%;
 }
+
 .newsroomAgenda-container .date-events:after {
   display: block;
   clear: both;
   content: "";
 }
+
 .newsroomAgenda-container .date-events .views-row {
   border-top: solid 1px #eee;
   padding-top: 15px;
   margin: 0;
 }
+
 .newsroomAgenda-container .date-events .views-row:first-child {
   border-top: 0;
   padding-top: 0;
@@ -456,12 +520,14 @@
   width: 100%;
   text-align: center;
 }
+
 .agendaPagination .agenda-next,
 .agendaPagination .agenda-previous {
   display: inline-block;
   vertical-align: middle;
   margin: 10px 0;
 }
+
 .agendaPagination .agenda-next a,
 .agendaPagination .agenda-previous a {
   display: inline-block;
@@ -471,22 +537,27 @@
   text-align: center;
   text-decoration: none;
 }
+
 .agendaPagination .agenda-next a {
   padding: 1px 26px 2px 8px;
 }
+
 .agendaPagination .date-form {
   display: inline-block;
   vertical-align: middle;
   margin: 5px 15px;
 }
+
 .agendaPagination .date-form .form-item-current-date label {
   display: none;
 }
+
 .agendaPagination .date-form .container-inline-date > .form-item,
 .agendaPagination .date-form .container-inline-date .form-item input {
   margin: 0;
   text-align: center;
 }
+
 .agendaPagination .container-inline-date .form-item input {
   text-align: center;
   color: #fff;
@@ -501,9 +572,11 @@
   margin-bottom: 2em;
   padding-bottom: 1em;
 }
+
 .newsroom-item--featured .newsroom-item__title {
   font-size: 150%;
 }
+
 .newsroom-item--featured .newsroom-item__featured {
   display: inline-block;
   background: #ffd617;
@@ -513,6 +586,7 @@
   text-transform: uppercase;
   font-size: 0.9em;
 }
+
 .newsroom-item--featured .newsroom-item__teaser {
   font-size: 110%;
 }
@@ -560,6 +634,7 @@
   padding: 0.3em 1em;
   float: right;
 }
+
 .newsroom_more .placeholder {
   font-style: normal;
 }
@@ -568,13 +643,16 @@
   padding: 1em 0;
   border-bottom: 2px solid #ececec;
 }
+
 .subscrNewsletterItem h4 {
   font-weight: 600;
 }
+
 .subscrNewsletterItem img {
   float: right;
   margin: 0 0 0 1em;
 }
+
 .subscrNewsletterItem input[type="submit"] {
   margin: 1.8em 0 0;
   background: #0065a2;
@@ -583,6 +661,7 @@
   font-weight: bold;
   padding: 7px 12px 6px;
 }
+
 .subscrNewsletterItem input[type="submit"][disabled] {
   background: #f9f9f9;
   color: #ccc !important;
@@ -591,22 +670,26 @@
 .newsroom-service-page .newsroom-service-widget {
   padding: 2em 0;
 }
+
 .newsroom-service-page .middle-step {
   border-left: 4px solid #0065a2;
   padding: 2em 0 2em 3em;
   margin-left: 1.3em;
 }
+
 .newsroom-service-page .newsroom-service-email-description {
   display: inline-block;
   font-style: italic;
   font-size: 0.9em;
   min-height: 30px;
 }
+
 .newsroom-service-page h2 {
   padding-left: 60px;
   position: relative;
   margin: 0;
 }
+
 .newsroom-service-page h2:before {
   content: "1";
   display: block;
@@ -621,6 +704,7 @@
   font-weight: bold;
   padding: 3px 0 0 12px;
 }
+
 .newsroom-service-page h2 ~ h2:before {
   content: "2";
 }

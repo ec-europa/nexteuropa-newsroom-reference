@@ -52,6 +52,15 @@
     margin-right: 6%;
   }
 
+  form > div > .checkbox {
+    width: 100%;
+    clear: both;
+  }
+
+  form > div > .checkbox > label {
+    font-weight: bold;
+  }
+
   .date-padding {
     float: none;
     width: 100%;
