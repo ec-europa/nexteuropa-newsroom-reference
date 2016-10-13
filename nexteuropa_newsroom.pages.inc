@@ -93,7 +93,6 @@ function _nexteuropa_newsroom_newsletters_page() {
     $view->pre_execute();
     $view->execute();
     $basic_newsletters = $view->result;
-
     $view->destroy();
 
     $view = views_get_view('newsroom_services');
@@ -118,6 +117,7 @@ function _nexteuropa_newsroom_newsletters_page() {
         )),
       'privacy_text' => variable_get('newsroom_newsletter_privacy', NULL),
     ));
+
     $build['#markup'] = $content;
     $build['#attached']['js'][] = array(
       'type' => 'setting',

@@ -344,7 +344,7 @@ function nexteuropa_newsroom_views_default_views() {
   );
 
   /* Display: Central newsletters */
-  $handler = $view->new_display('block', 'Central newsletters', 'basic');
+  $handler = $view->new_display('block', 'Central newsletters', 'central');
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
   /* Filter criterion: Taxonomy vocabulary: Machine name */
@@ -376,7 +376,7 @@ function nexteuropa_newsroom_views_default_views() {
   $handler->display->display_options['block_caching'] = '8';
 
   /* Display: Basic newsletters */
-  $handler = $view->new_display('block', 'Basic newsletters', 'central');
+  $handler = $view->new_display('block', 'Basic newsletters', 'basic');
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['title'] = 'Other newsletters';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
