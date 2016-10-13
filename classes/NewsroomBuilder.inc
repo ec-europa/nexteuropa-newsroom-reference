@@ -693,10 +693,6 @@ class NewsroomBuilder {
         'query' => 'title',
       ),
       array(
-        'field' => 'field_newsroom_topic',
-        'query' => 'category[@domain="Subchapter"]/@infsonewsroom:TopicId',
-      ),
-      array(
         'field' => 'field_newsroom_service_active',
         'query' => 'infsonewsroom:BasicSvStatus/text()',
       ),
