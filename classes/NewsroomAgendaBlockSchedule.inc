@@ -72,9 +72,8 @@ class NewsroomAgendaBlockSchedule extends NewsroomAgendaSchedule {
       return $query;
     }
 
-    $topic_ids = $this->getTopicsId();
     if ($this->getOperator() == NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR) {
-      $query->condition('topic_data.tid', $topic_ids);
+      $query->condition('topic_data.tid', $this->getTopicsId());
 
     }
     else {
