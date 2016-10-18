@@ -165,7 +165,7 @@ class NewsroomAgendaSchedule extends NewsroomAgenda {
   }
 
   /**
-   * Finds and sets previous date.
+   * Finds and sets previous available date.
    */
   protected function findPreviousDate() {
     $cache_key = 'get_agenda:previous_date:' . $this->getUniqueCachePart();
@@ -210,19 +210,18 @@ class NewsroomAgendaSchedule extends NewsroomAgenda {
    * Gets utmost date.
    *
    * @param bool $first
-   *   Return the first or last.
+   *   Return the first or last utmost date in the result.
    *
    * @return object
    *   Utmost date.
    */
   protected function getUtmostDate($first = TRUE) {
-    $last_date = NULL;
-    $result = $this->getResult();
-    $last_item = $first ? reset($result) : array_pop($result);
+    $utmost_date = NULL;
+    $last_item = $first ? reset($this->getResult()) : array_pop($this->getResult());
     if ($last_item) {
-      $last_date = clone $last_item->start_date_obj;
+      $utmost_date = clone $last_item->start_date_obj;
     }
-    return $last_date;
+    return $utmost_date;
   }
 
 }

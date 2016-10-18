@@ -62,7 +62,7 @@ function nexteuropa_newsroom_install() {
   variable_set('newsroom_agenda_after_highlights', 1);
   variable_set('newsroom_display_highlights_begin', 1);
   variable_set('newsroom_order_by_last_update', 1);
-  variable_set('newsroom_proposal_script', NEXTEUROPA_NEWSROOM_PROPOSAL_ACCESS);
+  variable_set('newsroom_proposal_script', NEXTEUROPA_NEWSROOM_PROPOSAL_SCRIPT);
 
   variable_set('newsroom_central_newsletter_title', $t('Central newsletters'));
   variable_set('newsroom_other_newsletter_title', $t('Other newsletters'));

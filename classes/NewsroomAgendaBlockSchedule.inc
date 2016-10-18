@@ -76,11 +76,8 @@ class NewsroomAgendaBlockSchedule extends NewsroomAgendaSchedule {
       $query->condition('topic_data.tid', $this->getTopicsId());
 
     }
-    else {
-      $nids = NewsroomHelper::getNodeRelatedToTopic($this->getTopicsId());
-      if ($nids) {
-        $query->condition('nid', $nids, 'IN');
-      }
+    else if ($nids = NewsroomHelper::getNodeRelatedToTopic($this->getTopicsId())) {
+      $query->condition('nid', $nids, 'IN');
     }
 
     return $query;

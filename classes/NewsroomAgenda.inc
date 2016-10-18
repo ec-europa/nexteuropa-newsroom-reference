@@ -321,7 +321,7 @@ abstract class NewsroomAgenda {
    * Sets DB data results.
    */
   public function setResult() {
-    $cache_key = 'result:' . md5($this->getUniqueCachePart());
+    $cache_key = 'result:' . $this->getUniqueCachePart();
     if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
       $data = $cache->data;
     }
@@ -382,13 +382,6 @@ abstract class NewsroomAgenda {
    */
   public function addItemsCount($value) {
     $this->itemsCount += $value;
-  }
-
-  /**
-   * Clears URL parts.
-   */
-  public function clearUrlParts() {
-    $this->urlParts = array();
   }
 
   /**
@@ -609,17 +602,9 @@ abstract class NewsroomAgenda {
       $output = $cache->data;
     }
     else {
-      $items = $this->getResult();
       while ($start_date < $end_date) {
-        $agenda_item = new NewsroomAgendaItem();
-        $agenda_item->setDate(clone $start_date);
-
-        foreach ($items as $item) {
-          if ($item->start_date_obj <= $start_date && $item->end_date_obj >= $start_date) {
-            $agenda_item->addItem($item);
-          }
-        }
-
+        $agenda_item = $this->createAgendaItem($start_date);
+        // We don't count empty days if we need to calculate the previous date.
         if ($build_empty_days || (!$build_empty_days && (count($agenda_item->getItems()) > 0))) {
           $output[] = $agenda_item;
         }
@@ -629,10 +614,32 @@ abstract class NewsroomAgenda {
       cache_set($cache_key, $output, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_agenda_build', 3600));
     }
 
-    // Calculate total number of events in agenda, so we will display too many
-    // or addtional events from the future days.
+    // Calculate total number of events in agenda, so we display exact number.
     $this->getBuildItemsCount($output);
     return $output;
+  }
+
+  /**
+   * Creates agenda item based on current date.
+   *
+   * @param object $current_date
+   *   Current date object.
+   *
+   * @return object
+   *   Agenda item.
+   */
+  protected function createAgendaItem($current_date) {
+    $agenda_item = new NewsroomAgendaItem();
+    $agenda_item->setDate(clone $current_date);
+    // Search for items in result which are start date is less than current and
+    // the end date is bigger than current.
+    foreach ($this->getResult() as $item) {
+      if ($item->start_date_obj <= $current_date && $item->end_date_obj >= $current_date) {
+        $agenda_item->addItem($item);
+      }
+    }
+
+    return $agenda_item;
   }
 
   /**
@@ -706,7 +713,6 @@ abstract class NewsroomAgenda {
    *   URL string.
    */
   public function getNavigationUrl($date) {
-    $this->clearUrlParts();
     $this->addUrlPart($this->getView());
     $this->addUrlPart($this->getTypeUrl());
     $this->addUrlPart($this->getTopicUrl());
@@ -816,7 +822,7 @@ abstract class NewsroomAgenda {
    *   Array of IDs.
    */
   protected function getResultTopicsId() {
-    $cache_key = 'result_topics';
+    $cache_key = 'agenda_result_topics';
     if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
       $tids = $cache->data;
     }
