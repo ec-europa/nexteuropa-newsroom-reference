@@ -435,7 +435,8 @@ abstract class NewsroomAgenda {
     $topics = $this->getTopics();
     $topic_id = count($topics) == 1 ? $topics[0]->tid : NULL;
     $result_topics = $form_id == 'nexteuropa_newsroom_agenda_filter_form' ? $this->getResultTopicsId() : NULL;
-    return drupal_get_form($form_id, $this->getView(), $this->getTypeId(), $topic_id, $this->getCurrentDate()->format(NewsroomAgenda::DATE_FORMAT), $result_topics);
+    return drupal_get_form($form_id, $this->getView(), $this->getTypeId(), $topic_id, $this->getCurrentDate()
+      ->format(NewsroomAgenda::DATE_FORMAT), $result_topics);
   }
 
   /**
@@ -524,7 +525,8 @@ abstract class NewsroomAgenda {
    *   Cache key unique value.
    */
   protected function getUniqueCachePart() {
-    return md5($this->getCurrentDate()->format(NewsroomAgenda::DATE_FORMAT) . $this->getTypeId() . implode('', $this->getTopicsId()));
+    return md5($this->getCurrentDate()
+        ->format(NewsroomAgenda::DATE_FORMAT) . $this->getTypeId() . implode('', $this->getTopicsId()));
   }
 
   /**
@@ -655,7 +657,7 @@ abstract class NewsroomAgenda {
   }
 
   /**
-   * Converts string to date object and fill empty dates.
+   * Converts string to date object and fills empty dates.
    *
    * @param array $items
    *   Agenda items.
@@ -743,12 +745,16 @@ abstract class NewsroomAgenda {
    */
   protected function loadResult() {
     $end_date_condition = db_and()
-      ->condition('d.field_newsroom_item_date_value2', $this->getCurrentDate()->format(NewsroomAgenda::DATE_FORMAT), '>=')
-      ->condition('d.field_newsroom_item_date_value', $this->getUpcomingDate()->format(NewsroomAgenda::DATE_FORMAT), '<=');
+      ->condition('d.field_newsroom_item_date_value2', $this->getCurrentDate()
+        ->format(NewsroomAgenda::DATE_FORMAT), '>=')
+      ->condition('d.field_newsroom_item_date_value', $this->getUpcomingDate()
+        ->format(NewsroomAgenda::DATE_FORMAT), '<=');
 
     $start_date_condition = db_and()
-      ->condition('d.field_newsroom_item_date_value', $this->getCurrentDate()->format(NewsroomAgenda::DATE_FORMAT), '>=')
-      ->condition('d.field_newsroom_item_date_value', $this->getUpcomingDate()->format(NewsroomAgenda::DATE_FORMAT), '<=')
+      ->condition('d.field_newsroom_item_date_value', $this->getCurrentDate()
+        ->format(NewsroomAgenda::DATE_FORMAT), '>=')
+      ->condition('d.field_newsroom_item_date_value', $this->getUpcomingDate()
+        ->format(NewsroomAgenda::DATE_FORMAT), '<=')
       ->isNull('d.field_newsroom_item_date_value2');
 
     $date_condition = db_or();

@@ -171,6 +171,8 @@ class NewsroomPage {
    *   Node.
    * @param string $field_name
    *   Field name.
+   * @param string $style_name
+   *   Style name.
    *
    * @return null|string
    *   Image HTML presentation.
