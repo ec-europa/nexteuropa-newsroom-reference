@@ -20,8 +20,7 @@ class NewsroomHelper {
    *   tids
    */
   public static function getTypeChildren($term_tid) {
-    $types = NewsroomHelper::getNewsroomTypes();
-    $children_items = NewsroomHelper::findChildrenById($types, $term_tid);
+    $children_items = NewsroomHelper::findChildrenById(NewsroomHelper::getNewsroomTypes(), $term_tid);
     // We need parent ID also in the output array to use it in query.
     $parent_children_tids = array($term_tid);
     $children_tids = array_keys($children_items);
