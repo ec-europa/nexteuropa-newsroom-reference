@@ -195,13 +195,6 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#collapsed' => $universe_id_info['collapsing'],
   );
 
-  $form['newsroom_universe'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Newsroom universe settings'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-  );
-
   $form['newsroom_universe']['newsroom_app'] = array(
     '#type' => 'textfield',
     '#title' => t('Newsroom app'),
@@ -289,6 +282,12 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Newsroom proposal script'),
     '#default_value' => variable_get('newsroom_proposal_script', NEXTEUROPA_NEWSROOM_PROPOSAL_SCRIPT),
+  );
+
+  $form['newsroom_universe']['newsroom_docroom_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Newsroom Docroom URL'),
+    '#default_value' => variable_get('newsroom_docroom_url'),
   );
 
   $form['newsroom_pages'] = array(
@@ -477,26 +476,6 @@ function _nexteuropa_newsroom_admin_settings_form_submit($form, &$form_state) {
   }
 
   $patterns ? variable_set('newsroom_patterns', 1) : variable_set('newsroom_patterns', 0);
-
-  // Create default importers if new Newsroom Universe ID detected.
-  if ($form_state['values']['newsroom_universe_id']) {
-    variable_set('newsroom_universe_id', $form_state['values']['newsroom_universe_id']);
-
-    $importers = array(
-      NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
-      NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
-      NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
-      NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
-      NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
-    );
-
-    foreach ($importers as $importer) {
-      $importer = NewsroomBuilder::buildImporter($importer);
-      $importer->generateImporter();
-    }
-
-    drupal_set_message(t('Newsroom importers have been successfully generated.'));
-  }
 
   // If the validation returns the confirm request.
   if (isset($form_state['storage']['confirm']) && empty($form_state['confirm']['processed'])) {

@@ -430,11 +430,10 @@ function nexteuropa_newsroom_node_view($node, $view_mode, $langcode) {
     // Except for editors who can import items.
     if (!user_access(NEXTEUROPA_NEWSROOM_IMPORT_ACCESS)) {
 
-      $click_through = NewsroomHelper::getFieldValue($type, 'field_newsroom_direct_link', 'taxonomy_term');
-
       // Only if we have a main link and if type is click through then redirect
       // item to main link URL.
       if ($type && $main_link_url) {
+        $click_through = NewsroomHelper::getFieldValue($type, 'field_newsroom_direct_link', 'taxonomy_term');
         if ($click_through == NEXTEUROPA_NEWSROOM_CLICKTHROUGH_FORCE) {
           drupal_goto($main_link_url, array(), 301);
         }
@@ -449,7 +448,7 @@ function nexteuropa_newsroom_node_view($node, $view_mode, $langcode) {
       }
     }
 
-    // Custom resposible person label per type.
+    // Custom responsible person label per type.
     $speaker = NewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_item_speaker');
     if ($type && $speaker) {
       // Case there is a custom read more text set, change it.
@@ -780,9 +779,7 @@ function nexteuropa_newsroom_feeds_after_save(FeedsSource $source, $entity, $ite
  */
 function _nexteuropa_newsroom_set_image_meta_info($image_field, $entity, $source, $item, $languages, $default_language) {
   if ($fid = NewsroomHelper::getFieldValue($entity, $image_field, 'fid')) {
-
     if ($file = file_load($fid)) {
-
       $fields = array(
         'field_file_image_title_text' => 'title',
         'field_newsroom_copyrights' => 'copyright',
@@ -834,6 +831,7 @@ function _nexteuropa_newsroom_set_image_meta_info($image_field, $entity, $source
           }
         }
       }
+
       file_save($file);
       if (module_exists('entitycache')) {
         cache_clear_all($fid, 'cache_entity_file');
@@ -980,7 +978,6 @@ function nexteuropa_newsroom_feeds_after_parse(FeedsSource $source, FeedsParserR
 
     // Check Xpath expressions for Start date and End date.
     if (isset($config['mappings'])) {
-      $xpath_expression = NULL;
       foreach ($config['mappings'] as $mapping) {
         if ($mapping['target'] == 'field_newsroom_item_date:start') {
           $start_date_exp = $mapping['source'];

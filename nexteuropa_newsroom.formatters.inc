@@ -25,6 +25,13 @@ function nexteuropa_newsroom_field_formatter_info() {
       'field types' => array('image'),
       'settings' => _nexteuropa_newsroom_zoomable_formatter_settings(),
     ),
+    'newsroom_docroom' => array(
+      'label' => t('Newsroom Docroom Documents'),
+      'field types' => array('number_integer'),
+      'settings' => array(
+        'display_type' => 'default',
+      ),
+    ),
   );
 }
 
@@ -82,6 +89,19 @@ function nexteuropa_newsroom_field_formatter_settings_form($field, $instance, $v
       );
 
       break;
+
+    case 'newsroom_docroom':
+      $element['display_type'] = array(
+        '#title' => t('Type of display context'),
+        '#type' => 'select',
+        '#options' => array(
+          'default' => t('Default iframe presentation'),
+          'link' => t('Link'),
+        ),
+        '#default_value' => $settings['display_type'],
+      );
+
+      break;
   }
 
   return $element;
@@ -106,29 +126,46 @@ function nexteuropa_newsroom_field_formatter_settings_summary($field, $instance,
       return t('Default');
     }
   }
+  else {
+    if ($display['type'] == 'newsroom_docroom') {
+      if ($display['settings']['display_type']) {
+        $options = array(
+          'default' => t('Default iframe presentation'),
+          'link' => t('Link'),
+        );
 
-  if ($display['type'] == 'newsroom_zoomable_image') {
-    $settings = $display['settings'];
-    $summary = array();
-    $image_styles = image_style_options(FALSE, PASS_THROUGH);
-    unset($image_styles['']);
-    if (isset($image_styles[$settings['image_style']])) {
-      $summary[] = t('Image style: @style', array('@style' => $image_styles[$settings['image_style']]));
+        return $options[$display['settings']['display_type']];
+      }
+      else {
+        return t('Default');
+      }
     }
     else {
-      $summary[] = t('Original image');
+      if ($display['type'] == 'newsroom_zoomable_image') {
+        $settings = $display['settings'];
+        $summary = array();
+        $image_styles = image_style_options(FALSE, PASS_THROUGH);
+        unset($image_styles['']);
+        if (isset($image_styles[$settings['image_style']])) {
+          $summary[] = t('Image style: @style', array('@style' => $image_styles[$settings['image_style']]));
+        }
+        else {
+          $summary[] = t('Original image');
+        }
+        if ($settings['zoomable']) {
+          $summary[] = t('Is zoomable');
+        }
+        if ($settings['display_title']) {
+          $summary[] = t('Displays title');
+        }
+        if ($settings['display_copyright']) {
+          $summary[] = t('Displays copyright');
+        }
+        return implode(',', $summary);
+      }
     }
-    if ($settings['zoomable']) {
-      $summary[] = t('Is zoomable');
-    }
-    if ($settings['display_title']) {
-      $summary[] = t('Displays title');
-    }
-    if ($settings['display_copyright']) {
-      $summary[] = t('Displays copyright');
-    }
-    return implode(',', $summary);
   }
+
   return '';
 }
 
@@ -201,7 +238,7 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
           }
         }
 
-        // Sets copyright.
+        // Sets caption.
         $caption = '';
         if ($display['settings']['display_caption']) {
           if (isset($item['field_caption'][$language->language][0])) {
@@ -237,6 +274,48 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
           '#zoomable' => $zoomable,
         );
       }
+
+      break;
+
+    case 'newsroom_docroom':
+      $display_type = isset($display['settings']['display_type']) ? $display['settings']['display_type'] : 'default';
+      $docroom_ids = array();
+      foreach ($items as $item) {
+        $docroom_ids[] = $item['value'];
+      }
+      if (count($docroom_ids) > 0) {
+        $url = url(
+          variable_get('newsroom_docroom_url'),
+          array(
+            'external' => TRUE,
+            'query' => array(
+              'documentsIds' => implode(',', $docroom_ids),
+              'iframe' => 'true',
+              'autoHeight' => 'true',
+            ),
+          )
+        );
+        if ($display_type == 'default') {
+          $elements[0] = array(
+            '#theme' => 'newsroom_docroom',
+            '#url' => $url,
+          );
+        }
+        else {
+          if ($display_type == 'link') {
+            $elements[0] = array(
+              '#theme' => 'link',
+              '#text' => 'Docroom documents',
+              '#path' => $url,
+              '#options' => array(
+                'attributes' => array('class' => array('docroom-link')),
+                'html' => FALSE,
+              ),
+            );
+          }
+        }
+      }
+
       break;
   }
 

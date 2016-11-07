@@ -496,6 +496,10 @@ class NewsroomBuilder {
         'query' => 'infsonewsroom:itemDisplay/text()',
       ),
       array(
+        'field' => 'field_newsroom_docroom_ids',
+        'query' => 'enclosure[@external_app="docsroom"]/@external_id',
+      ),
+      array(
         'field' => 'language',
         'source' => 'Blank source 1',
         'tamper' => array(
