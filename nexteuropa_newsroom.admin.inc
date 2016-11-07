@@ -464,6 +464,11 @@ function _nexteuropa_newsroom_admin_settings_form_validate($form, &$form_state) 
  *   Form state array.
  */
 function _nexteuropa_newsroom_admin_settings_form_submit($form, &$form_state) {
+  $universe_id = variable_get('newsroom_universe_id');
+  if (empty($universe_id) && $form_state['values']['newsroom_universe_id']) {
+    _nexteuropa_newsroom_admin_rebuild_importers();
+  }
+
   $patterns = isset($form_state['values']['patterns']) && $form_state['values']['patterns'] == 1 ? TRUE : FALSE;
   $keys = array_keys($form_state['values']);
   $rootpaths = preg_grep('/rootpath/', $keys);
@@ -890,7 +895,7 @@ function _nexteuropa_newsroom_admin_rebuild_importers() {
     $importer->generateImporter();
   }
 
-  drupal_set_message(t('Newsroom importers have been successfully recreated.'));
+  drupal_set_message(t('Newsroom importers have been successfully generated.'));
 }
 
 /**
