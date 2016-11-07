@@ -562,7 +562,6 @@ class NewsroomImporterGenerator {
       '_',
     ), $source));
 
-    var_dump($this->getId() . '-' . $source_prepared_string . '-' . $settings['plugin_id']);
     $feeds_tamper = new stdClass();
     $feeds_tamper->id = $this->getId() . '-' . $source_prepared_string . '-' . $settings['plugin_id'];
     $feeds_tamper->importer = $this->getId();
