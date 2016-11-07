@@ -430,22 +430,15 @@ function _nexteuropa_newsroom_admin_settings_form_validate($form, &$form_state) 
   if (!isset($form_state['storage']['confirm']) && empty($form_state['confirm']['processed'])) {
     $check_values = _nexteuropa_newsroom_admin_prepare_check($form_state['fields_form'], $form_state['input']);
 
-    // Check every topic instance if requested.
-    if ($check_values['delete']['topic'] == 1) {
-      $test = _nexteuropa_newsroom_admin_check_deletion('topic', NEXTEUROPA_NEWSROOM_ALL);
-    }
-    // If there are less values than before, check instances.
-    elseif (!empty($check_values['check']['topic'][0])) {
-      $test = _nexteuropa_newsroom_admin_check_deletion('topic', $check_values['check']['topic'][0]);
-    }
-
-    // Check every select instance if requested.
-    if ($check_values['delete']['select'] == 1) {
-      $test = _nexteuropa_newsroom_admin_check_deletion('select', NEXTEUROPA_NEWSROOM_ALL);
-    }
-    // If there are less values than before, check instances.
-    elseif (!empty($check_values['check']['select'][0])) {
-      $test = _nexteuropa_newsroom_admin_check_deletion('select', $check_values['check']['select'][0]);
+    // Check every topic and select instance if requested.
+    foreach (array('topic', 'select') as $field_item) {
+      if ($check_values['delete'][$field_item] == 1) {
+        $test = _nexteuropa_newsroom_admin_check_deletion($field_item, NEXTEUROPA_NEWSROOM_ALL);
+      }
+      // If there are less values than before, check instances.
+      elseif (!empty($check_values['check'][$field_item][0])) {
+        $test = _nexteuropa_newsroom_admin_check_deletion($field_item, $check_values['check'][$field_item][0]);
+      }
     }
 
     if (!empty($test)) {
@@ -489,33 +482,18 @@ function _nexteuropa_newsroom_admin_settings_form_submit($form, &$form_state) {
   else {
     $check_values = _nexteuropa_newsroom_admin_prepare_check($form_state['fields_form'], $form_state['values']);
 
-    // Remove every topic instance if requested.
-    if ($check_values['delete']['topic'] == 1) {
-      _nexteuropa_newsroom_admin_remove_fields('topic', NEXTEUROPA_NEWSROOM_ALL);
-    }
-    else {
-      if (!empty($check_values['selected']['topic']) && !empty($check_values['check']['topic'][1])) {
+    // Remove every topic or select instance if requested.
+    foreach (array('topic', 'select') as $field_item) {
+      if ($check_values['delete'][$field_item] == 1) {
+        _nexteuropa_newsroom_admin_remove_fields($field_item, NEXTEUROPA_NEWSROOM_ALL);
+      }
+      elseif (!empty($check_values['selected'][$field_item]) && !empty($check_values['check'][$field_item][1])) {
         // Add new instances.
-        _nexteuropa_newsroom_admin_add_fields('topic', $check_values['check']['topic'][1]);
+        _nexteuropa_newsroom_admin_add_fields($field_item, $check_values['check'][$field_item][1]);
       }
-      elseif (!empty($check_values['check']['topic'][0])) {
+      elseif (!empty($check_values['check'][$field_item][0])) {
         // Remove instances.
-        _nexteuropa_newsroom_admin_remove_fields('topic', $check_values['check']['topic'][0]);
-      }
-    }
-
-    // Remove every select instance if requested.
-    if ($check_values['delete']['select'] == 1) {
-      _nexteuropa_newsroom_admin_remove_fields('select', NEXTEUROPA_NEWSROOM_ALL);
-    }
-    else {
-      if (!empty($check_values['selected']['select']) && !empty($check_values['check']['select'][1])) {
-        // Add new instances.
-        _nexteuropa_newsroom_admin_add_fields('select', $check_values['check']['select'][1]);
-      }
-      elseif (!empty($check_values['check']['select'][0])) {
-        // Remove instances.
-        _nexteuropa_newsroom_admin_remove_fields('select', $check_values['check']['select'][0]);
+        _nexteuropa_newsroom_admin_remove_fields($field_item, $check_values['check'][$field_item][0]);
       }
     }
 
