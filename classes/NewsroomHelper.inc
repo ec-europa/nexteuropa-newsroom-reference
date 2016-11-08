@@ -112,6 +112,24 @@ class NewsroomHelper {
   }
 
   /**
+   * Importers list.
+   *
+   * @return array $importers
+   *   Returns an array of Importers IDs.
+   */
+  public static function returnImporters() {
+    $importers = [
+      NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
+      NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
+      NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
+      NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
+      NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
+    ];
+
+    return $importers;
+  }
+  
+  /**
    * Gets default URL of importer.
    *
    * @param string $importer_id

@@ -401,6 +401,13 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
       '#access' => user_access('administer newsroom advanced settings'),
       '#weight' => 12,
     );
+    $form['actions']['delete_items'] = array(
+      '#type' => 'submit',
+      '#value' => t('Delete existing items'),
+      '#submit' => array('_nexteuropa_newsroom_delete_items'),
+      '#access' => user_access('administer newsroom advanced settings'),
+      '#weight' => 10,
+    );
   }
 
   // Define the fields_form array().
@@ -890,15 +897,8 @@ function _nexteuropa_newsroom_admin_prepare_check(array $previous, array $input)
  * Rebuilds multilingual importers.
  */
 function _nexteuropa_newsroom_admin_rebuild_importers() {
-
   // Remove importers.
-  $importers = array(
-    NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
-    NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
-    NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
-    NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
-    NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
-  );
+  $importers = NewsroomHelper::returnImporters();
 
   foreach ($importers as $importer) {
     // WE drop all tampers for the current importer.
@@ -911,7 +911,7 @@ function _nexteuropa_newsroom_admin_rebuild_importers() {
     $importer->generateImporter();
   }
 
-  drupal_set_message(t('Newsroom importers have been successfully recreated.'));
+  drupal_set_message(t('Newsroom importers have been successfully generated.'));
 }
 
 /**
@@ -919,15 +919,22 @@ function _nexteuropa_newsroom_admin_rebuild_importers() {
  */
 function _nexteuropa_newsroom_import_importers() {
   // Run the multilingual imports if required.
-  $importers = array(
-    NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
-    NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
-    NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
-    NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
-    NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
-  );
+  $importers = NewsroomHelper::returnImporters();
 
   foreach ($importers as $importer) {
     NewsroomHelper::runFeedImporter($importer);
   }
 }
+
+/**
+ * Submit handler, delete items.
+ */
+function _nexteuropa_newsroom_delete_items($form, &$form_state) {
+  // Delete the imported items.
+  $importers = NewsroomHelper::returnImporters();
+
+  foreach ($importers as $importer) {
+    NewsroomHelper::deleteItems($importer);
+  }
+}
+
