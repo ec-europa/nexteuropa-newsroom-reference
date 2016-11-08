@@ -385,7 +385,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
       '#value' => t('Run importers'),
       '#submit' => array('_nexteuropa_newsroom_import_importers'),
       '#access' => user_access('administer newsroom advanced settings'),
-      '#weight' => 10,
+      '#weight' => 9,
     );
     $form['actions']['rebuild'] = array(
       '#type' => 'submit',
@@ -937,4 +937,3 @@ function _nexteuropa_newsroom_delete_items($form, &$form_state) {
     NewsroomHelper::deleteItems($importer);
   }
 }
-

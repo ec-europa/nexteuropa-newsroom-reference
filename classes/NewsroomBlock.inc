@@ -126,7 +126,7 @@ class NewsroomBlock extends NewsroomBlockBase {
         if ($this->getOperator() == NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR) {
           $query->condition('topic_data.tid', $topic_ids);
         }
-        else if ($nids = NewsroomHelper::getNodeRelatedToTopic($topic_ids)) {
+        elseif ($nids = NewsroomHelper::getNodeRelatedToTopic($topic_ids)) {
           $query->condition('nid', $nids, 'IN');
         }
       }

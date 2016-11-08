@@ -122,7 +122,7 @@ class NewsroomHelper {
     $source->startClear();
     $progress = $source->progressClearing();
   }
-  
+
   /**
    * Importers list.
    *
@@ -140,7 +140,7 @@ class NewsroomHelper {
 
     return $importers;
   }
-  
+
   /**
    * Gets default URL of importer.
    *
