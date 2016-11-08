@@ -506,7 +506,7 @@ class NewsroomBuilder {
           'plugin_id' => 'default_value',
           'default_value' => NewsroomHelper::getDefaultLanguage(),
         ],
-      ]
+      ],
     ];
 
     return $field_mapping;
@@ -579,7 +579,7 @@ class NewsroomBuilder {
           'plugin_id' => 'default_value',
           'default_value' => NewsroomHelper::getDefaultLanguage(),
         ],
-      ]
+      ],
     ];
 
     return $field_mapping;

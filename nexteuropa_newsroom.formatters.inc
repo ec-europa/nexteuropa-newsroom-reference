@@ -173,7 +173,6 @@ function nexteuropa_newsroom_field_formatter_settings_summary($field, $instance,
     return implode(',', $summary);
   }
 
-
   return '';
 }
 
