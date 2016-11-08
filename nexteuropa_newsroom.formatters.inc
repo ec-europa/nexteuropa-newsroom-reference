@@ -30,6 +30,8 @@ function nexteuropa_newsroom_field_formatter_info() {
       'field types' => array('number_integer'),
       'settings' => array(
         'display_type' => 'default',
+        'width' => 600,
+        'height' => 200,
       ),
     ),
   );
@@ -99,6 +101,16 @@ function nexteuropa_newsroom_field_formatter_settings_form($field, $instance, $v
           'link' => t('Link'),
         ),
         '#default_value' => $settings['display_type'],
+      );
+      $element['width'] = array(
+        '#title' => t('Iframe width.'),
+        '#type' => 'textfield',
+        '#default_value' => $settings['width'],
+      );
+      $element['height'] = array(
+        '#title' => t('Iframe height.'),
+        '#type' => 'textfield',
+        '#default_value' => $settings['height'],
       );
 
       break;
@@ -299,6 +311,8 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
           $elements[0] = array(
             '#theme' => 'newsroom_docroom',
             '#url' => $url,
+            '#width' => $display['settings']['width'],
+            '#height' => $display['settings']['height'],
           );
         }
         else {

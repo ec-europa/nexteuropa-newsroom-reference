@@ -159,6 +159,8 @@ function nexteuropa_newsroom_theme($existing, $type, $theme, $path) {
     'newsroom_docroom' => array(
       'variables' => array(
         'url' => NULL,
+        'width' => 600,
+        'height' => 200,
       ),
       'template' => 'newsroom-docroom',
       'path' => $theme_path,
