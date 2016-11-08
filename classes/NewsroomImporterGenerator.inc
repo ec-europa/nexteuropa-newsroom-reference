@@ -19,8 +19,8 @@ class NewsroomImporterGenerator {
   private $bundle = NULL;
   private $importPeriod = 3000;
   private $counter = 0;
-  private $queries = array();
-  private $mappers = array();
+  private $queries = [];
+  private $mappers = [];
   private $fieldInfo = NULL;
   private $languages = NULL;
 
@@ -313,11 +313,11 @@ class NewsroomImporterGenerator {
    */
   protected function addMapper($field_mapping, $language = NULL) {
 
-    $mapper = array(
+    $mapper = [
       'source' => isset($field_mapping['source']) ? $field_mapping['source'] : $this->getXpathString(),
       'target' => $language ? $field_mapping['field'] . ':et:' . drupal_strtolower($language) : $field_mapping['field'],
       'unique' => isset($field_mapping['unique']),
-    );
+    ];
 
     if (isset($field_mapping['options'])) {
       $mapper = array_merge($mapper, $field_mapping['options']);
@@ -374,10 +374,10 @@ class NewsroomImporterGenerator {
    */
   protected function addNewsroomDefaultValueTamper($default_source) {
     if ($default_source) {
-      $tamper['tamper'] = array(
+      $tamper['tamper'] = [
         'plugin_id' => 'newsroom_default_value',
         'default_value' => '[' . $default_source . ']',
-      );
+      ];
 
       $this->addTamper($tamper);
     }
@@ -451,7 +451,7 @@ class NewsroomImporterGenerator {
    */
   protected function generateDebugArray() {
     // We don't need debug and raw values, we set 0 for these xpath mappings.
-    $debug_array = array();
+    $debug_array = [];
     foreach (array_keys($this->getQueries()) as $xpath) {
       $debug_array[$xpath] = 0;
     }
@@ -462,43 +462,43 @@ class NewsroomImporterGenerator {
    * Saves importer.
    */
   private function saveImporter() {
-    $config = array(
+    $config = [
       'name' => $this->getTitle(),
       'description' => $this->getDescription(),
-      'fetcher' => array(
+      'fetcher' => [
         'plugin_key' => 'FeedsHTTPFetcher',
-        'config' => array(
+        'config' => [
           'auto_detect_feeds' => FALSE,
           'use_pubsubhubbub' => FALSE,
           'designated_hub' => '',
           'request_timeout' => NULL,
-        ),
-      ),
-      'parser' => array(
+        ],
+      ],
+      'parser' => [
         'plugin_key' => 'FeedsXPathParserXML',
-        'config' => array(
+        'config' => [
           'sources' => $this->getQueries(),
           'rawXML' => $this->generateDebugArray(),
           'context' => $this->getRssContext(),
-          'exp' => array(
+          'exp' => [
             'errors' => 0,
             'debug' => $this->generateDebugArray(),
-          ),
+          ],
           'allow_override' => 0,
-        ),
-      ),
+        ],
+      ],
       'content_type' => '',
       'update' => 0,
       'import_period' => $this->getImportPeriod(),
       'expire_period' => 1800,
       'import_on_create' => 1,
       'process_in_background' => 0,
-    );
+    ];
 
     if ($this->getEntityType() == 'node') {
-      $config['processor'] = array(
+      $config['processor'] = [
         'plugin_key' => 'FeedsNodeProcessor',
-        'config' => array(
+        'config' => [
           'expire' => '-1',
           'author' => '0',
           'authorize' => 0,
@@ -507,28 +507,28 @@ class NewsroomImporterGenerator {
           'input_format' => 'full_html',
           'skip_hash_check' => 0,
           'bundle' => $this->getBundle(),
-        ),
-      );
+        ],
+      ];
     }
     else {
-      $config['processor'] = array(
+      $config['processor'] = [
         'plugin_key' => 'FeedsTermProcessor',
-        'config' => array(
+        'config' => [
           'vocabulary' => $this->getBundle(),
           'mappings' => $this->getMappers(),
           'update_existing' => '2',
           'input_format' => 'plain_text',
           'skip_hash_check' => 0,
           'bundle' => $this->getBundle(),
-        ),
-      );
+        ],
+      ];
     }
 
     // Save importer.
     $save = feeds_importer($this->getId());
     $save->setConfig($config);
 
-    foreach (array('fetcher', 'parser', 'processor') as $type) {
+    foreach (['fetcher', 'parser', 'processor'] as $type) {
       $save->setPlugin($config[$type]['plugin_key']);
       $save->$type->setConfig($config[$type]['config']);
     }
@@ -557,10 +557,10 @@ class NewsroomImporterGenerator {
     $settings = $field_mapping['tamper'];
 
     $source = isset($field_mapping['source']) ? $field_mapping['source'] : $this->getXpathString();
-    $source_prepared_string = drupal_strtolower(str_replace(array('-', ' '), array(
+    $source_prepared_string = drupal_strtolower(str_replace(['-', ' '], [
       '_',
       '_',
-    ), $source));
+    ], $source));
 
     $feeds_tamper = new stdClass();
     $feeds_tamper->id = $this->getId() . '-' . $source_prepared_string . '-' . $settings['plugin_id'];
@@ -575,23 +575,23 @@ class NewsroomImporterGenerator {
     if ($settings['plugin_id'] == 'efq_finder') {
 
       // Prepare setting for Entity Field Query finder.
-      $feeds_tamper->settings = array(
+      $feeds_tamper->settings = [
         'entity_type' => $settings['entity_type'],
         'bundle' => $settings['bundle'],
         'column' => 'value',
         'property' => FALSE,
         'update' => 'Update',
         'field' => $settings['field'],
-      );
+      ];
       $feeds_tamper->description = 'Entity Field Query finder';
 
     }
     elseif ($settings['plugin_id'] == 'rewrite') {
 
       // Prepare setting for Rewrite plugin.
-      $feeds_tamper->settings = array(
+      $feeds_tamper->settings = [
         'text' => $settings['prefix'] . '[' . $source . ']',
-      );
+      ];
       $feeds_tamper->description = 'Rewrite';
 
     }
@@ -603,17 +603,17 @@ class NewsroomImporterGenerator {
     }
     elseif ($settings['plugin_id'] == 'default_value') {
 
-      $feeds_tamper->settings = array(
+      $feeds_tamper->settings = [
         'default_value' => $settings['default_value'],
-      );
+      ];
       $feeds_tamper->description = 'Set default language';
 
     }
     elseif ($settings['plugin_id'] == 'newsroom_default_value') {
 
-      $feeds_tamper->settings = array(
+      $feeds_tamper->settings = [
         'default_value' => $settings['default_value'],
-      );
+      ];
       $feeds_tamper->description = 'Set default value if empty';
 
     }

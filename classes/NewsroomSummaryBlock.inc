@@ -10,8 +10,8 @@
  */
 class NewsroomSummaryBlock {
 
-  protected $types = array();
-  protected $topics = array();
+  protected $types = [];
+  protected $topics = [];
   protected $operator = NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR;
 
   /**
@@ -86,7 +86,7 @@ class NewsroomSummaryBlock {
     $topic_name = NULL;
 
     // We take only first topic if we have multiple.
-    if (count($topics) > 0) {
+    if (!empty($topics)) {
       $topic_name = $topics[0]->name;
       $topic_url = pathauto_cleanstring($topics[0]->name);
     }
@@ -94,14 +94,14 @@ class NewsroomSummaryBlock {
       $url_parts[] = NEXTEUROPA_NEWSROOM_ALL;
     }
 
-    $rss_path = NewsroomHelper::getNewsroomRssUrl(array(NEXTEUROPA_NEWSROOM_ALL, $topic_url));
+    $rss_path = NewsroomHelper::getNewsroomRssUrl([NEXTEUROPA_NEWSROOM_ALL, $topic_url]);
     $rss_title = !empty($topic_name) ? 'RSS feed : ' . $topic_name : 'RSS feed';
 
     $rss = '<div class="newsroom_rss">';
-    $rss .= theme('feed_icon', array(
+    $rss .= theme('feed_icon', [
       'url' => $rss_path,
       'title' => $rss_title,
-    ));
+    ]);
     $rss .= l($rss_title, $rss_path);
     $rss .= '</div>';
 
@@ -120,8 +120,8 @@ class NewsroomSummaryBlock {
     }
     else {
       $topic_operator = NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR;
-      $selected_topics = array();
-      $selected_types = array();
+      $selected_topics = [];
+      $selected_types = [];
 
       if ($entity = $this->getEntityFromRequest()) {
         if (isset($entity->type) && $entity->type == 'newsroom_selection') {
@@ -151,8 +151,8 @@ class NewsroomSummaryBlock {
         }
       }
 
-      $types = array();
-      if (count($selected_types) > 0) {
+      $types = [];
+      if (!empty($selected_types)) {
         foreach ($selected_types as $type_id) {
           $types[] = NewsroomHelper::getNewsroomType($type_id);
         }
@@ -167,7 +167,7 @@ class NewsroomSummaryBlock {
         }
       }
 
-      $topics = array();
+      $topics = [];
       foreach ($selected_topics as $topic_id) {
         if ($topic_term = NewsroomHelper::getNewsroomTopic($topic_id)) {
           $topics[] = $topic_term;
@@ -232,7 +232,7 @@ class NewsroomSummaryBlock {
   public function generateContent() {
     $this->getFilters();
     $events_terms = NewsroomHelper::getEventsTermsIds();
-    $blocks = array();
+    $blocks = [];
     $output = NULL;
 
     foreach ($this->getTypes() as $key => $type) {
@@ -246,14 +246,14 @@ class NewsroomSummaryBlock {
 
     $blocks[] = new NewsroomBlockAgenda(NULL, $this->getTopics(), $this->getOperator());
 
-    usort($blocks, array('NewsroomSummaryBlock', 'sortBlocks'));
+    usort($blocks, ['NewsroomSummaryBlock', 'sortBlocks']);
     foreach ($blocks as $block) {
       $output .= $block->generateContent();
     }
-    return theme('newsroom_summary_block', array(
+    return theme('newsroom_summary_block', [
       'content' => $output,
       'rss' => $this->generateRss(),
-    ));
+    ]);
   }
 
   /**

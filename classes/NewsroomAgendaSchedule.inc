@@ -86,7 +86,7 @@ class NewsroomAgendaSchedule extends NewsroomAgenda {
     // We start from the next day after the current.
     $start_date->modify('+1 day');
     $this->setLastAgendaDate($start_date);
-    $upcoming_items = array();
+    $upcoming_items = [];
     // We add one day to include the last day also.
     $last_event_date = $this->getUtmostDate(FALSE);
     if ($last_event_date) {
@@ -117,7 +117,7 @@ class NewsroomAgendaSchedule extends NewsroomAgenda {
     $has_current_items = FALSE;
     if ($items) {
       foreach ($items as $item) {
-        if (count($item->getItems()) > 0) {
+        if (!empty($item->getItems())) {
           $has_current_items = TRUE;
           break;
         }

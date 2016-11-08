@@ -9,35 +9,31 @@
  * Implements hook_block_info().
  */
 function nexteuropa_newsroom_block_info() {
-  $blocks = array();
-  $blocks['newsroom_summary_blocks'] = array(
+  $blocks = [];
+  $blocks['newsroom_summary_blocks'] = [
     'info' => t('Newsroom summary blocks'),
     'cache' => DRUPAL_CACHE_CUSTOM,
-  );
-  $blocks['newsroom_related_content'] = array(
+  ];
+  $blocks['newsroom_related_content'] = [
     'info' => t('Newsroom related Content'),
     'cache' => DRUPAL_CACHE_GLOBAL,
-  );
-  $blocks['newsroom_admin_tools'] = array(
+  ];
+  $blocks['newsroom_admin_tools'] = [
     'info' => t('Newsroom administration buttons'),
     'cache' => DRUPAL_CACHE_PER_PAGE,
-  );
-  $blocks['newsroom_newsletter_subscription'] = array(
+  ];
+  $blocks['newsroom_newsletter_subscription'] = [
     'info' => t('Newsroom newsletter subscription'),
     'cache' => DRUPAL_CACHE_PER_PAGE,
-  );
-  $blocks['.'] = array(
-    'info' => t('Newsroom list filter'),
-    'cache' => DRUPAL_CACHE_CUSTOM,
-  );
-  $blocks['newsroom_proposal'] = array(
+  ];
+  $blocks['newsroom_proposal'] = [
     'info' => t('Newsroom items proposal'),
     'cache' => DRUPAL_CACHE_GLOBAL,
-  );
-  $blocks['newsroom_agenda_block'] = array(
+  ];
+  $blocks['newsroom_agenda_block'] = [
     'info' => t('Newsroom agenda block'),
     'cache' => DRUPAL_CACHE_PER_PAGE,
-  );
+  ];
   return $blocks;
 }
 
@@ -47,7 +43,7 @@ function nexteuropa_newsroom_block_info() {
 function nexteuropa_newsroom_block_view($delta = '') {
   switch ($delta) {
     case 'newsroom_summary_blocks':
-      $block['subject'] = l(t('Newsroom'), NewsroomHelper::getNewsroomPageUrl(array(NEXTEUROPA_NEWSROOM_ALL)));
+      $block['subject'] = l(t('Newsroom'), NewsroomHelper::getNewsroomPageUrl([NEXTEUROPA_NEWSROOM_ALL]));
       $block['content'] = _nexteuropa_nexteuropa_get_summary_blocks();
       break;
 
@@ -88,7 +84,7 @@ function nexteuropa_newsroom_block_view($delta = '') {
 function _nexteuropa_newsroom_agenda_block() {
   $content = '';
   if ($type = _nexteuropa_nexteuropa_get_type_from_agenda_block_context()) {
-    $agenda_block = new NewsroomBlockAgenda($type, array(), NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR);
+    $agenda_block = new NewsroomBlockAgenda($type, [], NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR);
     $content = $agenda_block->generateContent();
   }
 
@@ -140,7 +136,7 @@ function _nexteuropa_nexteuropa_related_content() {
   if ($node = menu_get_object()) {
     $children_related_items = _nexteuropa_nexteuropa_get_related_content('field_newsroom_related_content', $node);
     $parent_related_items = _nexteuropa_nexteuropa_get_related_content('field_newsroom_parent_content', $node);
-    $brother_items = array();
+    $brother_items = [];
     $parent_item = NULL;
     if (count($parent_related_items) > 0) {
       $parent_item = $parent_related_items[0];
@@ -148,12 +144,12 @@ function _nexteuropa_nexteuropa_related_content() {
     }
 
     if ($parent_item || count($brother_items) > 0 || count($children_related_items) > 0) {
-      $content = theme('newsroom_related_content', array(
+      $content = theme('newsroom_related_content', [
         'parent_item' => $parent_item,
         'current_item' => $node,
         'brother_items' => $brother_items,
         'children_items' => $children_related_items,
-      ));
+      ]);
     }
   }
   return $content;
@@ -173,7 +169,7 @@ function _nexteuropa_nexteuropa_related_content() {
  *   Taxonomy ids.
  */
 function _nexteuropa_newsroom_get_related_children($field_name, $parent_nid, $current_nid) {
-  $items = array();
+  $items = [];
   if ($parent_nid) {
     $cache_key = 'node_relative_items';
     if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
@@ -187,7 +183,7 @@ function _nexteuropa_newsroom_get_related_children($field_name, $parent_nid, $cu
       $result = $query->execute();
       if (isset($result['node'])) {
         // Exclude the current item ID from array.
-        $ids = array_diff(array_keys($result['node']), array($current_nid));
+        $ids = array_diff(array_keys($result['node']), [$current_nid]);
         $items = _nexteuropa_nexteuropa_prepare_related_content_array($ids);
       }
       cache_set($cache_key, $items, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_node_relative_items', 86400));
@@ -209,10 +205,10 @@ function _nexteuropa_newsroom_get_related_children($field_name, $parent_nid, $cu
  *   Related nodes.
  */
 function _nexteuropa_nexteuropa_get_related_content($field_name, $node) {
-  $items = array();
+  $items = [];
   $node_ids = NewsroomHelper::getFieldValue($node, $field_name, 'target_id');
   if ($node_ids) {
-    $node_ids = is_array($node_ids) ? $node_ids : array($node_ids);
+    $node_ids = is_array($node_ids) ? $node_ids : [$node_ids];
     $items = _nexteuropa_nexteuropa_prepare_related_content_array($node_ids);
   }
   return $items;
@@ -228,8 +224,8 @@ function _nexteuropa_nexteuropa_get_related_content($field_name, $node) {
  *   Array of objects to display.
  */
 function _nexteuropa_nexteuropa_prepare_related_content_array($ids) {
-  $items = array();
-  if (is_array($ids) && count($ids) > 0) {
+  $items = [];
+  if (!empty($ids)) {
     foreach ($ids as $id) {
       $std = new stdClass();
       $std->id = $id;
@@ -252,27 +248,27 @@ function _nexteuropa_newsroom_tools() {
   if ($newsroom_item->type == NEXTEUROPA_NEWSROOM_CONTENT_TYPE) {
     $newsroom_id_field = field_get_items('node', $newsroom_item, 'field_newsroom_item_id');
     $newsroom_id = $newsroom_id_field[0]['value'];
-    $links = array();
+    $links = [];
     if (user_access(NEXTEUROPA_NEWSROOM_EDIT_ACCESS)) {
-      $links['edit'] = array(
+      $links['edit'] = [
         'text' => '<span class="glyphicon glyphicon-edit"></span> Edit item in the Newsroom',
         'path' => NewsroomHelper::getNewsroomUrl(variable_get('newsroom_single_item_edit_segment', NEXTEUROPA_NEWSROOM_ITEM_EDIT_SEGMENT) . $newsroom_id),
-        'options' => array(
+        'options' => [
           'external' => TRUE,
           'html' => TRUE,
-          'attributes' => array('class' => 'btn btn-success'),
-        ),
-      );
+          'attributes' => ['class' => 'btn btn-success'],
+        ],
+      ];
     }
     if (user_access(NEXTEUROPA_NEWSROOM_IMPORT_ACCESS)) {
-      $links['reimport'] = array(
+      $links['reimport'] = [
         'text' => '<span class="glyphicon glyphicon-refresh"></span> Re-import from the Newsroom',
         'path' => 'newsroom-import/item/' . $newsroom_id,
-        'options' => array(
+        'options' => [
           'html' => TRUE,
-          'attributes' => array('class' => 'btn btn-danger'),
-        ),
-      );
+          'attributes' => ['class' => 'btn btn-danger'],
+        ],
+      ];
     }
 
     foreach ($links as $link) {
@@ -293,17 +289,17 @@ function _nexteuropa_newsroom_tools() {
  *   Form array.
  */
 function _nexteuropa_newsroom_newsletter_subscription() {
-  $content = array();
+  $content = [];
   if ($view = views_get_view('newsletter_subscription')) {
     $view->set_display('block');
     $view->pre_execute();
     $view->execute();
     if (!empty($view->result)) {
       $service = array_shift($view->result);
-      $content = drupal_get_form('nexteuropa_newsroom_newsletter_subscription_form', array(
+      $content = drupal_get_form('nexteuropa_newsroom_newsletter_subscription_form', [
         'tid' => $service->field_field_newsroom_service_id[0]['raw']['safe_value'],
         'name' => $service->taxonomy_term_data_name,
-      ));
+      ]);
     }
   }
 
@@ -361,7 +357,7 @@ function _nexteuropa_newsroom_block_news_proposal() {
 
   if (!empty($topic_id)) {
     $output = '<div class="communityTools">';
-    $output .= '<div class="RSSButton">' . l(t('Propose newsroom item'), '/news-proposal', array('query' => array('topic_id' => $topic_id))) . '</div>';
+    $output .= '<div class="RSSButton">' . l(t('Propose newsroom item'), '/news-proposal', ['query' => ['topic_id' => $topic_id]]) . '</div>';
     $output .= '</div>';
   }
   return $output;

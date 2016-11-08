@@ -22,12 +22,12 @@ class NexteuropaNewsroomAgendaReaction extends context_reaction {
   // @codingStandardsIgnoreLine
   public function options_form($context) {
     $values = $this->fetch_from_context($context);
-    $form['type_id'] = array(
+    $form['type_id'] = [
       '#type' => 'select',
       '#title' => t('Type'),
       '#options' => NewsroomHelper::getNewsroomTypeOptions(TRUE),
       '#default_value' => $values,
-    );
+    ];
 
     return $form;
   }

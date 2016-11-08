@@ -14,7 +14,7 @@
     </div>
   <?php endif; ?>
   <div class="newsroom-item__title<?php if ($l) {echo ' views-field-field-newsroom-item-short-title';} ?>">
-    <?php echo l($title, $node_url, array('external' => TRUE)); ?>
+    <?php echo l($title, $node_url, ['external' => TRUE]); ?>
   </div>
 
   <?php if ($image): ?>
@@ -44,6 +44,6 @@
   <?php endif; ?>
   <div class="newsroom-item__teaser <?php if ($l) {echo ' views-field-field-newsroom-teaser';} ?>">        
     <?php echo $teaser; ?>
-    <?php echo l(t('Read more'), $node_url, array('attributes' => array('class' => array('newsroom-read-more')))); ?>
+    <?php echo l(t('Read more'), $node_url, ['attributes' => ['class' => ['newsroom-read-more']]]); ?>
   </div>
 </div>
