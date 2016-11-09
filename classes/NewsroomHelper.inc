@@ -127,26 +127,26 @@ class NewsroomHelper {
 
       case NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER:
       case NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER:
-        $url = NewsroomHelper::getNewsroomUrl(NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT);
+        $url = NewsroomHelper::getNewsroomUrl(variable_get('newsroom_topic_import_script', NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT));
         break;
 
       case NEXTEUROPA_NEWSROOM_TYPE_IMPORTER:
-        $url = NewsroomHelper::getNewsroomUrl(NEXTEUROPA_NEWSROOM_TYPE_SCRIPT);
+        $url = NewsroomHelper::getNewsroomUrl(variable_get('newsroom_type_import_script', NEXTEUROPA_NEWSROOM_TYPE_SCRIPT));
         break;
 
       case NEXTEUROPA_NEWSROOM_ITEM_IMPORTER:
         $subsite = variable_get('newsroom_subsite', FALSE);
-        $subsite_url_part = '';
+        $subsite_url_part = '?';
 
         if ($subsite) {
           $subsite_url_part = '?subsite=' . $subsite;
         }
 
-        $url = NewsroomHelper::getNewsroomUrl(NEXTEUROPA_NEWSROOM_ITEM_SCRIPT) . $subsite_url_part;
+        $url = NewsroomHelper::getNewsroomUrl(variable_get('newsroom_item_import_script', NEXTEUROPA_NEWSROOM_ITEM_SCRIPT)) . $subsite_url_part;
         break;
 
       case NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER:
-        $url = NewsroomHelper::getNewsroomUrl(NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT);
+        $url = NewsroomHelper::getNewsroomUrl(variable_get('newsroom_issue_import_script', NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT));
         break;
     }
 

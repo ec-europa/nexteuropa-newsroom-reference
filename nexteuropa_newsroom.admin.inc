@@ -74,7 +74,6 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#title' => t('Name of the subsite, if any.'),
     '#description' => t('The value you enter here will be used to filter the items belonging to this website.'),
     '#default_value' => variable_get('newsroom_subsite'),
-    '#element_validate' => ['_nexteuropa_newsroom_admin_subsite_validate'],
   ];
 
   $form['newsroom_others']['newsroom_use_css'] = [

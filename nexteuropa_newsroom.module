@@ -39,7 +39,7 @@ define('NEXTEUROPA_NEWSROOM_UNPUBLISH', 'fullrss-unpublished.cfm');
 define('NEXTEUROPA_NEWSROOM_DELETE', 'fullrss-deleted.cfm');
 define('NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT', 'rss-service-multilingual.cfm');
 define('NEXTEUROPA_NEWSROOM_TYPE_SCRIPT', 'rss-item-type-multilingual.cfm');
-define('NEXTEUROPA_NEWSROOM_ITEM_SEGMENT', '?item_id=');
+define('NEXTEUROPA_NEWSROOM_ITEM_SEGMENT', '&item_id=');
 define('NEXTEUROPA_NEWSROOM_TOPIC_SEGMENT', '?topic_id=');
 define('NEXTEUROPA_NEWSROOM_SERVICE_SEGMENT', '?service_id=');
 define('NEXTEUROPA_NEWSROOM_TYPE_SEGMENT', '?item_type_id=');
