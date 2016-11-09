@@ -817,8 +817,8 @@ class NewsroomHelper {
       return TRUE;
     }
     else {
-      $test = drupal_http_request(NewsroomHelper::getUniverseUrl() . '?subsite=' . $subsite);
-      return $test->code == 200;
+      $request = drupal_http_request(NewsroomHelper::getUniverseUrl() . 'validation.cfm?subsite=' . $subsite);
+      return isset($request->data) && $request->data == 'True';
     }
 
     return FALSE;

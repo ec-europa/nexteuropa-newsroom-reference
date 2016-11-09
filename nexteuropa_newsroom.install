@@ -453,7 +453,7 @@ function nexteuropa_newsroom_update_7111() {
 }
 
 /**
- * Update item single item chunck.
+ * Update a single item chunck.
  */
 function nexteuropa_newsroom_update_7112() {
   variable_set('newsroom_single_item_import_segment', NEXTEUROPA_NEWSROOM_ITEM_SEGMENT);
