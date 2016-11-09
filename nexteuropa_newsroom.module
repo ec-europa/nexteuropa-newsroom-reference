@@ -298,11 +298,10 @@ function _nexteuropa_newsroom_get_real_groups($modes = ['teaser', 'full'], $bund
 function _nexteuropa_newsroom_enable_translations() {
   // Enable entity translation support for terms.
   $enabled = variable_get('entity_translation_entity_types', []);
-  $enabled_types = array_filter($enabled);
-  if (!in_array('taxonomy_term', $enabled_types)) {
+  if (!in_array('taxonomy_term', $enabled)) {
     $enabled['taxonomy_term'] = 'taxonomy_term';
   }
-  if (!in_array('file', $enabled_types)) {
+  if (!in_array('file', $enabled)) {
     $enabled['file'] = 'file';
   }
   variable_set('entity_translation_entity_types', $enabled);
@@ -350,16 +349,14 @@ function nexteuropa_newsroom_node_presave($node) {
   if ($node->type == NEXTEUROPA_NEWSROOM_CONTENT_TYPE && variable_get('newsroom_patterns', FALSE)) {
     // Get all the types.
     if ($type_tid = NewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid')) {
-
-      $conf = NULL;
       if ($type = NewsroomHelper::getNewsroomType($type_tid)) {
         $type_name = pathauto_cleanstring($type->name);
         $conf = variable_get('newsroom_' . $type_name . '_root', FALSE);
-      }
-      if ($conf) {
-        $node->path['pathauto'] = FALSE;
-        $node->path['alias'] = $conf . '/' . pathauto_cleanstring($node->title);
-        pathauto_alias_uniquify($node->path['alias'], 'node/' . $node->nid);
+        if ($conf) {
+          $node->path['pathauto'] = FALSE;
+          $node->path['alias'] = $conf . '/' . pathauto_cleanstring($node->title);
+          pathauto_alias_uniquify($node->path['alias'], 'node/' . $node->nid);
+        }
       }
     }
   }

@@ -202,7 +202,7 @@ class NewsroomAgendaSchedule extends NewsroomAgenda {
    *   Result.
    */
   protected function loadResult() {
-    return $this->getQuery()->execute()->fetchAll();;
+    return $this->getQuery()->execute()->fetchAll();
   }
 
   /**

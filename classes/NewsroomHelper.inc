@@ -495,10 +495,11 @@ class NewsroomHelper {
    */
   public static function getNewsroomTopicOptions($used_topics = [], $add_empty_value = TRUE) {
     $topic_options = NewsroomHelper::getTaxonomyTermOptions(NewsroomHelper::getNewsroomTopics());
-    $used_count = count($used_topics);
-    foreach ($topic_options as $key => $topic) {
-      if ($used_count > 0 && !in_array($key, $used_topics)) {
-        unset($topic_options[$key]);
+    if (!empty($used_topics)) {
+      foreach ($topic_options as $key => $topic) {
+        if (!in_array($key, $used_topics)) {
+          unset($topic_options[$key]);
+        }
       }
     }
     if ($add_empty_value) {

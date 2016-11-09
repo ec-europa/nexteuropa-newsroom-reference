@@ -237,7 +237,7 @@ class NewsroomSummaryBlock {
 
     foreach ($this->getTypes() as $key => $type) {
       // We exclude event content types, because we display them as agenda.
-      if (in_array($type->tid, $events_terms)) {
+      if (!empty($events_terms) && in_array($type->tid, $events_terms)) {
         continue;
       }
 

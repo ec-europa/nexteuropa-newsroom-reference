@@ -607,7 +607,7 @@ abstract class NewsroomAgenda {
       while ($start_date < $end_date) {
         $agenda_item = $this->createAgendaItem($start_date);
         // We don't count empty days if we need to calculate the previous date.
-        if ($build_empty_days || (!$build_empty_days && (count($agenda_item->getItems()) > 0))) {
+        if ($build_empty_days || (!$build_empty_days && !empty($agenda_item->getItems()))) {
           $output[] = $agenda_item;
         }
 
