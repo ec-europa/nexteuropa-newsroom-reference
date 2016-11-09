@@ -308,18 +308,16 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
             '#height' => isset($display['settings']['height']) && empty($display['settings']['height']) ? $display['settings']['height'] : NULL,
           ];
         }
-        else {
-          if ($display_type == 'link') {
-            $elements[0] = [
-              '#theme' => 'link',
-              '#text' => 'Docroom documents',
-              '#path' => $url,
-              '#options' => [
-                'attributes' => ['class' => ['docroom-link']],
-                'html' => FALSE,
-              ],
-            ];
-          }
+        elseif ($display_type == 'link') {
+          $elements[0] = [
+            '#theme' => 'link',
+            '#text' => 'Docroom documents',
+            '#path' => $url,
+            '#options' => [
+              'attributes' => ['class' => ['docroom-link']],
+              'html' => FALSE,
+            ],
+          ];
         }
       }
 
