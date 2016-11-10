@@ -358,11 +358,7 @@ class NewsroomHelper {
    *   Universe URL.
    */
   public static function getUniverseUrl() {
-    $data = &drupal_static(__FUNCTION__);
-    if (!isset($data)) {
-      $data = variable_get('newsroom_base_url', NEXTEUROPA_NEWSROOM_BASE_URL) . NewsroomHelper::getUniverseId() . '/';
-    }
-    return $data;
+    return variable_get('newsroom_base_url', NEXTEUROPA_NEWSROOM_BASE_URL) . NewsroomHelper::getUniverseId() . '/';
   }
 
   /**
@@ -564,11 +560,7 @@ class NewsroomHelper {
    *   Universe Id.
    */
   public static function getUniverseId() {
-    $data = &drupal_static(__FUNCTION__);
-    if (!isset($data)) {
-      $data = variable_get('newsroom_universe_id', FALSE);
-    }
-    return $data;
+    return variable_get('newsroom_universe_id', FALSE);
   }
 
   /**
@@ -1042,6 +1034,23 @@ class NewsroomHelper {
    */
   public static function getDefaultLanguageUppercase() {
     return drupal_strtoupper(language_default()->language);
+  }
+
+  /**
+   * Sets default importer URL.
+   *
+   * @param $importer_id
+   *   Importer id.
+   */
+  public function setDefaultImporterUrl($importer_id) {
+    $url = NewsroomHelper::getImporterUrl($importer_id);
+    if (!empty($url)) {
+      $source = feeds_source($importer_id);
+      $config = $source->getConfig();
+      $config['FeedsHTTPFetcher']['source'] = $url;
+      $source->setConfig($config);
+      $source->save();
+    }
   }
 
 }

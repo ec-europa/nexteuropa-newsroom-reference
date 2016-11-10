@@ -389,13 +389,7 @@ function nexteuropa_newsroom_date_formats() {
  */
 function nexteuropa_newsroom_feeds_after_import(FeedsSource $source) {
   // Restore the default URL in order to run importers manually or via cron.
-  $url = NewsroomHelper::getImporterUrl($source->importer->fetcher->id);
-  if (!empty($url)) {
-    $config = $source->getConfig();
-    $config['FeedsHTTPFetcher']['source'] = $url;
-    $source->setConfig($config);
-    $source->save();
-  }
+  NewsroomHelper::setDefaultImporterUrl($source->importer->fetcher->id);
 }
 
 /**

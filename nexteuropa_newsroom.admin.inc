@@ -457,8 +457,9 @@ function _nexteuropa_newsroom_admin_settings_form_validate($form, &$form_state) 
  *   Form state array.
  */
 function _nexteuropa_newsroom_admin_settings_form_submit($form, &$form_state) {
-  $universe_id = variable_get('newsroom_universe_id');
+  $universe_id = NewsroomHelper::getUniverseId();
   if (empty($universe_id) && $form_state['values']['newsroom_universe_id']) {
+    variable_set('newsroom_universe_id', $form_state['values']['newsroom_universe_id']);
     _nexteuropa_newsroom_admin_rebuild_importers();
   }
 
@@ -778,12 +779,10 @@ function _nexteuropa_newsroom_admin_check_deletion($type, $checks = []) {
   if ($checks == NEXTEUROPA_NEWSROOM_ALL) {
     $instances = NewsroomHelper::getFieldInstances($type);
   }
-  else {
-    if (!empty($checks)) {
-      // Get the instances to check for.
-      foreach ($checks as $field => $check) {
-        $instances[] = $check;
-      }
+  elseif (!empty($checks)) {
+    // Get the instances to check for.
+    foreach ($checks as $field => $check) {
+      $instances[] = $check;
     }
   }
 

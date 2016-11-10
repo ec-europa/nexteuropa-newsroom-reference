@@ -331,8 +331,21 @@ class NewsroomImporterGenerator {
    * Generates import.
    */
   public function generateImporter() {
-    $this->prepareDynamicMapping();
-    $this->saveImporter();
+    $config = $this->getConfig();
+
+    // Save importer.
+    $save = feeds_importer($this->getId());
+    $save->setConfig($config);
+
+    foreach (['fetcher', 'parser', 'processor'] as $type) {
+      $save->setPlugin($config[$type]['plugin_key']);
+      $save->$type->setConfig($config[$type]['config']);
+    }
+
+    $save->save();
+
+    // Set default URLS for importers.
+    NewsroomHelper::setDefaultImporterUrl($this->getId());
   }
 
   /**
@@ -459,91 +472,6 @@ class NewsroomImporterGenerator {
   }
 
   /**
-   * Saves importer.
-   */
-  private function saveImporter() {
-    $config = [
-      'name' => $this->getTitle(),
-      'description' => $this->getDescription(),
-      'fetcher' => [
-        'plugin_key' => 'FeedsHTTPFetcher',
-        'config' => [
-          'auto_detect_feeds' => FALSE,
-          'use_pubsubhubbub' => FALSE,
-          'designated_hub' => '',
-          'request_timeout' => NULL,
-        ],
-      ],
-      'parser' => [
-        'plugin_key' => 'FeedsXPathParserXML',
-        'config' => [
-          'sources' => $this->getQueries(),
-          'rawXML' => $this->generateDebugArray(),
-          'context' => $this->getRssContext(),
-          'exp' => [
-            'errors' => 0,
-            'debug' => $this->generateDebugArray(),
-          ],
-          'allow_override' => 0,
-        ],
-      ],
-      'content_type' => '',
-      'update' => 0,
-      'import_period' => $this->getImportPeriod(),
-      'expire_period' => 1800,
-      'import_on_create' => 1,
-      'process_in_background' => 0,
-    ];
-
-    if ($this->getEntityType() == 'node') {
-      $config['processor'] = [
-        'plugin_key' => 'FeedsNodeProcessor',
-        'config' => [
-          'expire' => '-1',
-          'author' => '0',
-          'authorize' => 0,
-          'mappings' => $this->getMappers(),
-          'update_existing' => '2',
-          'input_format' => 'full_html',
-          'skip_hash_check' => 0,
-          'bundle' => $this->getBundle(),
-        ],
-      ];
-    }
-    else {
-      $config['processor'] = [
-        'plugin_key' => 'FeedsTermProcessor',
-        'config' => [
-          'vocabulary' => $this->getBundle(),
-          'mappings' => $this->getMappers(),
-          'update_existing' => '2',
-          'input_format' => 'plain_text',
-          'skip_hash_check' => 0,
-          'bundle' => $this->getBundle(),
-        ],
-      ];
-    }
-
-    // Save importer.
-    $save = feeds_importer($this->getId());
-    $save->setConfig($config);
-
-    foreach (['fetcher', 'parser', 'processor'] as $type) {
-      $save->setPlugin($config[$type]['plugin_key']);
-      $save->$type->setConfig($config[$type]['config']);
-    }
-
-    $save->save();
-
-    // Set default URLS for importers.
-    $source = feeds_source($this->getId());
-    $config = $source->getConfig();
-    $config['FeedsHTTPFetcher']['source'] = NewsroomHelper::getImporterUrl($this->getId());
-    $source->setConfig($config);
-    $source->save();
-  }
-
-  /**
    * Adds tamper for the current source (field).
    *
    * @param array $field_mapping
@@ -619,6 +547,79 @@ class NewsroomImporterGenerator {
     }
 
     feeds_tamper_save_instance($feeds_tamper);
+  }
+
+  /**
+   * Gets importer config.
+   *
+   * @return array
+   *   Importer config.
+   */
+  private function getConfig() {
+    $this->prepareDynamicMapping();
+    $config = [
+      'name' => $this->getTitle(),
+      'description' => $this->getDescription(),
+      'fetcher' => [
+        'plugin_key' => 'FeedsHTTPFetcher',
+        'config' => [
+          'auto_detect_feeds' => FALSE,
+          'use_pubsubhubbub' => FALSE,
+          'designated_hub' => '',
+          'request_timeout' => NULL,
+        ],
+      ],
+      'parser' => [
+        'plugin_key' => 'FeedsXPathParserXML',
+        'config' => [
+          'sources' => $this->getQueries(),
+          'rawXML' => $this->generateDebugArray(),
+          'context' => $this->getRssContext(),
+          'exp' => [
+            'errors' => 0,
+            'debug' => $this->generateDebugArray(),
+          ],
+          'allow_override' => 0,
+        ],
+      ],
+      'content_type' => '',
+      'update' => 0,
+      'import_period' => $this->getImportPeriod(),
+      'expire_period' => 1800,
+      'import_on_create' => 1,
+      'process_in_background' => 0,
+    ];
+
+    if ($this->getEntityType() == 'node') {
+      $config['processor'] = [
+        'plugin_key' => 'FeedsNodeProcessor',
+        'config' => [
+          'expire' => '-1',
+          'author' => '0',
+          'authorize' => 0,
+          'mappings' => $this->getMappers(),
+          'update_existing' => '2',
+          'input_format' => 'full_html',
+          'skip_hash_check' => 0,
+          'bundle' => $this->getBundle(),
+        ],
+      ];
+      return $config;
+    }
+    else {
+      $config['processor'] = [
+        'plugin_key' => 'FeedsTermProcessor',
+        'config' => [
+          'vocabulary' => $this->getBundle(),
+          'mappings' => $this->getMappers(),
+          'update_existing' => '2',
+          'input_format' => 'plain_text',
+          'skip_hash_check' => 0,
+          'bundle' => $this->getBundle(),
+        ],
+      ];
+      return $config;
+    }
   }
 
 }
