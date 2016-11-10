@@ -461,6 +461,7 @@ abstract class NewsroomAgenda {
         'next' => $this->getUpcomingDate() ? $this->getNavigationLink($this->getNextTitle(), $this->getUpcomingDate()) : NULL,
       ],
     ]);
+
     return $content;
   }
 

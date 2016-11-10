@@ -26,13 +26,11 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     $universe_id_info['disabled'] = TRUE;
     $universe_id_info['description'] = t('To change the Newsroom Universe ID contact the site administrator.');
     $universe_id_info['class'] = 'selected';
-    $universe_id_info['collapsing'] = FALSE;
   }
   else {
     $universe_id_info['disabled'] = FALSE;
     $universe_id_info['description'] = t('After setting the Newsroom Universe ID for the first time content will be imported from the Newsroom service. This might take a few minutes.');
     $universe_id_info['class'] = 'not-selected';
-    $universe_id_info['collapsing'] = TRUE;
   }
 
   // This is special, made just to hold the universe_id field.
@@ -192,7 +190,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#type' => 'fieldset',
     '#title' => t('Newsroom universe settings'),
     '#collapsible' => TRUE,
-    '#collapsed' => $universe_id_info['collapsing'],
+    '#collapsed' => TRUE,
   ];
 
   $form['newsroom_universe']['newsroom_app'] = [

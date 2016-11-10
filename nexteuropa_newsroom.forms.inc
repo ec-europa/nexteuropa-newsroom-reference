@@ -856,7 +856,6 @@ function _nexteuropa_nexteuropa_newsroom_newsletter_subscription_form_ajax($form
  */
 function nexteuropa_newsroom_agenda_filter_form($form, &$form_state, $view, $type_id, $topic_id, $current_date, $result_topics) {
   $topic_options = NewsroomHelper::getNewsroomTopicOptions($result_topics);
-
   $form = [];
   $form['type_id'] = [
     '#type' => 'select',
