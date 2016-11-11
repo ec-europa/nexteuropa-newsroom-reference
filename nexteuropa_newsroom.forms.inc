@@ -1373,6 +1373,7 @@ function nexteuropa_newsroom_newsroom_page_filter_form($form, &$form_state, $typ
     '#type' => 'checkbox',
     '#title' => t('EC content'),
     '#default_value' => $ec_content == NEXTEUROPA_NEWSROOM_EC ? 1 : 0,
+    '#weight' => 2,
   ];
   $form['button'] = [
     '#type' => 'submit',
@@ -1380,6 +1381,7 @@ function nexteuropa_newsroom_newsroom_page_filter_form($form, &$form_state, $typ
     '#validate' => ['_nexteuropa_newsroom_validate_date'],
     '#button_type' => 'button',
     '#value' => t('Filter'),
+    '#weight' => 1,
   ];
 
   return $form;
