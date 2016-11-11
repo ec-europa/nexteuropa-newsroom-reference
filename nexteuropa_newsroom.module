@@ -99,8 +99,7 @@ function _nexteuropa_newsroom_delete_item($type, $newsroom_id) {
       break;
 
     default:
-      drupal_not_found();
-      drupal_exit();
+      NewsroomHelper::set404response();
   }
 
   return NULL;
@@ -137,8 +136,7 @@ function _nexteuropa_newsroom_import_item($type, $newsroom_id) {
       break;
 
     default:
-      drupal_not_found();
-      drupal_exit();
+      NewsroomHelper::set404response();
   }
 
   drupal_set_message(t('The item has been imported.'));
@@ -515,8 +513,7 @@ function _nexteuropa_newsroom_taxonomy_term_delete($field_name, $original_newsro
     drupal_set_message(t('Item has been deleted.'));
   }
   else {
-    drupal_not_found();
-    drupal_exit();
+    NewsroomHelper::set404response();
   }
 }
 
@@ -551,8 +548,7 @@ function _nexteuropa_nexteuropa_newsroom_item_delete($newsroom_id) {
     drupal_set_message($message);
   }
   else {
-    drupal_not_found();
-    drupal_exit();
+    NewsroomHelper::set404response();
   }
 }
 
@@ -576,8 +572,7 @@ function _nexteuropa_newsroom_item_redirect($newsroom_id = 0) {
  */
 function _nexteuropa_newsroom_redirect($redirect_type = NEXTEUROPA_NEWSROOM_ITEM, $newsroom_entity_id = 0) {
   if (!$newsroom_entity_id) {
-    drupal_not_found();
-    drupal_exit();
+    NewsroomHelper::set404response();
   }
 
   $path = FALSE;
@@ -616,8 +611,7 @@ function _nexteuropa_newsroom_redirect($redirect_type = NEXTEUROPA_NEWSROOM_ITEM
     drupal_goto($path, [], 301);
   }
   else {
-    drupal_not_found();
-    drupal_exit();
+    NewsroomHelper::set404response();
   }
 }
 

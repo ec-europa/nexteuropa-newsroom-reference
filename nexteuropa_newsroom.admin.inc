@@ -155,7 +155,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#type' => 'checkboxes',
     '#title' => t('Direct topic relation field in your content types'),
     '#description' => t('Choose the content types in which you want to activate a relationship with a newsroom topic.'),
-    '#options' => NewsroomHelper::prepareOptions('ct'),
+    '#options' => _nexteuropa_newsroom_prepare_options('ct'),
     '#multiple' => TRUE,
     '#default_value' => $top_ct,
   ];
@@ -173,7 +173,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#type' => 'checkboxes',
     '#title' => t('Advanced and configurable reference with newsroom items.'),
     '#description' => t('Choose the content types in which you want to activate a complex relationship with the newsroom items.'),
-    '#options' => NewsroomHelper::prepareOptions('ct'),
+    '#options' => _nexteuropa_newsroom_prepare_options('ct'),
     '#multiple' => TRUE,
     '#default_value' => $sel_ct,
   ];
@@ -329,14 +329,14 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
   $form['newsroom_blocks']['newsroom_summary_block_num_items'] = [
     '#type' => 'select',
     '#title' => t('Number of items in boxes in the summary blocks'),
-    '#options' => NewsroomHelper::prepareOptions(5),
+    '#options' => _nexteuropa_newsroom_prepare_options(5),
     '#default_value' => variable_get('newsroom_summary_block_num_items', 3),
   ];
 
   $form['newsroom_blocks']['newsroom_summary_block_num_highlighted_items'] = [
     '#type' => 'select',
     '#title' => t('Number of items in boxes of highlighted types in the summary blocks'),
-    '#options' => NewsroomHelper::prepareOptions(6),
+    '#options' => _nexteuropa_newsroom_prepare_options(6),
     '#default_value' => variable_get('newsroom_summary_block_num_highlighted_items', 3),
   ];
 
@@ -350,14 +350,14 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
   $form['newsroom_blocks']['home_blocks']['newsroom_summary_home_block_num_items'] = [
     '#type' => 'select',
     '#title' => t('Number of items in boxes in the summary block on the homepage'),
-    '#options' => NewsroomHelper::prepareOptions(5),
+    '#options' => _nexteuropa_newsroom_prepare_options(5),
     '#default_value' => variable_get('newsroom_summary_home_block_num_items', 3),
   ];
 
   $form['newsroom_blocks']['home_blocks']['newsroom_summary_home_block_num_highlighted_items'] = [
     '#type' => 'select',
     '#title' => t('Number of items in boxes of highlighted types in the summary block on the homepage'),
-    '#options' => NewsroomHelper::prepareOptions(6),
+    '#options' => _nexteuropa_newsroom_prepare_options(6),
     '#default_value' => variable_get('newsroom_summary_home_block_num_highlighted_items', 3),
   ];
 
@@ -889,4 +889,36 @@ function _nexteuropa_newsroom_import_importers() {
   foreach ($importers as $importer) {
     NewsroomHelper::runFeedImporter($importer);
   }
+}
+
+/**
+ * Prepares options for the content type select.
+ *
+ * @param string $type
+ *   Type of the options to generate.
+ *
+ * @return array
+ *   Array of options.
+ */
+function _nexteuropa_newsroom_prepare_options($type) {
+  $options = [];
+  if (is_numeric($type)) {
+    for ($i = 1; $i <= $type; $i++) {
+      $options[$i] = $i;
+    }
+  }
+  else {
+    // Get a list of the existing content type.
+    $content_types = node_type_get_types();
+    // Exclude the ct used for the import.
+    unset($content_types[NEXTEUROPA_NEWSROOM_CONTENT_TYPE]);
+    unset($content_types['newsroom_selection']);
+    // Build options for selecting content types.
+    foreach ($content_types as $name => $content_type) {
+      if ($content_type->disabled !== 1) {
+        $options[$name] = $content_type->name;
+      }
+    }
+  }
+  return $options;
 }

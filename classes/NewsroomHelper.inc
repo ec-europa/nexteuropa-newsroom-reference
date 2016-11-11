@@ -58,38 +58,6 @@ class NewsroomHelper {
   }
 
   /**
-   * Prepares options for the content type select.
-   *
-   * @param string $type
-   *   Type of the options to generate.
-   *
-   * @return array
-   *   Array of options.
-   */
-  public static function prepareOptions($type) {
-    $options = [];
-    if (is_numeric($type)) {
-      for ($i = 1; $i <= $type; $i++) {
-        $options[$i] = $i;
-      }
-    }
-    else {
-      // Get a list of the existing content type.
-      $content_types = node_type_get_types();
-      // Exclude the ct used for the import.
-      unset($content_types[NEXTEUROPA_NEWSROOM_CONTENT_TYPE]);
-      unset($content_types['newsroom_selection']);
-      // Build options for selecting content types.
-      foreach ($content_types as $name => $content_type) {
-        if ($content_type->disabled !== 1) {
-          $options[$name] = $content_type->name;
-        }
-      }
-    }
-    return $options;
-  }
-
-  /**
    * Calls feed importer with the certain URL.
    *
    * @param string $importer_id
@@ -1043,10 +1011,10 @@ class NewsroomHelper {
   /**
    * Sets default importer URL.
    *
-   * @param $importer_id
+   * @param string $importer_id
    *   Importer id.
    */
-  public function setDefaultImporterUrl($importer_id) {
+  public static function setDefaultImporterUrl($importer_id) {
     $url = NewsroomHelper::getImporterUrl($importer_id);
     if (!empty($url)) {
       $source = feeds_source($importer_id);
@@ -1055,6 +1023,14 @@ class NewsroomHelper {
       $source->setConfig($config);
       $source->save();
     }
+  }
+
+  /**
+   * Sets 404 http response.
+   */
+  public static function set404response() {
+    drupal_not_found();
+    drupal_exit();
   }
 
 }
