@@ -138,7 +138,7 @@ class NewsroomHelper {
       ->entityCondition('entity_type', 'node')
       ->fieldCondition($field_name, 'value', $newsroom_id, '=')
       ->execute();
-    return isset($newsroom_item['node']) ? array_shift($newsroom_item['node']) : FALSE;
+    return !empty($newsroom_item['node']) ? array_shift($newsroom_item['node']) : FALSE;
   }
 
   /**
@@ -287,7 +287,7 @@ class NewsroomHelper {
       $query->entityCondition('bundle', $bundle);
     }
     $result = $query->execute();
-    if (isset($result['taxonomy_term'])) {
+    if (!empty($result['taxonomy_term'])) {
       $term_ids = array_keys($result['taxonomy_term']);
     }
 
@@ -302,7 +302,7 @@ class NewsroomHelper {
    */
   public static function getEventsTermsIds() {
     $event_type_ids = &drupal_static(__FUNCTION__);
-    if (!isset($event_type_ids)) {
+    if (empty($event_type_ids)) {
       $types = NewsroomHelper::getNewsroomTypes();
       $behavior_types = [
         'consultation_funding',
@@ -344,7 +344,7 @@ class NewsroomHelper {
     if ($type) {
       $field_name = 'field_newsroom_associated_' . $type;
       $mappings = field_info_field_map();
-      if (isset($mappings[$field_name]['bundles']['node'])) {
+      if (!empty($mappings[$field_name]['bundles']['node'])) {
         $instances = $mappings[$field_name]['bundles']['node'];
       }
     }
@@ -543,7 +543,7 @@ class NewsroomHelper {
    */
   public static function getNewsroomTypeVocabulary() {
     $data = &drupal_static(__FUNCTION__);
-    if (!isset($data)) {
+    if (empty($data)) {
       $data = taxonomy_vocabulary_machine_name_load(NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY);
     }
     return $data;
@@ -557,7 +557,7 @@ class NewsroomHelper {
    */
   public static function getNewsroomTopicVocabulary() {
     $data = &drupal_static(__FUNCTION__);
-    if (!isset($data)) {
+    if (empty($data)) {
       $data = taxonomy_vocabulary_machine_name_load(NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY);
     }
     return $data;
@@ -571,7 +571,7 @@ class NewsroomHelper {
    */
   public static function getNewsroomTopics() {
     $data = &drupal_static(__FUNCTION__);
-    if (!isset($data)) {
+    if (empty($data)) {
       $vocabulary = NewsroomHelper::getNewsroomTopicVocabulary();
       $data = NewsroomHelper::getNewsroomTaxonomyTerms($vocabulary->vid);
     }
@@ -586,7 +586,7 @@ class NewsroomHelper {
    */
   public static function getNewsroomTypes() {
     $data = &drupal_static(__FUNCTION__);
-    if (!isset($data)) {
+    if (empty($data)) {
       $vocabulary = NewsroomHelper::getNewsroomTypeVocabulary();
       $data = NewsroomHelper::getNewsroomTaxonomyTerms($vocabulary->vid);
     }
@@ -782,7 +782,7 @@ class NewsroomHelper {
     }
     else {
       $request = drupal_http_request(NewsroomHelper::getUniverseUrl() . 'validation.cfm?subsite=' . $subsite);
-      return isset($request->data) && $request->data == 'True';
+      return !empty($request->data) && $request->data == 'True';
     }
 
     return FALSE;
@@ -885,7 +885,7 @@ class NewsroomHelper {
     $value = NULL;
 
     if ($entity) {
-      if (isset($entity->{$field_name}[LANGUAGE_NONE][0][$value_name])) {
+      if (!empty($entity->{$field_name}[LANGUAGE_NONE][0][$value_name])) {
         if (count($entity->{$field_name}[LANGUAGE_NONE]) > 1) {
           $value = [];
           foreach ($entity->{$field_name}[LANGUAGE_NONE] as $item) {
@@ -959,10 +959,10 @@ class NewsroomHelper {
   public static function getFieldTranslatedValue($entity, $field_name, $property_name = 'value', $entity_type = 'node') {
     $field = field_view_field($entity_type, $entity, $field_name);
     $value = NULL;
-    if (isset($field['#items'][0]['safe_value'])) {
+    if (!empty($field['#items'][0]['safe_value'])) {
       $value = $field['#items'][0]['safe_value'];
     }
-    elseif (isset($field['#items'][0][$property_name])) {
+    elseif (!empty($field['#items'][0][$property_name])) {
       $value = $field['#items'][0][$property_name];
     }
     return $value;

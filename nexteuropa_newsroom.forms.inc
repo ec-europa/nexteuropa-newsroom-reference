@@ -136,7 +136,7 @@ function nexteuropa_newsroom_restore_conf_all($form, &$form_state) {
 function nexteuropa_newsroom_form_nexteuropa_newsroom_admin_settings_alter(&$form, &$form_state, $form_id) {
 
   // If we are in a confimation step, change the form visualization.
-  if (isset($form_state['storage']['confirm'])) {
+  if (!empty($form_state['storage']['confirm'])) {
     drupal_set_message(t('You are in a confirmation page, to submit all the form settings check the box below.'), 'warning');
     $form['newsroom_universe']['#collapsible'] = TRUE;
     $form['newsroom_universe']['#collapsed'] = TRUE;
@@ -424,7 +424,7 @@ function _nexteuropa_newsroom_export_modes($view_modes = ['full', 'teaser'], $bu
 
   foreach ($fields as $field_name => $field_instance) {
     foreach ($view_modes as $view_mode) {
-      $export['instances'][$field_name][$view_mode] = isset($fields[$field_name]['display'][$view_mode]) ? $fields[$field_name]['display'][$view_mode] : NULL;
+      $export['instances'][$field_name][$view_mode] = !empty($fields[$field_name]['display'][$view_mode]) ? $fields[$field_name]['display'][$view_mode] : NULL;
     }
   }
 
@@ -558,7 +558,7 @@ function _nexteuropa_newsroom_import_modes($export) {
           field_group_group_save($group);
           // The group was deleted through UI, it will be marked as disabled in
           // ctools. We need to enable it.
-          if ((isset($group->disabled) && ($group->disabled == TRUE)) ? TRUE : FALSE) {
+          if ((!empty($group->disabled) && ($group->disabled == TRUE)) ? TRUE : FALSE) {
             ctools_export_crud_enable('field_group', $group->identifier);
           }
         }
@@ -572,9 +572,9 @@ function _nexteuropa_newsroom_import_modes($export) {
   if (!empty($export['instances'])) {
     $fields_instances = field_info_instances('node', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
     foreach ($export['instances'] as $field_name => $export_instance) {
-      if (isset($fields_instances[$field_name])) {
+      if (!empty($fields_instances[$field_name])) {
         foreach ($view_modes as $view_mode) {
-          if (isset($export_instance[$view_mode])) {
+          if (!empty($export_instance[$view_mode])) {
             $fields_instances[$field_name]['display'][$view_mode] = $export_instance[$view_mode];
             // Update the instance.
             field_update_instance($fields_instances[$field_name]);
@@ -653,7 +653,7 @@ function nexteuropa_newsroom_newsroom_proposal_form($form, $form_state) {
   $form['topic_id'] = [
     '#title' => t('Topic ID'),
     '#type' => 'hidden',
-    '#value' => isset($_REQUEST['topic_id']) ? filter_xss($_REQUEST['topic_id']) : NULL,
+    '#value' => !empty($_REQUEST['topic_id']) ? filter_xss($_REQUEST['topic_id']) : NULL,
     '#required' => TRUE,
   ];
 
@@ -768,7 +768,7 @@ function _nexteuropa_newsroom_send_unsubscription_request($url, $email) {
     'app' => variable_get('newsroom_app'),
   ];
   $request = drupal_http_request($url . '&' . drupal_http_build_query($input));
-  return isset($request->data) ? drupal_json_decode($request->data) : NULL;
+  return !empty($request->data) ? drupal_json_decode($request->data) : NULL;
 }
 
 /**
@@ -792,11 +792,11 @@ function _nexteuropa_newsroom_send_subscription_request($url, $service_id, $emai
     'response_type' => 'json',
   ];
   $request = drupal_http_request($url . '?' . drupal_http_build_query($input));
-  if (isset($request->data)) {
+  if (!empty($request->data)) {
     $data = drupal_json_decode($request->data);
   }
 
-  return isset($data['subscription']) ? $data['subscription'] : NULL;
+  return !empty($data['subscription']) ? $data['subscription'] : NULL;
 }
 
 /**
@@ -947,20 +947,20 @@ function nexteuropa_newsroom_agenda_datepicker_form($form, &$form_state, $view, 
  */
 function _nexteuropa_newsroom_agenda_ajax_form_submit(&$form, &$form_state) {
 
-  $view = isset($form_state['input']['view']) ? $form_state['input']['view'] : NULL;
+  $view = !empty($form_state['input']['view']) ? $form_state['input']['view'] : NULL;
 
-  if (isset($form_state['input']['current_date']['date'])) {
+  if (!empty($form_state['input']['current_date']['date'])) {
     $date = $form_state['input']['current_date']['date'];
   }
-  elseif (isset($form_state['input']['current_date'])) {
+  elseif (!empty($form_state['input']['current_date'])) {
     $date = $form_state['input']['current_date'];
   }
   else {
     $date = NewsroomHelper::getFormatedDate();
   }
 
-  $topic_id = isset($form_state['input']['topic_id']) ? $form_state['input']['topic_id'] : NULL;
-  $type_id = isset($form_state['input']['type_id']) ? $form_state['input']['type_id'] : NULL;
+  $topic_id = !empty($form_state['input']['topic_id']) ? $form_state['input']['topic_id'] : NULL;
+  $type_id = !empty($form_state['input']['type_id']) ? $form_state['input']['type_id'] : NULL;
 
   $topic = NewsroomHelper::getNewsroomTopic($topic_id);
   $type = NewsroomHelper::getNewsroomType($type_id);
@@ -1159,7 +1159,7 @@ function nexteuropa_newsroom_restore_batch(array $chunk, $voc, array $operation_
           }
         }
 
-        if (isset($context)) {
+        if (!empty($context)) {
           // Build the worked term name list.
           $context['results'][] .= $term['name'] . ', ';
           $context['message'] = t('Restoring "@title" @operations.', [
@@ -1396,11 +1396,11 @@ function nexteuropa_newsroom_newsroom_page_filter_form($form, &$form_state, $typ
  *   Form state array.
  */
 function nexteuropa_newsroom_newsroom_page_filter_form_submit(&$form, &$form_state) {
-  $topic_id = isset($form_state['input']['topic_id']) ? $form_state['input']['topic_id'] : NULL;
-  $type_id = isset($form_state['input']['type_id']) ? $form_state['input']['type_id'] : NULL;
-  $start_date = isset($form_state['input']['start_date']['date']) ? $form_state['input']['start_date']['date'] : NULL;
-  $end_date = isset($form_state['input']['end_date']['date']) ? $form_state['input']['end_date']['date'] : NULL;
-  $ec_content = isset($form_state['input']['ec_content']);
+  $topic_id = !empty($form_state['input']['topic_id']) ? $form_state['input']['topic_id'] : NULL;
+  $type_id = !empty($form_state['input']['type_id']) ? $form_state['input']['type_id'] : NULL;
+  $start_date = !empty($form_state['input']['start_date']['date']) ? $form_state['input']['start_date']['date'] : NULL;
+  $end_date = !empty($form_state['input']['end_date']['date']) ? $form_state['input']['end_date']['date'] : NULL;
+  $ec_content = !empty($form_state['input']['ec_content']);
 
   $newsroom_page = NewsroomBuilder::buildNewsroomPage($type_id, $topic_id, $start_date, $end_date, $ec_content);
   // Redirect user to prepared URL.

@@ -314,12 +314,12 @@ class NewsroomImporterGenerator {
   protected function addMapper($field_mapping, $language = NULL) {
 
     $mapper = [
-      'source' => isset($field_mapping['source']) ? $field_mapping['source'] : $this->getXpathString(),
+      'source' => !empty($field_mapping['source']) ? $field_mapping['source'] : $this->getXpathString(),
       'target' => $language ? $field_mapping['field'] . ':et:' . drupal_strtolower($language) : $field_mapping['field'],
-      'unique' => isset($field_mapping['unique']),
+      'unique' => !empty($field_mapping['unique']),
     ];
 
-    if (isset($field_mapping['options'])) {
+    if (!empty($field_mapping['options'])) {
       $mapper = array_merge($mapper, $field_mapping['options']);
     }
 
@@ -361,8 +361,8 @@ class NewsroomImporterGenerator {
     $is_translatable = FALSE;
     $fields = $this->getFieldInfo();
     $attribute = strrchr($field_mapping['field'], ':');
-    $sanitized_name = isset($field_mapping['original_field']) ? $field_mapping['original_field'] : str_replace($attribute, '', $field_mapping['field']);
-    if (isset($fields[$sanitized_name])) {
+    $sanitized_name = !empty($field_mapping['original_field']) ? $field_mapping['original_field'] : str_replace($attribute, '', $field_mapping['field']);
+    if (!empty($fields[$sanitized_name])) {
       $is_translatable = field_is_translatable($this->getEntityType(), $fields[$sanitized_name]);
     }
 
@@ -412,7 +412,7 @@ class NewsroomImporterGenerator {
             $this->addNewsroomDefaultValueTamper($default_language_source);
           }
 
-          if (isset($field_mapping['query'])) {
+          if (!empty($field_mapping['query'])) {
             $this->addTranslatableQuery($field_mapping['query'], $language);
           }
 
@@ -422,7 +422,7 @@ class NewsroomImporterGenerator {
       }
       else {
         $this->addTamper($field_mapping);
-        if (isset($field_mapping['query'])) {
+        if (!empty($field_mapping['query'])) {
           $this->addQuery($field_mapping['query']);
         }
 
@@ -478,13 +478,13 @@ class NewsroomImporterGenerator {
    *   Field mapping settings.
    */
   private function addTamper($field_mapping) {
-    if (!isset($field_mapping['tamper'])) {
+    if (empty($field_mapping['tamper'])) {
       return;
     }
 
     $settings = $field_mapping['tamper'];
 
-    $source = isset($field_mapping['source']) ? $field_mapping['source'] : $this->getXpathString();
+    $source = !empty($field_mapping['source']) ? $field_mapping['source'] : $this->getXpathString();
     $source_prepared_string = drupal_strtolower(str_replace(['-', ' '], [
       '_',
       '_',

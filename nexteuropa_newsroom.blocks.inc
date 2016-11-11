@@ -104,7 +104,7 @@ function _nexteuropa_nexteuropa_get_type_from_agenda_block_context() {
     if (is_array($active_context->reactions) && count($active_context->reactions) > 0) {
       foreach ($active_context->reactions as $reaction_type => $current_reaction) {
         if ($reaction_type == 'newsroom_agenda_block') {
-          if (isset($current_reaction['type_id'])) {
+          if (!empty($current_reaction['type_id'])) {
             $type = NewsroomHelper::getNewsroomType($current_reaction['type_id']);
           }
         }
@@ -181,7 +181,7 @@ function _nexteuropa_newsroom_get_related_children($field_name, $parent_nid, $cu
         ->fieldCondition($field_name, 'target_id', $parent_nid)
         ->execute();
       $result = $query->execute();
-      if (isset($result['node'])) {
+      if (!empty($result['node'])) {
         // Exclude the current item ID from array.
         $ids = array_diff(array_keys($result['node']), [$current_nid]);
         $items = _nexteuropa_nexteuropa_prepare_related_content_array($ids);
@@ -345,7 +345,7 @@ function _nexteuropa_newsroom_block_news_proposal() {
       // Never sure what menu_callback will get you with.
       // A view overridding a taxo page.
       $url_tokens = explode('/', $current_page_path);
-      if (isset($url_tokens[2]) && is_numeric($url_tokens[2])) {
+      if (!empty($url_tokens[2]) && is_numeric($url_tokens[2])) {
         $taxonomy_term = taxonomy_term_load($url_tokens[2]);
         // First try to get topic from the current taxonomy term.
         if ($taxonomy_term && $associated_topic_id = NewsroomHelper::getFieldValue($taxonomy_term, 'field_newsroom_associated_topic', 'tid')) {

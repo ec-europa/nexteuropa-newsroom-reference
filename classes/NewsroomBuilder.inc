@@ -86,7 +86,7 @@ class NewsroomBuilder {
    * @param object $date
    *   Current date.
    *
-   * @return object
+   * @return NewsroomAgenda|null
    *   Agenda item.
    */
   public static function buildAgenda($view, $type, $topics, $date, $operator = NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR) {

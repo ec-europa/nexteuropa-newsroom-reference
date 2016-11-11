@@ -506,14 +506,21 @@ abstract class NewsroomAgenda {
     }
     else {
       $this->prepareAgenda();
-      $content = theme('newsroom_agenda_page', [
-        'filter_form' => NULL,
-        'date_form' => NULL,
-        'items' => $this->prepareItemsOutput($this->getCurrentItems()),
-        'next_event_items' => $this->prepareItemsOutput($this->getUpcomingItems()),
-        'is_block' => $this->getIsBlock(),
-        'navigation' => [],
-      ]);
+
+      $items = $this->getCurrentItems();
+      $next_items = $this->getUpcomingItems();
+
+      $content = NULL;
+      if (!empty($items) || !empty($next_items)) {
+        $content = theme('newsroom_agenda_page', [
+          'filter_form' => NULL,
+          'date_form' => NULL,
+          'items' => $this->prepareItemsOutput($items),
+          'next_event_items' => $this->prepareItemsOutput($next_items),
+          'is_block' => $this->getIsBlock(),
+          'navigation' => [],
+        ]);
+      }
       cache_set($cache_key, $content, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_agenda_block', 180));
     }
     return $content;
@@ -560,6 +567,11 @@ abstract class NewsroomAgenda {
 
     if ($this->getTypeId()) {
       $query->condition('tt.tid', NewsroomHelper::getTypeChildren($this->getTypeId()));
+    }
+
+    $topic_ids = $this->getTopicsId();
+    if (!empty($topic_ids)) {
+      $query->condition('topic_field.field_newsroom_topics_tid', $topic_ids);
     }
 
     $this->setQuery($this->processQuery($query));

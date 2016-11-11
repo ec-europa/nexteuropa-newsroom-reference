@@ -12,7 +12,7 @@
   </div>
   <div class="newsroom-page view-content">
     <?php echo $featured_item; ?>
-    <?php if ($items) : ?>
+    <?php if ($items): ?>
       <?php echo $items; ?>
     <?php else: ?>
       <div class="no-result"><?php echo t("No results"); ?></div>
