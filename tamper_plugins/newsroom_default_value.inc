@@ -5,13 +5,13 @@
  * Set field to default value.
  */
 
-$plugin = array(
+$plugin = [
   'form'     => 'nexteuropa_newsroom_tamper_default_value_form',
   'callback' => 'nexteuropa_newsroom_tamper_default_value_callback',
   'name'     => 'Set default value if field is empty',
   'multi'    => 'direct',
   'category' => 'Other',
-);
+];
 
 /**
  * Gets tamper form.
@@ -27,28 +27,28 @@ $plugin = array(
  *   Form array.
  */
 function nexteuropa_newsroom_tamper_default_value_form($importer, $element_key, $settings) {
-  $form = array();
+  $form = [];
 
-  $form['default_value'] = array(
+  $form['default_value'] = [
     '#type' => 'textarea',
     '#title' => t('Value'),
     '#default_value' => isset($settings['default_value']) ? $settings['default_value'] : '',
     '#description' => t('This field will be set to the value specified.'),
-  );
+  ];
 
-  $replace = array();
+  $replace = [];
 
   foreach (feeds_tamper_get_unique_source_list($importer) as $source) {
     $replace[] = '[' . $source . ']';
   }
 
-  $form['help'] = array(
+  $form['help'] = [
     '#type' => 'fieldset',
     '#title' => t('Available Replacement Patterns'),
     '#collapsed' => FALSE,
     '#collapsible' => FALSE,
-    '#value' => theme('item_list', array('items' => $replace)),
-  );
+    '#value' => theme('item_list', ['items' => $replace]),
+  ];
 
   return $form;
 }
@@ -72,7 +72,7 @@ function nexteuropa_newsroom_tamper_default_value_form($importer, $element_key, 
 function nexteuropa_newsroom_tamper_default_value_callback($result, $item_key, $element_key, &$field, $settings, $source) {
   // If the field is empty we set default value.
   if (!$field) {
-    $trans = array();
+    $trans = [];
     $item = $result->items[$item_key];
     foreach ($item as $key => $value) {
       $trans['[' . $key . ']'] = is_array($value) ? reset($value) : $value;

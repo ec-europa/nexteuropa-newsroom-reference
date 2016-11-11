@@ -22,9 +22,9 @@ class NewsroomHelper {
   public static function getTypeChildren($term_tid) {
     $children_items = NewsroomHelper::findChildrenById(NewsroomHelper::getNewsroomTypes(), $term_tid);
     // We need parent ID also in the output array to use it in query.
-    $parent_children_tids = array($term_tid);
+    $parent_children_tids = [$term_tid];
     $children_tids = array_keys($children_items);
-    if (count($children_tids) > 0) {
+    if (!empty($children_tids)) {
       $parent_children_tids = array_merge($parent_children_tids, $children_tids);
     }
 
@@ -40,7 +40,7 @@ class NewsroomHelper {
    * @return string
    *   Newsroom page URL.
    */
-  public static function getNewsroomPageUrl($url_parts = array()) {
+  public static function getNewsroomPageUrl($url_parts = []) {
     return 'newsroom/' . implode('/', $url_parts);
   }
 
@@ -53,40 +53,8 @@ class NewsroomHelper {
    * @return string
    *   Newsroom rss URL.
    */
-  public static function getNewsroomRssUrl($url_parts = array()) {
+  public static function getNewsroomRssUrl($url_parts = []) {
     return 'newsroom-rss/' . implode('/', $url_parts);
-  }
-
-  /**
-   * Prepares options for the content type select.
-   *
-   * @param string $type
-   *   Type of the options to generate.
-   *
-   * @return array
-   *   Array of options.
-   */
-  public static function prepareOptions($type) {
-    $options = array();
-    if (is_numeric($type)) {
-      for ($i = 1; $i <= $type; $i++) {
-        $options[$i] = $i;
-      }
-    }
-    else {
-      // Get a list of the existing content type.
-      $content_types = node_type_get_types();
-      // Exclude the ct used for the import.
-      unset($content_types[NEXTEUROPA_NEWSROOM_CONTENT_TYPE]);
-      unset($content_types['newsroom_selection']);
-      // Build options for selecting content types.
-      foreach ($content_types as $name => $content_type) {
-        if ($content_type->disabled !== 1) {
-          $options[$name] = $content_type->name;
-        }
-      }
-    }
-    return $options;
   }
 
   /**
@@ -127,26 +95,26 @@ class NewsroomHelper {
 
       case NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER:
       case NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER:
-        $url = NewsroomHelper::getNewsroomUrl(NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT);
+        $url = NewsroomHelper::getNewsroomUrl(variable_get('newsroom_topic_import_script', NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT));
         break;
 
       case NEXTEUROPA_NEWSROOM_TYPE_IMPORTER:
-        $url = NewsroomHelper::getNewsroomUrl(NEXTEUROPA_NEWSROOM_TYPE_SCRIPT);
+        $url = NewsroomHelper::getNewsroomUrl(variable_get('newsroom_type_import_script', NEXTEUROPA_NEWSROOM_TYPE_SCRIPT));
         break;
 
       case NEXTEUROPA_NEWSROOM_ITEM_IMPORTER:
         $subsite = variable_get('newsroom_subsite', FALSE);
-        $subsite_url_part = '';
+        $subsite_url_part = '?';
 
         if ($subsite) {
           $subsite_url_part = '?subsite=' . $subsite;
         }
 
-        $url = NewsroomHelper::getNewsroomUrl(NEXTEUROPA_NEWSROOM_ITEM_SCRIPT) . $subsite_url_part;
+        $url = NewsroomHelper::getNewsroomUrl(variable_get('newsroom_item_import_script', NEXTEUROPA_NEWSROOM_ITEM_SCRIPT)) . $subsite_url_part;
         break;
 
       case NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER:
-        $url = NewsroomHelper::getNewsroomUrl(NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT);
+        $url = NewsroomHelper::getNewsroomUrl(variable_get('newsroom_issue_import_script', NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT));
         break;
     }
 
@@ -208,7 +176,7 @@ class NewsroomHelper {
    *   Field data.
    */
   public static function getNodesAssociatedToTopics($topic_ids) {
-    $topic_ids = is_array($topic_ids) ? $topic_ids : array($topic_ids);
+    $topic_ids = is_array($topic_ids) ? $topic_ids : [$topic_ids];
     $cache_key = 'get_topic_entities' . md5(implode('', $topic_ids));
     $data = NULL;
     if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
@@ -244,10 +212,10 @@ class NewsroomHelper {
     else {
       $path = FALSE;
       // Check if they are added to menu.
-      $menu_items = array();
+      $menu_items = [];
       // Fetch entities associated to topic using the special field.
       $topic_entities = NewsroomHelper::getNodesAssociatedToTopics($topic_id);
-      if (count($topic_entities) > 0) {
+      if (!empty($topic_entities)) {
         foreach ($topic_entities as $entity) {
           // Could use entity_uri() but we would have to load the full entity.
           $menu_link_items = NewsroomHelper::getMenuByPath(str_replace('_', '/', $entity->entity_type) . '/' . $entity->entity_id);
@@ -259,7 +227,7 @@ class NewsroomHelper {
         }
       }
 
-      if (count($menu_items) > 0) {
+      if (!empty($menu_items)) {
         // Favor terms over nodes and lower entity ID in case we have multiple.
         usort($menu_items, function ($a, $b) {
           if ($a->router_path == 'taxonomy/term/%' && $b->router_path == 'node/%') {
@@ -269,12 +237,12 @@ class NewsroomHelper {
             return 1;
           }
           else {
-            $fields = array(
+            $fields = [
               'p1', 'p2', 'p3',
               'p4', 'p5', 'p6',
               'p7', 'p8', 'p9',
               'plid', 'weight', 'mlid',
-            );
+            ];
             $result = 0;
             foreach ($fields as $field) {
               if ($a->{$field} == $b->{$field}) {
@@ -310,8 +278,8 @@ class NewsroomHelper {
    *   Taxonomy ids.
    */
   public static function getTaxonomyTermFromField($field_name, $field_value, $bundle = NULL) {
-    $term_ids = array();
-    $field_value = is_array($field_value) ? $field_value : array($field_value);
+    $term_ids = [];
+    $field_value = is_array($field_value) ? $field_value : [$field_value];
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'taxonomy_term')
       ->fieldCondition($field_name, 'value', $field_value);
@@ -336,12 +304,12 @@ class NewsroomHelper {
     $event_type_ids = &drupal_static(__FUNCTION__);
     if (!isset($event_type_ids)) {
       $types = NewsroomHelper::getNewsroomTypes();
-      $behavior_types = array(
+      $behavior_types = [
         'consultation_funding',
         'events',
         'agenda',
         'call',
-      );
+      ];
       foreach ($types as $type) {
         if (in_array(NewsroomHelper::getFieldValue($type, 'field_newsroom_type'), $behavior_types)) {
           $event_type_ids[] = $type->tid;
@@ -358,11 +326,7 @@ class NewsroomHelper {
    *   Universe URL.
    */
   public static function getUniverseUrl() {
-    $data = &drupal_static(__FUNCTION__);
-    if (!isset($data)) {
-      $data = variable_get('newsroom_base_url', NEXTEUROPA_NEWSROOM_BASE_URL) . NewsroomHelper::getUniverseId() . '/';
-    }
-    return $data;
+    return variable_get('newsroom_base_url', NEXTEUROPA_NEWSROOM_BASE_URL) . NewsroomHelper::getUniverseId() . '/';
   }
 
   /**
@@ -376,7 +340,7 @@ class NewsroomHelper {
    */
   public static function getFieldInstances($type) {
     // Get instances per field.
-    $instances = array();
+    $instances = [];
     if ($type) {
       $field_name = 'field_newsroom_associated_' . $type;
       $mappings = field_info_field_map();
@@ -412,7 +376,7 @@ class NewsroomHelper {
       }
 
       if (!$taxonomy_term) {
-        $taxonomy_terms = array();
+        $taxonomy_terms = [];
 
         if ($vocabulary_name == NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY) {
           $taxonomy_terms = array_merge($taxonomy_terms, NewsroomHelper::getNewsroomTypes());
@@ -468,15 +432,21 @@ class NewsroomHelper {
     if ($events_only) {
       $events_types = NewsroomHelper::getEventsTermsIds();
       // Filter out non events type.
-      foreach ($type_options as $key => $type_item) {
-        if (!in_array($key, $events_types)) {
-          unset($type_options[$key]);
+      if (!empty($events_types)) {
+        foreach ($type_options as $key => $type_item) {
+          if (!in_array($key, $events_types)) {
+            unset($type_options[$key]);
+          }
         }
+      }
+      else {
+        $type_options = [];
       }
     }
     if ($add_empty_value) {
-      $type_options = array(t('- None -')) + $type_options;
+      $type_options = [t('- None -')] + $type_options;
     }
+
     return $type_options;
   }
 
@@ -491,16 +461,17 @@ class NewsroomHelper {
    * @return array
    *   Drop down options array.
    */
-  public static function getNewsroomTopicOptions($used_topics = array(), $add_empty_value = TRUE) {
+  public static function getNewsroomTopicOptions($used_topics = [], $add_empty_value = TRUE) {
     $topic_options = NewsroomHelper::getTaxonomyTermOptions(NewsroomHelper::getNewsroomTopics());
-    $used_count = count($used_topics);
-    foreach ($topic_options as $key => $topic) {
-      if ($used_count > 0 && !in_array($key, $used_topics)) {
-        unset($topic_options[$key]);
+    if (!empty($used_topics)) {
+      foreach ($topic_options as $key => $topic) {
+        if (!in_array($key, $used_topics)) {
+          unset($topic_options[$key]);
+        }
       }
     }
     if ($add_empty_value) {
-      $topic_options = array(t('- None -')) + $topic_options;
+      $topic_options = [t('- None -')] + $topic_options;
     }
     return $topic_options;
   }
@@ -514,7 +485,7 @@ class NewsroomHelper {
    * @return array
    *   Array of nodes' ids.
    */
-  public static function getNodeRelatedToTopic($topic_ids = array()) {
+  public static function getNodeRelatedToTopic($topic_ids = []) {
     $cache_key = 'get_node_related_to_topic:' . md5(implode('', $topic_ids));
     if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
       $data = $cache->data;
@@ -524,7 +495,7 @@ class NewsroomHelper {
       $query->addField('ttopic', 'entity_id');
       $query->condition('field_newsroom_topics_tid', $topic_ids);
       $query->groupBy('ttopic.entity_id');
-      $query->having('count(ttopic.entity_id) = :cnt', array(':cnt' => count($topic_ids)));
+      $query->having('count(ttopic.entity_id) = :cnt', [':cnt' => count($topic_ids)]);
 
       $data = $query->execute()->fetchAllKeyed(0, 0);
       cache_set($cache_key, $data, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_node_related_to_topic', 3600));
@@ -561,11 +532,7 @@ class NewsroomHelper {
    *   Universe Id.
    */
   public static function getUniverseId() {
-    $data = &drupal_static(__FUNCTION__);
-    if (!isset($data)) {
-      $data = variable_get('newsroom_universe_id', FALSE);
-    }
-    return $data;
+    return variable_get('newsroom_universe_id', FALSE);
   }
 
   /**
@@ -714,7 +681,7 @@ class NewsroomHelper {
    *   Taxonomy terms.
    */
   public static function findChildrenById($taxonomy_terms, $parent_tid) {
-    $children = array();
+    $children = [];
     if ($taxonomy_terms) {
       foreach ($taxonomy_terms as $item) {
         if (in_array($parent_tid, $item->parents)) {
@@ -765,7 +732,7 @@ class NewsroomHelper {
    *   Language string.
    */
   public static function deleteEntityTranslations($entity, $entity_id, $language = NULL) {
-    $languages = $language ? array($language) : language_list();
+    $languages = $language ? [$language] : language_list();
     $handler = entity_translation_get_handler('node', $entity);
 
     foreach ($languages as $language) {
@@ -814,8 +781,8 @@ class NewsroomHelper {
       return TRUE;
     }
     else {
-      $test = drupal_http_request(NewsroomHelper::getUniverseUrl() . '?subsite=' . $subsite);
-      return $test->code == 200;
+      $request = drupal_http_request(NewsroomHelper::getUniverseUrl() . 'validation.cfm?subsite=' . $subsite);
+      return isset($request->data) && $request->data == 'True';
     }
 
     return FALSE;
@@ -831,7 +798,7 @@ class NewsroomHelper {
    *   Dropdown options.
    */
   public static function getTaxonomyTermOptions($terms) {
-    $options = array();
+    $options = [];
     if ($terms) {
       foreach ($terms as $term) {
         $options[$term->tid] = str_repeat('-', $term->depth) . $term->name;
@@ -854,7 +821,7 @@ class NewsroomHelper {
     else {
       $query = db_select('node', 'n');
       $query->distinct();
-      $query->fields('topic_field', array('tid' => 'field_newsroom_topics_tid'));
+      $query->fields('topic_field', ['tid' => 'field_newsroom_topics_tid']);
       $query->join('field_data_field_newsroom_item_type', 'tf', 'tf.entity_id = n.nid');
       $query->join('field_data_field_newsroom_topics', 'topic_field', 'topic_field.entity_id = n.nid');
       $query->condition('n.status', 1);
@@ -892,9 +859,9 @@ class NewsroomHelper {
       $node_title = $cache->data;
     }
     else {
-      $node_title = db_query('SELECT title_field_value FROM {field_data_title_field} WHERE entity_id = :nid', array(':nid' => $nid))->fetchField();
+      $node_title = db_query('SELECT title_field_value FROM {field_data_title_field} WHERE entity_id = :nid', [':nid' => $nid])->fetchField();
       if (empty($node_title)) {
-        $node_title = db_query('SELECT title FROM {node} WHERE nid = :nid', array(':nid' => $nid))->fetchField();
+        $node_title = db_query('SELECT title FROM {node} WHERE nid = :nid', [':nid' => $nid])->fetchField();
       }
       cache_set($cache_key, $node_title, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_node_title', 3600));
     }
@@ -920,7 +887,7 @@ class NewsroomHelper {
     if ($entity) {
       if (isset($entity->{$field_name}[LANGUAGE_NONE][0][$value_name])) {
         if (count($entity->{$field_name}[LANGUAGE_NONE]) > 1) {
-          $value = array();
+          $value = [];
           foreach ($entity->{$field_name}[LANGUAGE_NONE] as $item) {
             $value[] = $item[$value_name];
           }
@@ -1039,6 +1006,31 @@ class NewsroomHelper {
    */
   public static function getDefaultLanguageUppercase() {
     return drupal_strtoupper(language_default()->language);
+  }
+
+  /**
+   * Sets default importer URL.
+   *
+   * @param string $importer_id
+   *   Importer id.
+   */
+  public static function setDefaultImporterUrl($importer_id) {
+    $url = NewsroomHelper::getImporterUrl($importer_id);
+    if (!empty($url)) {
+      $source = feeds_source($importer_id);
+      $config = $source->getConfig();
+      $config['FeedsHTTPFetcher']['source'] = $url;
+      $source->setConfig($config);
+      $source->save();
+    }
+  }
+
+  /**
+   * Sets 404 http response.
+   */
+  public static function set404response() {
+    drupal_not_found();
+    drupal_exit();
   }
 
 }

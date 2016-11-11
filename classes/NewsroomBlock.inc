@@ -9,7 +9,7 @@
  * NewsroomBlock class base class.
  */
 class NewsroomBlock extends NewsroomBlockBase {
-  protected $items = array();
+  protected $items = [];
 
   /**
    * Contructor of NewsroomBlock class.
@@ -105,8 +105,8 @@ class NewsroomBlock extends NewsroomBlockBase {
     else {
       $query = db_select('node', 'n');
       $query->distinct();
-      $query->fields('n', array('nid', 'title', 'created'));
-      $query->fields('tt', array('name'));
+      $query->fields('n', ['nid', 'title', 'created']);
+      $query->fields('tt', ['name']);
       $query->addField('tt', 'tid', 'type_id');
       $query->join('field_data_field_newsroom_item_type', 'tf', 'tf.entity_id = n.nid');
       $query->join('taxonomy_term_data', 'tt', 'tt.tid = tf.field_newsroom_item_type_tid');
@@ -122,11 +122,11 @@ class NewsroomBlock extends NewsroomBlockBase {
 
       $query->condition('n.type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
 
-      if (count($topic_ids) > 0) {
+      if (!empty($topic_ids)) {
         if ($this->getOperator() == NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR) {
           $query->condition('topic_data.tid', $topic_ids);
         }
-        else if ($nids = NewsroomHelper::getNodeRelatedToTopic($topic_ids)) {
+        elseif ($nids = NewsroomHelper::getNodeRelatedToTopic($topic_ids)) {
           $query->condition('nid', $nids, 'IN');
         }
       }
@@ -158,13 +158,13 @@ class NewsroomBlock extends NewsroomBlockBase {
    *   Block content.
    */
   public function generateContent() {
-    return theme('newsroom_summary_block_wrapper', array(
+    return theme('newsroom_summary_block_wrapper', [
       'content' => $this->getContent(),
       'css_classes' => $this->getCssClasses(),
       'title' => $this->getTitle(),
       'type_url' => $this->getTypeUrl(),
-      'url' => NewsroomHelper::getNewsroomPageUrl(array($this->getTypeUrl(), $this->getTopicUrl())),
-    ));
+      'url' => NewsroomHelper::getNewsroomPageUrl([$this->getTypeUrl(), $this->getTopicUrl()]),
+    ]);
   }
 
   /**
@@ -174,9 +174,9 @@ class NewsroomBlock extends NewsroomBlockBase {
    *   Block items content.
    */
   protected function getContent() {
-    return theme('newsroom_summary_block_item', array(
+    return theme('newsroom_summary_block_item', [
       'items' => $this->getItems(),
-    ));
+    ]);
   }
 
 }

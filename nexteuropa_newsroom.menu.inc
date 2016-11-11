@@ -10,77 +10,77 @@
  */
 function nexteuropa_newsroom_menu() {
   // Configuration page.
-  $items['admin/config/content/newsroom'] = array(
+  $items['admin/config/content/newsroom'] = [
     'title' => 'Newsroom',
     'description' => 'Configure Newsroom settings',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('nexteuropa_newsroom_admin_settings'),
-    'access arguments' => array('administer newsroom settings'),
+    'page arguments' => ['nexteuropa_newsroom_admin_settings'],
+    'access arguments' => ['administer newsroom settings'],
     'file' => 'nexteuropa_newsroom.admin.inc',
-  );
-  $items['news-redirect'] = array(
+  ];
+  $items['news-redirect'] = [
     'title' => 'Newsroom Item Redirect',
     'page callback' => '_nexteuropa_newsroom_item_redirect',
-    'access arguments' => array('access content'),
+    'access arguments' => ['access content'],
     'type' => MENU_CALLBACK,
-  );
-  $items['news-proposal'] = array(
+  ];
+  $items['news-proposal'] = [
     'title' => 'Newsroom item proposal',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('nexteuropa_newsroom_newsroom_proposal_form'),
-    'access arguments' => array(NEXTEUROPA_NEWSROOM_PROPOSAL_ACCESS),
-  );
-  $items['newsroom-agenda'] = array(
+    'page arguments' => ['nexteuropa_newsroom_newsroom_proposal_form'],
+    'access arguments' => [NEXTEUROPA_NEWSROOM_PROPOSAL_ACCESS],
+  ];
+  $items['newsroom-agenda'] = [
     'title' => 'Newsroom Agenda',
     'description' => 'Displays Newsroom items as Agenda',
     'page callback' => '_nexteuropa_newsroom_agenda',
-    'access arguments' => array('access content'),
+    'access arguments' => ['access content'],
     'type' => MENU_CALLBACK,
     'file' => 'nexteuropa_newsroom.pages.inc',
-  );
-  $items['newsletters-list'] = array(
+  ];
+  $items['newsletters-list'] = [
     'title' => 'Newsletters',
     'description' => 'Newsletters service list',
     'page callback' => '_nexteuropa_newsroom_newsletters_page',
-    'access arguments' => array('access content'),
+    'access arguments' => ['access content'],
     'type' => MENU_CALLBACK,
     'file' => 'nexteuropa_newsroom.pages.inc',
-  );
-  $items['newsroom-redirect'] = array(
+  ];
+  $items['newsroom-redirect'] = [
     'title' => 'Newsroom item redirect',
     'page callback' => '_nexteuropa_newsroom_redirect',
-    'page arguments' => array(1, 2),
-    'access arguments' => array('access content'),
+    'page arguments' => [1, 2],
+    'access arguments' => ['access content'],
     'type' => MENU_CALLBACK,
-  );
-  $items['newsroom-import'] = array(
+  ];
+  $items['newsroom-import'] = [
     'title' => 'Newsroom item import',
     'page callback' => '_nexteuropa_newsroom_import_item',
-    'page arguments' => array(1, 2),
+    'page arguments' => [1, 2],
     'access callback' => '_nexteuropa_nexteuropa_newsroom_item_import_access',
     'type' => MENU_CALLBACK,
-  );
-  $items['newsroom-delete'] = array(
+  ];
+  $items['newsroom-delete'] = [
     'title' => 'Newsroom item delete',
     'page callback' => '_nexteuropa_newsroom_delete_item',
-    'page arguments' => array(1, 2),
+    'page arguments' => [1, 2],
     'access callback' => '_nexteuropa_nexteuropa_newsroom_item_import_access',
     'type' => MENU_CALLBACK,
-  );
-  $items['newsroom'] = array(
+  ];
+  $items['newsroom'] = [
     'page callback' => '_nexteuropa_newsroom_newsroom_page',
-    'access arguments' => array('access content'),
+    'access arguments' => ['access content'],
     'type' => MENU_CALLBACK,
     'file' => 'nexteuropa_newsroom.pages.inc',
-  );
-  $items['newsroom-rss'] = array(
+  ];
+  $items['newsroom-rss'] = [
     'title' => 'Newsroom RSS feed',
     'description' => 'Newsroom RSS feed',
     'page callback' => '_nexteuropa_newsroom_newsroom_rss',
-    'access arguments' => array('access content'),
+    'access arguments' => ['access content'],
     'type' => MENU_CALLBACK,
     'file' => 'nexteuropa_newsroom.pages.inc',
-  );
+  ];
 
   return $items;
 }

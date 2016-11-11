@@ -10,13 +10,13 @@
  */
 function nexteuropa_newsroom_drush_command() {
 
-  $items['newsroom-init'] = array(
+  $items['newsroom-init'] = [
     'description' => 'Initializes Newsroom importers.',
-    'aliases' => array('nri'),
-    'arguments' => array(
+    'aliases' => ['nri'],
+    'arguments' => [
       'universe_id' => 'Newsroom Universe ID.',
-    ),
-  );
+    ],
+  ];
 
   return $items;
 }
@@ -28,7 +28,7 @@ function drush_nexteuropa_newsroom_newsroom_init($universe_id = NULL) {
   if ($universe_id) {
     if (NewsroomHelper::validateUniverse($universe_id)) {
       variable_set('newsroom_universe_id', $universe_id);
-      drush_print(dt('Newsroom Universe was found at: !universe', array('!universe' => NewsroomHelper::getUniverseUrl())));
+      drush_print(dt('Newsroom Universe was found at: !universe', ['!universe' => NewsroomHelper::getUniverseUrl()]));
       _nexteuropa_newsroom_admin_rebuild_importers();
     }
     else {

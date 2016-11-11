@@ -86,7 +86,7 @@ class NewsroomAgendaSchedule extends NewsroomAgenda {
     // We start from the next day after the current.
     $start_date->modify('+1 day');
     $this->setLastAgendaDate($start_date);
-    $upcoming_items = array();
+    $upcoming_items = [];
     // We add one day to include the last day also.
     $last_event_date = $this->getUtmostDate(FALSE);
     if ($last_event_date) {
@@ -117,7 +117,7 @@ class NewsroomAgendaSchedule extends NewsroomAgenda {
     $has_current_items = FALSE;
     if ($items) {
       foreach ($items as $item) {
-        if (count($item->getItems()) > 0) {
+        if (!empty($item->getItems())) {
           $has_current_items = TRUE;
           break;
         }
@@ -136,6 +136,7 @@ class NewsroomAgendaSchedule extends NewsroomAgenda {
       $upcoming_date = $cache->data;
     }
     else {
+      $upcoming_date = NULL;
       // We start from the latest item of the agenda on the current page.
       $last_agenda_date = $this->getLastAgendaDate();
       // We add one day to include the last day also.
@@ -202,7 +203,7 @@ class NewsroomAgendaSchedule extends NewsroomAgenda {
    *   Result.
    */
   protected function loadResult() {
-    return $this->getQuery()->execute()->fetchAll();;
+    return $this->getQuery()->execute()->fetchAll();
   }
 
   /**
@@ -216,9 +217,12 @@ class NewsroomAgendaSchedule extends NewsroomAgenda {
    */
   protected function getUtmostDate($first = TRUE) {
     $utmost_date = NULL;
-    $last_item = $first ? reset($this->getResult()) : array_pop($this->getResult());
-    if ($last_item) {
-      $utmost_date = clone $last_item->start_date_obj;
+    $result = $this->getResult();
+    if ($result) {
+      $last_item = $first ? reset($result) : array_pop($result);
+      if ($last_item) {
+        $utmost_date = clone $last_item->start_date_obj;
+      }
     }
     return $utmost_date;
   }

@@ -26,34 +26,32 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     $universe_id_info['disabled'] = TRUE;
     $universe_id_info['description'] = t('To change the Newsroom Universe ID contact the site administrator.');
     $universe_id_info['class'] = 'selected';
-    $universe_id_info['collapsing'] = FALSE;
   }
   else {
     $universe_id_info['disabled'] = FALSE;
     $universe_id_info['description'] = t('After setting the Newsroom Universe ID for the first time content will be imported from the Newsroom service. This might take a few minutes.');
     $universe_id_info['class'] = 'not-selected';
-    $universe_id_info['collapsing'] = TRUE;
   }
 
   // This is special, made just to hold the universe_id field.
-  $form['universe_id'] = array(
+  $form['universe_id'] = [
     '#type' => 'container',
     '#title' => t('Newsroom Universe ID'),
-    '#attributes' => array('class' => array($universe_id_info['class'])),
-  );
+    '#attributes' => ['class' => [$universe_id_info['class']]],
+  ];
 
-  $form['universe_id']['newsroom_universe_id'] = array(
+  $form['universe_id']['newsroom_universe_id'] = [
     '#type' => 'textfield',
     '#title' => t('Universe ID value'),
     '#required' => TRUE,
     '#disabled' => $universe_id_info['disabled'],
     '#description' => $universe_id_info['description'],
     '#default_value' => $newsroom_universe_id,
-    '#element_validate' => array('_nexteuropa_newsroom_admin_universe_id_validate'),
-  );
+    '#element_validate' => ['_nexteuropa_newsroom_admin_universe_id_validate'],
+  ];
 
   // Other settings for the newsroom.
-  $form['newsroom_others'] = array(
+  $form['newsroom_others'] = [
     '#type' => 'fieldset',
     '#title' => t('Newsroom client settings'),
     '#description' => t("These settings will determine newsroom behavior in your website.
@@ -62,37 +60,37 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
     '#access' => user_access('administer newsroom advanced settings'),
-  );
+  ];
 
-  $form['newsroom_others']['importers_link'] = array(
+  $form['newsroom_others']['importers_link'] = [
     '#type' => 'item',
     '#markup' => l(t('Feed importers'), 'import'),
-  );
+  ];
 
-  $form['newsroom_others']['newsroom_subsite'] = array(
+  $form['newsroom_others']['newsroom_subsite'] = [
     '#type' => 'textfield',
     '#title' => t('Name of the subsite, if any.'),
     '#description' => t('The value you enter here will be used to filter the items belonging to this website.'),
     '#default_value' => variable_get('newsroom_subsite'),
-    '#element_validate' => array('_nexteuropa_newsroom_admin_subsite_validate'),
-  );
+    '#element_validate' => ['_nexteuropa_newsroom_admin_subsite_validate'],
+  ];
 
-  $form['newsroom_others']['newsroom_use_css'] = array(
+  $form['newsroom_others']['newsroom_use_css'] = [
     '#type' => 'checkbox',
     '#title' => t('Use the stylesheets provided by this feature'),
     '#default_value' => variable_get('newsroom_use_css', 1),
-  );
+  ];
 
-  $form['newsroom_others']['newsroom_legacy'] = array(
+  $form['newsroom_others']['newsroom_legacy'] = [
     '#type' => 'checkbox',
     '#title' => t('If you have custom css code related to the newsroom maintain the legacy html code.'),
     '#default_value' => variable_get('newsroom_legacy', 1),
-  );
+  ];
 
   $types = NewsroomHelper::getNewsroomTypes();
 
   if (!empty($types)) {
-    $form['newsroom_paths'] = array(
+    $form['newsroom_paths'] = [
       '#type' => 'fieldset',
       '#title' => t('Newsroom content path settings'),
       '#prefix' => '<div id="newsroom_reset">',
@@ -102,14 +100,14 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#access' => user_access('administer newsroom settings'),
-    );
+    ];
 
-    $form['newsroom_paths']['patterns'] = array(
+    $form['newsroom_paths']['patterns'] = [
       '#type' => 'checkbox',
       '#title' => t('Do you want to take over the configuration of pattern for node aliases?'),
       '#description' => t('if this is unchecked the newsroom will not alter the aliases for its nodes.'),
       '#default_value' => variable_get('newsroom_patterns', FALSE),
-    );
+    ];
 
     foreach ($types as $tid => $type) {
       $type_name = pathauto_cleanstring($type->name);
@@ -121,290 +119,289 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
         $parent = pathauto_cleanstring($parent->name) . '/';
       }
 
-      $form['newsroom_paths'][$type_name . '_rootpath'] = array(
+      $form['newsroom_paths'][$type_name . '_rootpath'] = [
         '#type' => 'textfield',
-        '#title' => t('Pattern for %type', array('%type' => $type_name)),
+        '#title' => t('Pattern for %type', ['%type' => $type_name]),
         '#required' => FALSE,
-        '#description' => t('Aliases pattern for the %type_name topic.', array('%type_name' => $type_name)),
+        '#description' => t('Aliases pattern for the %type_name topic.', ['%type_name' => $type_name]),
         '#default_value' => variable_get('newsroom_' . $type_name . '_root', $parent . $type_name),
-        '#element_validate' => array('_nexteuropa_newsroom_admin_type_root_validate'),
-      );
+        '#element_validate' => ['_nexteuropa_newsroom_admin_type_root_validate'],
+      ];
     }
 
-    $form['newsroom_paths']['reset'] = array(
+    $form['newsroom_paths']['reset'] = [
       '#type' => 'submit',
       '#value' => 'Reset to the defaults',
-      '#ajax' => array(
+      '#ajax' => [
         'callback' => '_nexteuropa_newsroom_admin_reset_paths',
         'event' => 'click',
         'wrapper' => 'newsroom_reset',
         'effect' => 'fade',
         'method' => 'replace',
-      ),
-    );
+      ],
+    ];
   }
   // Settings about the newsroom fields.
-  $form['newsroom_fields'] = array(
+  $form['newsroom_fields'] = [
     '#type' => 'fieldset',
     '#title' => t('Newsroom fields settings'),
-    '#description' => t('Here you can easily manage the addition or the removal of the newsroom fields from your content types. Refer to the <a href="@documentation">documentation</a> for having detailed information about the usage of the newsroom fields.  They are meant to give you the chance to associate topics to you contents so that matching news coming from the newsroom can be shown or mentioned contextually.', array('@documentation' => 'https://webgate.ec.europa.eu/fpfis/wikis/pages/viewpage.action?spaceKey=MULTISITE&title=%5BFPFIS%5D+Nexteuropa+Newsroom+-+Documentation')),
+    '#description' => t('Here you can easily manage the addition or the removal of the newsroom fields from your content types. Refer to the <a href="@documentation">documentation</a> for having detailed information about the usage of the newsroom fields.  They are meant to give you the chance to associate topics to you contents so that matching news coming from the newsroom can be shown or mentioned contextually.', ['@documentation' => 'https://webgate.ec.europa.eu/fpfis/wikis/pages/viewpage.action?spaceKey=MULTISITE&title=%5BFPFIS%5D+Nexteuropa+Newsroom+-+Documentation']),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
     '#access' => user_access('administer newsroom advanced settings'),
-  );
+  ];
 
-  $form['newsroom_fields']['newsroom_content_types_topic'] = array(
+  $form['newsroom_fields']['newsroom_content_types_topic'] = [
     '#type' => 'checkboxes',
     '#title' => t('Direct topic relation field in your content types'),
     '#description' => t('Choose the content types in which you want to activate a relationship with a newsroom topic.'),
-    '#options' => NewsroomHelper::prepareOptions('ct'),
+    '#options' => _nexteuropa_newsroom_prepare_options('ct'),
     '#multiple' => TRUE,
     '#default_value' => $top_ct,
-  );
+  ];
 
-  $form['newsroom_fields']['newsroom_content_types_delete_topic'] = array(
+  $form['newsroom_fields']['newsroom_content_types_delete_topic'] = [
     '#type' => 'checkbox',
     '#title' => t('Delete all the topic relation fields in your content types.'),
     '#description' => t('If you want to delete all the instance of the topic field together check this.'),
     '#default_value' => 0,
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
-  );
+  ];
 
-  $form['newsroom_fields']['newsroom_content_types_select'] = array(
+  $form['newsroom_fields']['newsroom_content_types_select'] = [
     '#type' => 'checkboxes',
     '#title' => t('Advanced and configurable reference with newsroom items.'),
     '#description' => t('Choose the content types in which you want to activate a complex relationship with the newsroom items.'),
-    '#options' => NewsroomHelper::prepareOptions('ct'),
+    '#options' => _nexteuropa_newsroom_prepare_options('ct'),
     '#multiple' => TRUE,
     '#default_value' => $sel_ct,
-  );
+  ];
 
-  $form['newsroom_fields']['newsroom_content_types_delete_select'] = array(
+  $form['newsroom_fields']['newsroom_content_types_delete_select'] = [
     '#type' => 'checkbox',
     '#title' => t('Delete all the newsroom select fields in your content types.'),
     '#description' => t('If you want to delete all the instance of the select field together check this.'),
     '#default_value' => 0,
-  );
+  ];
 
   // Settings about the universe.
-  $form['newsroom_universe'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Newsroom universe settings'),
-    '#collapsible' => TRUE,
-    '#collapsed' => $universe_id_info['collapsing'],
-  );
-
-  $form['newsroom_universe'] = array(
+  $form['newsroom_universe'] = [
     '#type' => 'fieldset',
     '#title' => t('Newsroom universe settings'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
-  );
+  ];
 
-  $form['newsroom_universe']['newsroom_app'] = array(
+  $form['newsroom_universe']['newsroom_app'] = [
     '#type' => 'textfield',
     '#title' => t('Newsroom app'),
     '#default_value' => variable_get('newsroom_app'),
-  );
+  ];
 
-  $form['newsroom_universe']['newsroom_app_key'] = array(
+  $form['newsroom_universe']['newsroom_app_key'] = [
     '#type' => 'textfield',
     '#title' => t('Newsroom key'),
     '#default_value' => variable_get('newsroom_app_key'),
-  );
+  ];
 
-  $form['newsroom_universe']['newsroom_subscription_url'] = array(
+  $form['newsroom_universe']['newsroom_subscription_url'] = [
     '#type' => 'textfield',
     '#title' => t('Newsroom subscription URL'),
     '#default_value' => variable_get('newsroom_subscription_url'),
-  );
+  ];
 
-  $form['newsroom_universe']['newsroom_base_url'] = array(
+  $form['newsroom_universe']['newsroom_base_url'] = [
     '#type' => 'textfield',
     '#title' => t('Newsroom universe base URL'),
     '#default_value' => variable_get('newsroom_base_url', NEXTEUROPA_NEWSROOM_BASE_URL),
     '#description' => t('The base url of newsroom feeds.'),
-  );
+  ];
 
-  $form['newsroom_universe']['newsroom_allowed_ips'] = array(
+  $form['newsroom_universe']['newsroom_allowed_ips'] = [
     '#type' => 'textfield',
     '#title' => t('IP addresses allowed for import'),
     '#default_value' => variable_get('newsroom_allowed_ips', '127.0.0.1'),
     '#description' => t('Comma separated list of IP addresses where the importer can be launched from.'),
-  );
+  ];
 
-  $form['newsroom_universe']['newsroom_item_import_script'] = array(
+  $form['newsroom_universe']['newsroom_item_import_script'] = [
     '#type' => 'textfield',
     '#title' => t('Item import script name'),
     '#default_value' => variable_get('newsroom_item_import_script', NEXTEUROPA_NEWSROOM_ITEM_SCRIPT),
-  );
-  $form['newsroom_universe']['newsroom_single_item_import_segment'] = array(
+  ];
+  $form['newsroom_universe']['newsroom_single_item_import_segment'] = [
     '#type' => 'textfield',
     '#title' => t('URL chunk for single item import'),
     '#default_value' => variable_get('newsroom_single_item_import_segment', NEXTEUROPA_NEWSROOM_ITEM_SEGMENT),
-  );
+  ];
 
-  $form['newsroom_universe']['newsroom_topic_import_script'] = array(
+  $form['newsroom_universe']['newsroom_topic_import_script'] = [
     '#type' => 'textfield',
     '#title' => t('Topic import script name'),
     '#default_value' => variable_get('newsroom_topic_import_script', NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT),
-  );
-  $form['newsroom_universe']['newsroom_single_topic_import_segment'] = array(
+  ];
+  $form['newsroom_universe']['newsroom_single_topic_import_segment'] = [
     '#type' => 'textfield',
     '#title' => t('URL chunk for single topic import'),
     '#default_value' => variable_get('newsroom_single_topic_import_segment', NEXTEUROPA_NEWSROOM_TOPIC_SEGMENT),
-  );
+  ];
 
-  $form['newsroom_universe']['newsroom_type_import_script'] = array(
+  $form['newsroom_universe']['newsroom_type_import_script'] = [
     '#type' => 'textfield',
     '#title' => t('Type import script name'),
     '#default_value' => variable_get('newsroom_type_import_script', NEXTEUROPA_NEWSROOM_TYPE_SCRIPT),
-  );
-  $form['newsroom_universe']['newsroom_single_type_import_segment'] = array(
+  ];
+  $form['newsroom_universe']['newsroom_single_type_import_segment'] = [
     '#type' => 'textfield',
     '#title' => t('URL chunk for single type import'),
     '#default_value' => variable_get('newsroom_single_type_import_segment', NEXTEUROPA_NEWSROOM_TYPE_SEGMENT),
-  );
+  ];
 
   // For topics and services we use the same script name.
-  $form['newsroom_universe']['newsroom_service_import_script'] = array(
+  $form['newsroom_universe']['newsroom_service_import_script'] = [
     '#type' => 'textfield',
     '#title' => t('Service import script name'),
     '#default_value' => variable_get('newsroom_service_import_script', NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT),
-  );
-  $form['newsroom_universe']['newsroom_single_service_import_segment'] = array(
+  ];
+  $form['newsroom_universe']['newsroom_single_service_import_segment'] = [
     '#type' => 'textfield',
     '#title' => t('URL chunk for single service import'),
     '#default_value' => variable_get('newsroom_single_service_import_segment', NEXTEUROPA_NEWSROOM_SERVICE_SEGMENT),
-  );
+  ];
 
-  $form['newsroom_universe']['newsroom_single_item_edit_segment'] = array(
+  $form['newsroom_universe']['newsroom_single_item_edit_segment'] = [
     '#type' => 'textfield',
     '#title' => t('URL chunk to edit an item in the Newsroom'),
     '#default_value' => variable_get('newsroom_single_item_edit_segment', NEXTEUROPA_NEWSROOM_ITEM_EDIT_SEGMENT),
-  );
+  ];
 
-  $form['newsroom_universe']['newsroom_proposal_script'] = array(
+  $form['newsroom_universe']['newsroom_proposal_script'] = [
     '#type' => 'textfield',
     '#title' => t('Newsroom proposal script'),
     '#default_value' => variable_get('newsroom_proposal_script', NEXTEUROPA_NEWSROOM_PROPOSAL_SCRIPT),
-  );
+  ];
 
-  $form['newsroom_pages'] = array(
+  $form['newsroom_universe']['newsroom_docroom_url'] = [
+    '#type' => 'textfield',
+    '#title' => t('Newsroom Docroom URL'),
+    '#default_value' => variable_get('newsroom_docroom_url'),
+  ];
+
+  $form['newsroom_pages'] = [
     '#type' => 'fieldset',
     '#title' => t('Newsroom page settings'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
-  );
-  $form['newsroom_pages']['newsroom_newsletter_privacy'] = array(
+  ];
+  $form['newsroom_pages']['newsroom_newsletter_privacy'] = [
     '#type' => 'textarea',
     '#title' => t('Privacy statement'),
     '#default_value' => variable_get('newsroom_newsletter_privacy'),
-  );
+  ];
 
   // Settings about the newsroom blocks.
-  $form['newsroom_blocks'] = array(
+  $form['newsroom_blocks'] = [
     '#type' => 'fieldset',
     '#title' => t('Newsroom blocks settings'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
-  );
+  ];
 
-  $form['newsroom_blocks']['newsroom_order_by_last_update'] = array(
+  $form['newsroom_blocks']['newsroom_order_by_last_update'] = [
     '#type' => 'checkbox',
     '#title' => t('Sort newsroom boxes chronologically in the summary blocks.'),
     '#default_value' => variable_get('newsroom_order_by_last_update', 0),
-  );
+  ];
 
-  $form['newsroom_blocks']['newsroom_display_highlights_begin'] = array(
+  $form['newsroom_blocks']['newsroom_display_highlights_begin'] = [
     '#type' => 'checkbox',
     '#title' => t('Highlighted topics are displayed at the begining of the list.'),
     '#default_value' => variable_get('newsroom_display_highlights_begin', 1),
-  );
+  ];
 
-  $form['newsroom_blocks']['newsroom_agenda_after_highlights'] = array(
+  $form['newsroom_blocks']['newsroom_agenda_after_highlights'] = [
     '#type' => 'checkbox',
     '#title' => t('Display Agenda after the highlights.'),
     '#default_value' => variable_get('newsroom_agenda_after_highlights', 1),
-  );
+  ];
 
-  $form['newsroom_blocks']['newsroom_summary_block_num_items'] = array(
+  $form['newsroom_blocks']['newsroom_summary_block_num_items'] = [
     '#type' => 'select',
     '#title' => t('Number of items in boxes in the summary blocks'),
-    '#options' => NewsroomHelper::prepareOptions(5),
+    '#options' => _nexteuropa_newsroom_prepare_options(5),
     '#default_value' => variable_get('newsroom_summary_block_num_items', 3),
-  );
+  ];
 
-  $form['newsroom_blocks']['newsroom_summary_block_num_highlighted_items'] = array(
+  $form['newsroom_blocks']['newsroom_summary_block_num_highlighted_items'] = [
     '#type' => 'select',
     '#title' => t('Number of items in boxes of highlighted types in the summary blocks'),
-    '#options' => NewsroomHelper::prepareOptions(6),
+    '#options' => _nexteuropa_newsroom_prepare_options(6),
     '#default_value' => variable_get('newsroom_summary_block_num_highlighted_items', 3),
-  );
+  ];
 
-  $form['newsroom_blocks']['home_blocks'] = array(
+  $form['newsroom_blocks']['home_blocks'] = [
     '#type' => 'fieldset',
     '#title' => t('Newsroom home blocks settings'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
-  );
+  ];
   // Settings about newsroom blocks in the home page.
-  $form['newsroom_blocks']['home_blocks']['newsroom_summary_home_block_num_items'] = array(
+  $form['newsroom_blocks']['home_blocks']['newsroom_summary_home_block_num_items'] = [
     '#type' => 'select',
     '#title' => t('Number of items in boxes in the summary block on the homepage'),
-    '#options' => NewsroomHelper::prepareOptions(5),
+    '#options' => _nexteuropa_newsroom_prepare_options(5),
     '#default_value' => variable_get('newsroom_summary_home_block_num_items', 3),
-  );
+  ];
 
-  $form['newsroom_blocks']['home_blocks']['newsroom_summary_home_block_num_highlighted_items'] = array(
+  $form['newsroom_blocks']['home_blocks']['newsroom_summary_home_block_num_highlighted_items'] = [
     '#type' => 'select',
     '#title' => t('Number of items in boxes of highlighted types in the summary block on the homepage'),
-    '#options' => NewsroomHelper::prepareOptions(6),
+    '#options' => _nexteuropa_newsroom_prepare_options(6),
     '#default_value' => variable_get('newsroom_summary_home_block_num_highlighted_items', 3),
-  );
+  ];
 
-  $form['newsroom_blocks']['home_blocks']['newsroom_days_number_for_new_user'] = array(
+  $form['newsroom_blocks']['home_blocks']['newsroom_days_number_for_new_user'] = [
     '#type' => 'textfield',
     '#title' => t('Number of days from now where we check new newsroom items'),
     '#default_value' => variable_get('newsroom_days_number_for_new_user', 14),
-  );
+  ];
 
   // Attach a css to the admin settings form.
-  $form['#attached']['css'] = array(
+  $form['#attached']['css'] = [
     drupal_get_path('module', 'nexteuropa_newsroom') . '/styles/nexteuropa_newsroom_admin_setting.css',
-  );
+  ];
   // Validate function.
   $form['#validate'][] = '_nexteuropa_newsroom_admin_settings_form_validate';
   // Submit handler.
   $form['#submit'][] = '_nexteuropa_newsroom_admin_settings_form_submit';
 
   if ($newsroom_universe_id) {
-    $form['actions']['run'] = array(
+    $form['actions']['run'] = [
       '#type' => 'submit',
       '#value' => t('Run importers'),
-      '#submit' => array('_nexteuropa_newsroom_import_importers'),
+      '#submit' => ['_nexteuropa_newsroom_import_importers'],
       '#access' => user_access('administer newsroom advanced settings'),
       '#weight' => 10,
-    );
-    $form['actions']['rebuild'] = array(
+    ];
+    $form['actions']['rebuild'] = [
       '#type' => 'submit',
       '#value' => t('Rebuild importers'),
-      '#submit' => array('_nexteuropa_newsroom_admin_rebuild_importers'),
+      '#submit' => ['_nexteuropa_newsroom_admin_rebuild_importers'],
       '#access' => user_access('administer newsroom advanced settings'),
       '#weight' => 11,
-    );
-    $form['actions']['clean_cache'] = array(
+    ];
+    $form['actions']['clean_cache'] = [
       '#type' => 'submit',
       '#value' => 'Clean cache',
-      '#submit' => array('_nexteuropa_newsroom_admin_clean_cache'),
+      '#submit' => ['_nexteuropa_newsroom_admin_clean_cache'],
       '#access' => user_access('administer newsroom advanced settings'),
       '#weight' => 12,
-    );
+    ];
   }
 
-  // Define the fields_form array().
-  $form_state['fields_form'] = array();
+  // Define the fields_form array.
+  $form_state['fields_form'] = [];
   $form_state['fields_form']['topic'] = $top_ct;
   $form_state['fields_form']['select'] = $sel_ct;
 
@@ -431,22 +428,15 @@ function _nexteuropa_newsroom_admin_settings_form_validate($form, &$form_state) 
   if (!isset($form_state['storage']['confirm']) && empty($form_state['confirm']['processed'])) {
     $check_values = _nexteuropa_newsroom_admin_prepare_check($form_state['fields_form'], $form_state['input']);
 
-    // Check every topic instance if requested.
-    if ($check_values['delete']['topic'] == 1) {
-      $test = _nexteuropa_newsroom_admin_check_deletion('topic', NEXTEUROPA_NEWSROOM_ALL);
-    }
-    // If there are less values than before, check instances.
-    elseif (!empty($check_values['check']['topic'][0])) {
-      $test = _nexteuropa_newsroom_admin_check_deletion('topic', $check_values['check']['topic'][0]);
-    }
-
-    // Check every select instance if requested.
-    if ($check_values['delete']['select'] == 1) {
-      $test = _nexteuropa_newsroom_admin_check_deletion('select', NEXTEUROPA_NEWSROOM_ALL);
-    }
-    // If there are less values than before, check instances.
-    elseif (!empty($check_values['check']['select'][0])) {
-      $test = _nexteuropa_newsroom_admin_check_deletion('select', $check_values['check']['select'][0]);
+    // Check every topic and select instance if requested.
+    foreach (['topic', 'select'] as $field_item) {
+      if ($check_values['delete'][$field_item] == 1) {
+        $test = _nexteuropa_newsroom_admin_check_deletion($field_item, NEXTEUROPA_NEWSROOM_ALL);
+      }
+      // If there are less values than before, check instances.
+      elseif (!empty($check_values['check'][$field_item][0])) {
+        $test = _nexteuropa_newsroom_admin_check_deletion($field_item, $check_values['check'][$field_item][0]);
+      }
     }
 
     if (!empty($test)) {
@@ -465,6 +455,12 @@ function _nexteuropa_newsroom_admin_settings_form_validate($form, &$form_state) 
  *   Form state array.
  */
 function _nexteuropa_newsroom_admin_settings_form_submit($form, &$form_state) {
+  $universe_id = NewsroomHelper::getUniverseId();
+  if (empty($universe_id) && $form_state['values']['newsroom_universe_id']) {
+    variable_set('newsroom_universe_id', $form_state['values']['newsroom_universe_id']);
+    _nexteuropa_newsroom_admin_rebuild_importers();
+  }
+
   $patterns = isset($form_state['values']['patterns']) && $form_state['values']['patterns'] == 1 ? TRUE : FALSE;
   $keys = array_keys($form_state['values']);
   $rootpaths = preg_grep('/rootpath/', $keys);
@@ -478,26 +474,6 @@ function _nexteuropa_newsroom_admin_settings_form_submit($form, &$form_state) {
 
   $patterns ? variable_set('newsroom_patterns', 1) : variable_set('newsroom_patterns', 0);
 
-  // Create default importers if new Newsroom Universe ID detected.
-  if ($form_state['values']['newsroom_universe_id']) {
-    variable_set('newsroom_universe_id', $form_state['values']['newsroom_universe_id']);
-
-    $importers = array(
-      NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
-      NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
-      NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
-      NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
-      NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
-    );
-
-    foreach ($importers as $importer) {
-      $importer = NewsroomBuilder::buildImporter($importer);
-      $importer->generateImporter();
-    }
-
-    drupal_set_message(t('Newsroom importers have been successfully generated.'));
-  }
-
   // If the validation returns the confirm request.
   if (isset($form_state['storage']['confirm']) && empty($form_state['confirm']['processed'])) {
     $form_state['rebuild'] = TRUE;
@@ -505,33 +481,18 @@ function _nexteuropa_newsroom_admin_settings_form_submit($form, &$form_state) {
   else {
     $check_values = _nexteuropa_newsroom_admin_prepare_check($form_state['fields_form'], $form_state['values']);
 
-    // Remove every topic instance if requested.
-    if ($check_values['delete']['topic'] == 1) {
-      _nexteuropa_newsroom_admin_remove_fields('topic', NEXTEUROPA_NEWSROOM_ALL);
-    }
-    else {
-      if (!empty($check_values['selected']['topic']) && !empty($check_values['check']['topic'][1])) {
+    // Remove every topic or select instance if requested.
+    foreach (['topic', 'select'] as $field_item) {
+      if ($check_values['delete'][$field_item] == 1) {
+        _nexteuropa_newsroom_admin_remove_fields($field_item, NEXTEUROPA_NEWSROOM_ALL);
+      }
+      elseif (!empty($check_values['selected'][$field_item]) && !empty($check_values['check'][$field_item][1])) {
         // Add new instances.
-        _nexteuropa_newsroom_admin_add_fields('topic', $check_values['check']['topic'][1]);
+        _nexteuropa_newsroom_admin_add_fields($field_item, $check_values['check'][$field_item][1]);
       }
-      elseif (!empty($check_values['check']['topic'][0])) {
+      elseif (!empty($check_values['check'][$field_item][0])) {
         // Remove instances.
-        _nexteuropa_newsroom_admin_remove_fields('topic', $check_values['check']['topic'][0]);
-      }
-    }
-
-    // Remove every select instance if requested.
-    if ($check_values['delete']['select'] == 1) {
-      _nexteuropa_newsroom_admin_remove_fields('select', NEXTEUROPA_NEWSROOM_ALL);
-    }
-    else {
-      if (!empty($check_values['selected']['select']) && !empty($check_values['check']['select'][1])) {
-        // Add new instances.
-        _nexteuropa_newsroom_admin_add_fields('select', $check_values['check']['select'][1]);
-      }
-      elseif (!empty($check_values['check']['select'][0])) {
-        // Remove instances.
-        _nexteuropa_newsroom_admin_remove_fields('select', $check_values['check']['select'][0]);
+        _nexteuropa_newsroom_admin_remove_fields($field_item, $check_values['check'][$field_item][0]);
       }
     }
 
@@ -557,16 +518,16 @@ function _nexteuropa_newsroom_admin_delete_confirm($form, &$form_state) {
   foreach ($values as $field => $nodes) {
     for ($i = 0; $i < count($values[$field]); $i++) {
       $desc .= t('@num nodes containing values for the field @field in the content type @ct.',
-          array(
+          [
             '@num' => $values[$field][$i]['nodes'],
             '@field' => $field,
             '@ct' => $values[$field][$i]['ct'],
-          )
+          ]
         ) . '<br/>';
     }
   }
   $desc .= '</i>' . t('If you continue these information could be lost.') . '</p>';
-  $form['process'] = array('#type' => 'hidden', '#value' => 'true');
+  $form['process'] = ['#type' => 'hidden', '#value' => 'true'];
   return confirm_form($form, 'Confirmation needed for removing field instances with values in the current database', 'admin/config/content/newsroom', check_markup($desc, 'full_html'), 'Continue', 'Restart');
 }
 
@@ -622,11 +583,11 @@ function _nexteuropa_newsroom_admin_type_root_validate($element, &$form_state) {
   if ($form_state['values'][$element['#name']] != $pattern) {
     drupal_set_message(
       t('The value for the %el has been modified. BEFORE: %or ::: AFTER: %mod',
-        array(
+        [
           '%el' => $element['#name'],
           '%or' => $form_state['values'][$element['#name']],
           '%mod' => $pattern,
-        )),
+        ]),
       'warning'
     );
     $form_state['values'][$element['#name']] = $pattern;
@@ -674,7 +635,7 @@ function _nexteuropa_newsroom_admin_clean_cache() {
  * @param array $sel_ct
  *   Array of content types machine names.
  */
-function _nexteuropa_newsroom_admin_add_fields($type = 'topic', $sel_ct = array()) {
+function _nexteuropa_newsroom_admin_add_fields($type = 'topic', $sel_ct = []) {
   $field_name = 'field_newsroom_associated_' . $type;
 
   if (!empty($sel_ct)) {
@@ -682,19 +643,19 @@ function _nexteuropa_newsroom_admin_add_fields($type = 'topic', $sel_ct = array(
       $exist = field_info_instance('node', $field_name, $machine_name);
       // Check for existing instances.
       if ($exist === NULL) {
-        $instance = array(
+        $instance = [
           'field_name' => $field_name,
           'entity_type' => 'node',
           'bundle' => $machine_name,
           'label' => 'Newsroom ' . $type,
           'description' => '',
           'required' => 0,
-        );
+        ];
         field_create_instance($instance);
         // Call the field_group helper function, we surely have to update it.
         _nexteuropa_newsroom_admin_field_group($machine_name, $field_name);
         // Set a message to inform the user about the field instance creation.
-        drupal_set_message(t('Created instance of @field in the @bundle content type.', array('@field' => $field_name, '@bundle' => $machine_name)));
+        drupal_set_message(t('Created instance of @field in the @bundle content type.', ['@field' => $field_name, '@bundle' => $machine_name]));
       }
     }
   }
@@ -711,7 +672,7 @@ function _nexteuropa_newsroom_admin_add_fields($type = 'topic', $sel_ct = array(
 function _nexteuropa_newsroom_admin_field_group($machine_name, $field_name) {
   // Get info about the group, it's likely to be already in the database.
   $groups = field_group_info_groups('node', $machine_name, 'form', TRUE);
-  $fields = array('topic', 'select');
+  $fields = ['topic', 'select'];
   $group_name = 'group_' . $machine_name . '_newsroom';
   $instances = FALSE;
   // Check for instances of the newsroom fields inside the given content type.
@@ -730,27 +691,27 @@ function _nexteuropa_newsroom_admin_field_group($machine_name, $field_name) {
   }
   // Create the group with the right children.
   if ($instances) {
-    $field_group = (object) array(
+    $field_group = (object) [
       'identifier' => $group_name . '|node|' . $machine_name . '|form',
       'group_name' => $group_name,
       'entity_type' => 'node',
       'bundle' => $machine_name,
       'mode' => 'form',
-      'children' => array(),
+      'children' => [],
       'parent_name' => '',
       'weight' => 5,
       'label' => 'Newsroom fields',
       'format_type' => 'tab',
       'disabled' => FALSE,
-      'format_settings' => array(
-        'instance_settings' => array(
+      'format_settings' => [
+        'instance_settings' => [
           'required_fields' => 0,
           'classes' => 'group-newsroom field-group-tab',
           'description' => '',
-        ),
+        ],
         'formatter' => 'closed',
-      ),
-    );
+      ],
+    ];
 
     foreach ($instances as $instance) {
       $field_group->children[] = $instance['field_name'];
@@ -760,7 +721,7 @@ function _nexteuropa_newsroom_admin_field_group($machine_name, $field_name) {
   }
   // Remove the group since we don't have fields to show.
   else {
-    drupal_set_message(t('Removed the fieldgroup @name from the @content_type content type.', array('@name' => $group_name, '@content_type' => $machine_name)), 'status');
+    drupal_set_message(t('Removed the fieldgroup @name from the @content_type content type.', ['@name' => $group_name, '@content_type' => $machine_name]), 'status');
   }
 }
 
@@ -772,7 +733,7 @@ function _nexteuropa_newsroom_admin_field_group($machine_name, $field_name) {
  * @param array $sel_ct
  *   Array of content types machine names.
  */
-function _nexteuropa_newsroom_admin_remove_fields($type = 'topic', $sel_ct = array()) {
+function _nexteuropa_newsroom_admin_remove_fields($type = 'topic', $sel_ct = []) {
   // This function runs after checking for existing field values in the databas.
   $field_name = 'field_newsroom_associated_' . $type;
   // All is the parameter we get when an user want to delete all the instances.
@@ -794,7 +755,7 @@ function _nexteuropa_newsroom_admin_remove_fields($type = 'topic', $sel_ct = arr
       // Call the field_group helper function, we could have to delete it.
       _nexteuropa_newsroom_admin_field_group($instance['bundle'], $field_name);
       // Add the message to queue.
-      drupal_set_message(t('Deleted instance of @field in the @bundle content type.', array('@field' => $field_name, '@bundle' => $instance['bundle'])));
+      drupal_set_message(t('Deleted instance of @field in the @bundle content type.', ['@field' => $field_name, '@bundle' => $instance['bundle']]));
     }
   }
 }
@@ -810,18 +771,16 @@ function _nexteuropa_newsroom_admin_remove_fields($type = 'topic', $sel_ct = arr
  * @return array
  *   Information about the field name and nodes found.
  */
-function _nexteuropa_newsroom_admin_check_deletion($type, $checks = array()) {
-  $nodes = array();
+function _nexteuropa_newsroom_admin_check_deletion($type, $checks = []) {
+  $nodes = [];
   // "All" is the parameter we get to delete all the instances.
   if ($checks == NEXTEUROPA_NEWSROOM_ALL) {
     $instances = NewsroomHelper::getFieldInstances($type);
   }
-  else {
-    if (!empty($checks)) {
-      // Get the instances to check for.
-      foreach ($checks as $field => $check) {
-        $instances[] = $check;
-      }
+  elseif (!empty($checks)) {
+    // Get the instances to check for.
+    foreach ($checks as $field => $check) {
+      $instances[] = $check;
     }
   }
 
@@ -833,10 +792,10 @@ function _nexteuropa_newsroom_admin_check_deletion($type, $checks = array()) {
       $num_rows = $query->countQuery()->execute()->fetchField();
       // There are values, we store the number of nodes to show it to the user.
       if ($num_rows > 0) {
-        $nodes['field_data_field_newsroom_associated_' . $type][] = array(
+        $nodes['field_data_field_newsroom_associated_' . $type][] = [
           'ct' => $instance,
           'nodes' => $num_rows,
-        );
+        ];
       }
     }
   }
@@ -858,8 +817,8 @@ function _nexteuropa_newsroom_admin_prepare_check(array $previous, array $input)
   // Set some values.
   $selected['topic'] = array_filter($input['newsroom_content_types_topic']);
   $selected['select'] = array_filter($input['newsroom_content_types_select']);
-  $check_topic = array();
-  $check_select = array();
+  $check_topic = [];
+  $check_select = [];
   // Check the two array for differences. we need to catch also a deselection.
   if ($selected != $previous) {
     $check_topic[] = array_diff($previous['topic'], $selected['topic']);
@@ -867,21 +826,21 @@ function _nexteuropa_newsroom_admin_prepare_check(array $previous, array $input)
     $check_select[] = array_diff($previous['select'], $selected['select']);
     $check_select[] = array_diff($selected['select'], $previous['select']);
   }
-  // Prepare all the relevant data formatted into an array().
-  $infos = array(
-    'selected' => array(
+  // Prepare all the relevant data formatted into an [).
+  $infos = [
+    'selected' => [
       'topic' => $selected['topic'],
       'select' => $selected['select'],
-    ),
-    'delete' => array(
+    ],
+    'delete' => [
       'topic' => $input['newsroom_content_types_delete_topic'],
       'select' => $input['newsroom_content_types_delete_select'],
-    ),
-    'check' => array(
+    ],
+    'check' => [
       'topic' => $check_topic,
       'select' => $check_select,
-    ),
-  );
+    ],
+  ];
 
   return $infos;
 }
@@ -892,13 +851,13 @@ function _nexteuropa_newsroom_admin_prepare_check(array $previous, array $input)
 function _nexteuropa_newsroom_admin_rebuild_importers() {
 
   // Remove importers.
-  $importers = array(
+  $importers = [
     NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
     NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
     NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
     NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
     NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
-  );
+  ];
 
   foreach ($importers as $importer) {
     // WE drop all tampers for the current importer.
@@ -911,7 +870,7 @@ function _nexteuropa_newsroom_admin_rebuild_importers() {
     $importer->generateImporter();
   }
 
-  drupal_set_message(t('Newsroom importers have been successfully recreated.'));
+  drupal_set_message(t('Newsroom importers have been successfully generated.'));
 }
 
 /**
@@ -919,15 +878,47 @@ function _nexteuropa_newsroom_admin_rebuild_importers() {
  */
 function _nexteuropa_newsroom_import_importers() {
   // Run the multilingual imports if required.
-  $importers = array(
+  $importers = [
     NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
     NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
     NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
     NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
     NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
-  );
+  ];
 
   foreach ($importers as $importer) {
     NewsroomHelper::runFeedImporter($importer);
   }
+}
+
+/**
+ * Prepares options for the content type select.
+ *
+ * @param string $type
+ *   Type of the options to generate.
+ *
+ * @return array
+ *   Array of options.
+ */
+function _nexteuropa_newsroom_prepare_options($type) {
+  $options = [];
+  if (is_numeric($type)) {
+    for ($i = 1; $i <= $type; $i++) {
+      $options[$i] = $i;
+    }
+  }
+  else {
+    // Get a list of the existing content type.
+    $content_types = node_type_get_types();
+    // Exclude the ct used for the import.
+    unset($content_types[NEXTEUROPA_NEWSROOM_CONTENT_TYPE]);
+    unset($content_types['newsroom_selection']);
+    // Build options for selecting content types.
+    foreach ($content_types as $name => $content_type) {
+      if ($content_type->disabled !== 1) {
+        $options[$name] = $content_type->name;
+      }
+    }
+  }
+  return $options;
 }

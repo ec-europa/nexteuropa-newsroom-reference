@@ -68,7 +68,7 @@ class NewsroomAgendaBlockSchedule extends NewsroomAgendaSchedule {
    */
   protected function processQuery($query) {
 
-    if (count($this->getTopics()) == 0) {
+    if (!empty($this->getTopics())) {
       return $query;
     }
 
@@ -76,7 +76,7 @@ class NewsroomAgendaBlockSchedule extends NewsroomAgendaSchedule {
       $query->condition('topic_data.tid', $this->getTopicsId());
 
     }
-    else if ($nids = NewsroomHelper::getNodeRelatedToTopic($this->getTopicsId())) {
+    elseif ($nids = NewsroomHelper::getNodeRelatedToTopic($this->getTopicsId())) {
       $query->condition('nid', $nids, 'IN');
     }
 

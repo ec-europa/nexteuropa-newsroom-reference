@@ -572,6 +572,50 @@ function nexteuropa_newsroom_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-newsroom_item-field_newsroom_docroom_ids'.
+  $field_instances['node-newsroom_item-field_newsroom_docroom_ids'] = array(
+    'bundle' => 'newsroom_item',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'nexteuropa_newsroom',
+        'settings' => array(
+          'display_type' => 'default',
+        ),
+        'type' => 'newsroom_docroom',
+        'weight' => 11,
+      ),
+      'newsroom_event' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_newsroom_docroom_ids',
+    'label' => 'Docroom documents',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 48,
+    ),
+  );
+
   // Exported field_instance: 'node-newsroom_item-field_newsroom_documents'.
   $field_instances['node-newsroom_item-field_newsroom_documents'] = array(
     'bundle' => 'newsroom_item',

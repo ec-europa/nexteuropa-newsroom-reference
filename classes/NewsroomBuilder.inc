@@ -189,321 +189,325 @@ class NewsroomBuilder {
    */
   private static function getItemImporterMappings() {
 
-    $field_mapping = array(
-      array(
+    $field_mapping = [
+      [
         'field' => 'title',
         'query' => 'title[@lang="' . NewsroomHelper::getDefaultLanguageUppercase() . '"]/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'title_field',
         'query' => 'title',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_date:start',
         'query' => 'infsonewsroom:BasicDate/text()',
-        'tamper' => array(
+        'tamper' => [
           'plugin_id' => 'strtotime',
-        ),
-      ),
-      array(
+        ],
+      ],
+      [
         'field' => 'field_newsroom_item_date:end',
         'query' => 'infsonewsroom:BasictoDate/text()',
-        'tamper' => array(
+        'tamper' => [
           'plugin_id' => 'strtotime',
-        ),
-      ),
-      array(
+        ],
+      ],
+      [
         'field' => 'field_newsroom_private_img:uri',
         'query' => 'enclosure[@type="image/jpeg" and @schema="Private"]/@url',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_illustrative_img:uri',
         'query' => 'enclosure[@type="image/jpeg" and @schema="Public"]/@url',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_private_img:title',
         'query' => 'infsonewsroom:PicTitle',
         'original_field' => 'field_file_image_title_text',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_private_img:alt',
         'query' => 'infsonewsroom:PicAlt',
         'original_field' => 'field_file_image_alt_text',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_private_img:copyright',
         'query' => 'infsonewsroom:PicCopyright',
         'original_field' => 'field_newsroom_copyrights',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_private_img:caption',
         'query' => 'infsonewsroom:PicCaption',
         'original_field' => 'field_caption',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_illustrative_img:uri',
         'query' => 'enclosure[@type="image/jpeg" and @schema="Public"]/@url',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_illustrative_img:title',
         'query' => 'infsonewsroom:PicTitle',
         'original_field' => 'field_file_image_title_text',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_illustrative_img:alt',
         'query' => 'infsonewsroom:PicAlt',
         'original_field' => 'field_file_image_alt_text',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_illustrative_img:copyright',
         'query' => 'infsonewsroom:PicCopyright',
         'original_field' => 'field_newsroom_copyrights',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_illustrative_img:caption',
         'query' => 'infsonewsroom:PicCaption',
         'original_field' => 'field_caption',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_rapid_pr',
         'query' => 'infsonewsroom:BasicRapidPressRelease/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_type',
         'query' => 'infsonewsroom:NewsType/@id',
-        'options' => array(
+        'options' => [
           'term_search' => '1',
           'autocreate' => 0,
-        ),
-        'tamper' => array(
+        ],
+        'tamper' => [
           'entity_type' => 'taxonomy_term',
           'plugin_id' => 'efq_finder',
           'bundle' => NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY,
           'field' => 'field_newsroom_type_id',
-        ),
-      ),
-      array(
+        ],
+      ],
+      [
         'field' => 'field_tags',
         'query' => 'category[@domain="Policy" or @domain="Activity" or @domain="Theme" or @domain="Collection" or @domain="Tag"]/text()',
-        'options' => array(
+        'options' => [
           'term_search' => '0',
           'autocreate' => 0,
-        ),
-      ),
-      array(
+        ],
+      ],
+      [
         'field' => 'field_newsroom_item_id',
         'query' => 'infsonewsroom:BasicId',
         'unique' => 1,
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_other_link:title',
         'query' => 'infsonewsroom:ContextOtherLinkText',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_other_link:url',
         'query' => 'infsonewsroom:ContextOtherLinkUrl',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_main_link:url',
         'query' => 'infsonewsroom:BasicUrl',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_documents:url',
         'query' => 'enclosure[not(@type="image/jpeg")]/@url',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_documents:title',
         'query' => 'enclosure[not(@type="image/jpeg")]/@title',
-      ),
-      array(
+      ],
+      [
         'field' => 'promote',
         'query' => 'infsonewsroom:pubHighlight/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_topics',
         'query' => 'category[@domain!="Newsletter"]/@infsonewsroom:TopicId',
-        'options' => array(
+        'options' => [
           'term_search' => '1',
           'autocreate' => 0,
-        ),
-        'tamper' => array(
+        ],
+        'tamper' => [
           'plugin_id' => 'efq_finder',
           'entity_type' => 'taxonomy_term',
           'bundle' => NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY,
           'field' => 'field_newsroom_topic_id',
-        ),
-      ),
-      array(
+        ],
+      ],
+      [
         'field' => 'field_newsroom_primary_topic',
         'query' => 'category[@infsonewsroom:TopicPrimary="1" and @domain!="Newsletter"]/@infsonewsroom:TopicId',
-        'options' => array(
+        'options' => [
           'term_search' => '1',
           'autocreate' => 0,
-        ),
-        'tamper' => array(
+        ],
+        'tamper' => [
           'plugin_id' => 'efq_finder',
           'entity_type' => 'taxonomy_term',
           'bundle' => NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY,
           'field' => 'field_newsroom_topic_id',
-        ),
-      ),
-      array(
+        ],
+      ],
+      [
         'field' => 'created',
         'query' => 'infsonewsroom:BasicReferenceDate/text()',
-        'tamper' => array(
+        'tamper' => [
           'plugin_id' => 'strtotime',
-        ),
-      ),
-      array(
+        ],
+      ],
+      [
         'field' => 'sticky',
         'query' => 'infsonewsroom:pubIsCentral/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_short_item',
         'query' => 'infsonewsroom:pubIsLong/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_teaser_only',
         'query' => 'infsonewsroom:pubTeaserOnly/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_related_content',
         'query' => 'infsonewsroom:slave/@id',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_parent_content',
         'query' => 'infsonewsroom:master/@id',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_project_acr',
         'query' => 'infsonewsroom:ContextProjectAcronym/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_prj_coordinator',
         'query' => 'infsonewsroom:ContextProjectCoordinator/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_project',
         'query' => 'infsonewsroom:ContextProjectName',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_project_website:url',
         'query' => 'infsonewsroom:ContextProjectURL',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_project_website:title',
         'query' => 'infsonewsroom:ContextProjectURLDisplay',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_location:wkt',
         'query' => 'infsonewsroom:ContextWellknowntext/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_highlighted_topic',
         'query' => 'category[@infsonewsroom:TopicHighlight="1" and @domain!="Newsletter"]/@infsonewsroom:TopicId',
-        'options' => array(
+        'options' => [
           'term_search' => '1',
           'autocreate' => 0,
-        ),
-        'tamper' => array(
+        ],
+        'tamper' => [
           'plugin_id' => 'efq_finder',
           'entity_type' => 'taxonomy_term',
           'bundle' => NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY,
           'field' => 'field_newsroom_topic_id',
-        ),
-      ),
-      array(
+        ],
+      ],
+      [
         'field' => 'field_newsroom_ec_content',
         'query' => 'infsonewsroom:ContextECContent/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_venue',
         'query' => 'infsonewsroom:ContextVenue',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_organiser',
         'query' => 'infsonewsroom:ContextOrganiser',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_author',
         'query' => 'infsonewsroom:ContextAuthor',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_eur_lex_link:url',
         'query' => 'infsonewsroom:ContextEurlex',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_ted_link:url',
         'query' => 'infsonewsroom:ContextTed',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_registration_link:url',
         'query' => 'infsonewsroom:ContextRegistrationLink',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_registration_link:title',
         'query' => 'infsonewsroom:ContextRegistrationLinkText',
-      ),
-      array(
+      ],
+      [
         'field' => 'body',
         'query' => 'infsonewsroom:FullContent',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_contact_text',
         'query' => 'infsonewsroom:ContextContactText',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_contact_mail',
         'query' => 'infsonewsroom:ContextContactEmail',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_linked_obj',
         'query' => 'infsonewsroom:FullLinkedObject',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_pre_title',
         'query' => 'infsonewsroom:FullPreTitle',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_quote_box',
         'query' => 'infsonewsroom:FullQuoteBox',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_short_title',
         'query' => 'infsonewsroom:BasicShortTitle',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_speaker',
         'query' => 'infsonewsroom:ContextSpeaker',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_teaser',
         'query' => 'infsonewsroom:BasicTeaser',
-      ),
-      array(
+      ],
+      [
         'field' => 'guid',
         'query' => '$field_newsroom_item_id',
-      ),
-      array(
+      ],
+      [
         'field' => '_feed_changed',
         'query' => 'infsonewsroom:pubUpdateDate/text()',
-        'tamper' => array(
+        'tamper' => [
           'plugin_id' => 'strtotime',
-        ),
-      ),
-      array(
+        ],
+      ],
+      [
         'field' => 'field_newsroom_newsletter_only',
         'query' => 'infsonewsroom:itemDisplay/text()',
-      ),
-      array(
+      ],
+      [
+        'field' => 'field_newsroom_docroom_ids',
+        'query' => 'enclosure[@external_app="docsroom"]/@external_id',
+      ],
+      [
         'field' => 'language',
         'source' => 'Blank source 1',
-        'tamper' => array(
+        'tamper' => [
           'plugin_id' => 'default_value',
           'default_value' => NewsroomHelper::getDefaultLanguage(),
-        ),
-      ),
-    );
+        ],
+      ],
+    ];
 
     return $field_mapping;
   }
@@ -515,68 +519,68 @@ class NewsroomBuilder {
    *   Issue importer field mapping settings.
    */
   private static function getIssueImporterMappings() {
-    $field_mapping = array(
-      array(
+    $field_mapping = [
+      [
         'field' => 'title',
         'query' => 'title[@lang="' . NewsroomHelper::getDefaultLanguageUppercase() . '"]/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'title_field',
         'query' => 'title',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_nl_issue_date:start',
         'query' => 'pubDate/text()',
-        'tamper' => array(
+        'tamper' => [
           'plugin_id' => 'strtotime',
-        ),
-      ),
-      array(
+        ],
+      ],
+      [
         'field' => 'field_newsroom_newsletter_id',
         'query' => 'infsonewsroom:BasicIssueId/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_item_main_link:url',
         'query' => 'link',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_newsletter_items:etid',
         'query' => 'infsonewsroom:BasicSvItemId/text()',
-        'tamper' => array(
+        'tamper' => [
           'plugin_id' => 'efq_finder',
           'entity_type' => 'node',
           'bundle' => 'newsroom_item',
           'field' => 'field_newsroom_item_id',
-        ),
-      ),
-      array(
+        ],
+      ],
+      [
         'field' => 'field_newsroom_service',
         'query' => 'infsonewsroom:BasicSvId/text()',
-        'options' => array(
+        'options' => [
           'term_search' => '1',
           'autocreate' => 0,
-        ),
-        'tamper' => array(
+        ],
+        'tamper' => [
           'entity_type' => 'taxonomy_term',
           'plugin_id' => 'efq_finder',
           'bundle' => NEXTEUROPA_NEWSROOM_SERVICE_VOCABULARY,
           'field' => 'field_newsroom_service_id',
-        ),
-      ),
-      array(
+        ],
+      ],
+      [
         'field' => 'guid',
         'query' => '$field_newsroom_newsletter_id',
         'unique' => 1,
-      ),
-      array(
+      ],
+      [
         'field' => 'language',
         'source' => 'Blank source 1',
-        'tamper' => array(
+        'tamper' => [
           'plugin_id' => 'default_value',
           'default_value' => NewsroomHelper::getDefaultLanguage(),
-        ),
-      ),
-    );
+        ],
+      ],
+    ];
 
     return $field_mapping;
   }
@@ -589,33 +593,33 @@ class NewsroomBuilder {
    */
   private static function getTypeImporterMappings() {
     // Define the needed infos to build the importer dinamically.
-    $field_mapping = array(
-      array(
+    $field_mapping = [
+      [
         'field' => 'guid',
         'query' => '@nrid',
         'unique' => 1,
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_type_id',
         'query' => 'infsonewsroom:BasicTypeId/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'name',
         'query' => 'title[@lang="' . NewsroomHelper::getDefaultLanguageUppercase() . '"]/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'name_field',
         'query' => 'title',
-      ),
-      array(
+      ],
+      [
         'field' => 'parentguid',
         'query' => 'infsonewsroom:BasicTypeParent/text()',
-        'tamper' => array(
+        'tamper' => [
           'plugin_id' => 'rewrite',
           'prefix' => 'type-',
-        ),
-      ),
-    );
+        ],
+      ],
+    ];
 
     return $field_mapping;
   }
@@ -627,42 +631,42 @@ class NewsroomBuilder {
    *   Topic importer field mapping settings.
    */
   private static function getTopicImporterMappings() {
-    $field_mapping = array(
-      array(
+    $field_mapping = [
+      [
         'field' => 'Temporary target 1',
         'query' => '@infsonewsroom:TopicId',
         'target' => 'Temporary target 1',
-      ),
-      array(
+      ],
+      [
         'field' => 'guid',
         'query' => '@nrid',
         'unique' => 1,
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_topic_id',
         'query' => '@infsonewsroom:TopicId',
-      ),
-      array(
+      ],
+      [
         'field' => 'name',
         'query' => 'text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'name_field',
         'query' => 'text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_category_domain',
         'query' => '@domain',
-      ),
-      array(
+      ],
+      [
         'field' => 'parentguid',
         'query' => '@infsonewsroom:parentTopicId',
-        'tamper' => array(
+        'tamper' => [
           'plugin_id' => 'rewrite',
           'prefix' => 'topic-',
-        ),
-      ),
-    );
+        ],
+      ],
+    ];
 
     return $field_mapping;
   }
@@ -674,61 +678,61 @@ class NewsroomBuilder {
    *   Service importer field mapping settings.
    */
   private static function getServiceImporterMappings() {
-    $field_mapping = array(
-      array(
+    $field_mapping = [
+      [
         'field' => 'guid',
         'query' => '@nrid',
         'unique' => 1,
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_service_id',
         'query' => 'infsonewsroom:BasicSvId/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'name',
         'query' => 'title[@lang="' . NewsroomHelper::getDefaultLanguageUppercase() . '"]/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'name_field',
         'query' => 'title',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_service_active',
         'query' => 'infsonewsroom:BasicSvStatus/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_service_sample:url',
         'query' => 'infsonewsroom:archivesLink',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_service_type',
         'query' => 'infsonewsroom:BasicSvType',
-      ),
-      array(
+      ],
+      [
         'field' => 'description',
         'query' => 'description/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_basic_mailing',
         'query' => 'infsonewsroom:BasicSvMailing/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_mailing_exists',
         'query' => 'infsonewsroom:mailingExists/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'field_newsroom_service_image:uri',
         'query' => 'infsonewsroom:BasicSvVisuUrl/text()',
-      ),
-      array(
+      ],
+      [
         'field' => 'parentguid',
         'query' => '@infsonewsroom:parentTopicId',
-        'tamper' => array(
+        'tamper' => [
           'plugin_id' => 'rewrite',
           'prefix' => 'service-',
-        ),
-      ),
-    );
+        ],
+      ],
+    ];
 
     return $field_mapping;
   }
