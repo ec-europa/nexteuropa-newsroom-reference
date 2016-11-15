@@ -542,7 +542,7 @@ function _nexteuropa_nexteuropa_newsroom_item_importer($newsroom_id = 0) {
  *   Original newsroom id.
  */
 function _nexteuropa_nexteuropa_newsroom_item_delete($newsroom_id) {
-  if ($newsroom_id && $newsroom_item = NewsroomHelper::getNodeByNewsroomItemId($newsroom_id)) {
+  if ($newsroom_id && $newsroom_item = NewsroomHelper::getNodeByFieldValue('field_newsroom_item_id', $newsroom_id)) {
     node_delete_multiple([$newsroom_item->nid]);
     $message = t('Newsroom Item nid: %1 deleted', ['%1' => implode(', ', $newsroom_item->nid)]);
     drupal_set_message($message);
