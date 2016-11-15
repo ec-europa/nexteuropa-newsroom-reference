@@ -569,11 +569,6 @@ abstract class NewsroomAgenda {
       $query->condition('tt.tid', NewsroomHelper::getTypeChildren($this->getTypeId()));
     }
 
-    $topic_ids = $this->getTopicsId();
-    if (!empty($topic_ids)) {
-      $query->condition('topic_field.field_newsroom_topics_tid', $topic_ids);
-    }
-
     $this->setQuery($this->processQuery($query));
   }
 
