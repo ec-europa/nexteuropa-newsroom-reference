@@ -413,7 +413,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
   $form_state['fields_form']['select'] = $sel_ct;
 
   // Confirmation step_needed.
-  if (isset($form_state['storage']['confirm']) && empty($form_state['confirm']['processed'])) {
+  if (!empty($form_state['storage']['confirm']) && empty($form_state['confirm']['processed'])) {
     return _nexteuropa_newsroom_admin_delete_confirm($form, $form_state);
   }
   // Normal form.
@@ -432,7 +432,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
  */
 function _nexteuropa_newsroom_admin_settings_form_validate($form, &$form_state) {
   // If we are not during a confirm or this has happened right before.
-  if (!isset($form_state['storage']['confirm']) && empty($form_state['confirm']['processed'])) {
+  if (empty($form_state['storage']['confirm']) && empty($form_state['confirm']['processed'])) {
     $check_values = _nexteuropa_newsroom_admin_prepare_check($form_state['fields_form'], $form_state['input']);
 
     // Check every topic and select instance if requested.
@@ -468,7 +468,7 @@ function _nexteuropa_newsroom_admin_settings_form_submit($form, &$form_state) {
     _nexteuropa_newsroom_admin_rebuild_importers();
   }
 
-  $patterns = isset($form_state['values']['patterns']) && $form_state['values']['patterns'] == 1 ? TRUE : FALSE;
+  $patterns = !empty($form_state['values']['patterns']) && $form_state['values']['patterns'] == 1 ? TRUE : FALSE;
   $keys = array_keys($form_state['values']);
   $rootpaths = preg_grep('/rootpath/', $keys);
   // Shouldn't be needed, it is a setting form.
@@ -482,7 +482,7 @@ function _nexteuropa_newsroom_admin_settings_form_submit($form, &$form_state) {
   $patterns ? variable_set('newsroom_patterns', 1) : variable_set('newsroom_patterns', 0);
 
   // If the validation returns the confirm request.
-  if (isset($form_state['storage']['confirm']) && empty($form_state['confirm']['processed'])) {
+  if (!empty($form_state['storage']['confirm']) && empty($form_state['confirm']['processed'])) {
     $form_state['rebuild'] = TRUE;
   }
   else {
@@ -690,7 +690,7 @@ function _nexteuropa_newsroom_admin_field_group($machine_name, $field_name) {
     }
   }
   // If the group is already there, remove it.
-  if (isset($groups[$group_name])) {
+  if (!empty($groups[$group_name])) {
     db_delete('field_group')
       ->condition('bundle', $machine_name, '=')
       ->condition('group_name', 'group_' . $machine_name . '_newsroom', '=')

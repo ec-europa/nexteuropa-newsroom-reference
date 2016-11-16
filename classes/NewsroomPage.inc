@@ -360,7 +360,7 @@ class NewsroomPage {
     $start_date = $this->getStartDate() ? $this->getStartDate()->getTimestamp() : NULL;
     $end_date = $this->getEndDate() ? $this->getEndDate()->getTimestamp() : NULL;
     $ec_content = $this->getEcContent();
-    $page = isset($_GET['page']) ? $_GET['page'] : NULL;
+    $page = !empty($_GET['page']) ? $_GET['page'] : NULL;
 
     return md5($type_id . $topic_id . $start_date . $end_date . $page . $ec_content);
   }

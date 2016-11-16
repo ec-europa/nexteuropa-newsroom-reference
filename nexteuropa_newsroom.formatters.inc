@@ -125,7 +125,7 @@ function nexteuropa_newsroom_field_formatter_settings_form($field, $instance, $v
 function nexteuropa_newsroom_field_formatter_settings_summary($field, $instance, $view_mode) {
   $display = $instance['display'][$view_mode];
   if ($display['type'] == 'newsroom_main_link') {
-    if (isset($display['settings']['display_type']) && !empty($display['settings']['display_type'])) {
+    if (!empty($display['settings']['display_type'])) {
       $options = [
         'default' => t('Default'),
         'title' => t('Title only'),
@@ -138,7 +138,7 @@ function nexteuropa_newsroom_field_formatter_settings_summary($field, $instance,
     }
   }
   elseif ($display['type'] == 'newsroom_docroom') {
-    if (isset($display['settings']['display_type']) && !empty($display['settings']['display_type'])) {
+    if (!empty($display['settings']['display_type'])) {
       $options = [
         'default' => t('Default iframe presentation'),
         'link' => t('Link'),
@@ -155,16 +155,16 @@ function nexteuropa_newsroom_field_formatter_settings_summary($field, $instance,
     $summary = [];
     $image_styles = image_style_options(FALSE, PASS_THROUGH);
     unset($image_styles['']);
-    if (isset($image_styles[$settings['image_style']])) {
+    if (!empty($image_styles[$settings['image_style']])) {
       $summary[] = t('Image style: @style', ['@style' => $image_styles[$settings['image_style']]]);
     }
     else {
       $summary[] = t('Original image');
     }
-    if (isset($settings['zoomable']) && !empty($settings['zoomable'])) {
+    if (!empty($settings['zoomable'])) {
       $summary[] = t('Is zoomable');
     }
-    if (isset($settings['display_title']) && !empty($settings['display_title'])) {
+    if (!empty($settings['display_title'])) {
       $summary[] = t('Displays title');
     }
     if (!empty($settings['display_copyright'])) {
@@ -212,7 +212,7 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
         $path_to_original = file_create_url($item['uri']);
 
         // Sets alt text.
-        if (isset($item['field_file_image_alt_text'][$language->language][0])) {
+        if (!empty($item['field_file_image_alt_text'][$language->language][0])) {
           $image['alt'] = $item['field_file_image_alt_text'][$language->language][0]['safe_value'];
         }
         elseif (is_array($item) && array_key_exists('alt', $item)) {
@@ -220,49 +220,49 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
         }
 
         // Sets zoomability.
-        $zoomable = isset($display['settings']['zoomable']) && !empty($display['settings']['zoomable']) ? TRUE : FALSE;
+        $zoomable = !empty($display['settings']['zoomable']) ? TRUE : FALSE;
 
         // Sets title.
         $title = NULL;
-        if (isset($item['field_file_image_title_text'][$language->language][0])) {
+        if (!empty($item['field_file_image_title_text'][$language->language][0])) {
           $image['title'] = $item['field_file_image_title_text'][$language->language][0]['safe_value'];
           if ($display['settings']['display_title']) {
             $title = $item['field_file_image_title_text'][$language->language][0]['safe_value'];
           }
         }
-        elseif (isset($item['title']) && drupal_strlen($item['title']) > 0) {
+        elseif (!empty($item['title'])) {
           $image['title'] = $item['title'];
         }
 
         $copyright = NULL;
 
         // Sets copyright.
-        if (isset($display['settings']['display_copyright']) && !empty($display['settings']['display_copyright'])) {
-          if (isset($item['field_newsroom_copyrights'][$language->language][0])) {
+        if (!empty($display['settings']['display_copyright'])) {
+          if (!empty($item['field_newsroom_copyrights'][$language->language][0])) {
             $copyright = $item['field_newsroom_copyrights'][$language->language][0]['safe_value'];
           }
         }
 
         // Sets caption.
         $caption = '';
-        if (isset($display['settings']['display_caption']) && !empty($display['settings']['display_caption'])) {
-          if (isset($item['field_caption'][$language->language][0])) {
+        if (!empty($display['settings']['display_caption'])) {
+          if (!empty($item['field_caption'][$language->language][0])) {
             $caption = $item['field_caption'][$language->language][0]['safe_value'];
           }
         }
 
-        if (isset($item['attributes'])) {
+        if (!empty($item['attributes'])) {
           $image['attributes'] = $item['attributes'];
         }
 
-        if (isset($item['width']) && isset($item['height'])) {
+        if (!empty($item['width']) && !empty($item['height'])) {
           $image['width'] = $item['width'];
           $image['height'] = $item['height'];
         }
 
         $image['title'] = $title;
 
-        if (isset($display['settings']['image_style']) && !empty($display['settings']['image_style'])) {
+        if (!empty($display['settings']['image_style'])) {
           $image['style_name'] = $display['settings']['image_style'];
           $image_output = theme('image_style', $image);
         }
@@ -283,7 +283,7 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
       break;
 
     case 'newsroom_docroom':
-      $display_type = isset($display['settings']['display_type']) ? $display['settings']['display_type'] : 'default';
+      $display_type = !empty($display['settings']['display_type']) ? $display['settings']['display_type'] : 'default';
       $docroom_ids = [];
       foreach ($items as $item) {
         $docroom_ids[] = $item['value'];
@@ -304,8 +304,8 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
           $elements[0] = [
             '#theme' => 'newsroom_docroom',
             '#url' => $url,
-            '#width' => isset($display['settings']['width']) && empty($display['settings']['width']) ? $display['settings']['width'] : NULL,
-            '#height' => isset($display['settings']['height']) && empty($display['settings']['height']) ? $display['settings']['height'] : NULL,
+            '#width' => !empty($display['settings']['width']) ? $display['settings']['width'] : NULL,
+            '#height' => !empty($display['settings']['height']) ? $display['settings']['height'] : NULL,
           ];
         }
         elseif ($display_type == 'link') {

@@ -538,7 +538,7 @@ function _nexteuropa_nexteuropa_newsroom_item_importer($newsroom_id = 0) {
  *   Original newsroom id.
  */
 function _nexteuropa_nexteuropa_newsroom_item_delete($newsroom_id) {
-  if ($newsroom_id && $newsroom_item = NewsroomHelper::getNodeByNewsroomItemId($newsroom_id)) {
+  if ($newsroom_id && $newsroom_item = NewsroomHelper::getNodeByFieldValue('field_newsroom_item_id', $newsroom_id)) {
     node_delete_multiple([$newsroom_item->nid]);
     $message = t('Newsroom Item nid: %1 deleted', ['%1' => implode(', ', $newsroom_item->nid)]);
     drupal_set_message($message);
@@ -650,17 +650,17 @@ function nexteuropa_newsroom_views_pre_view(&$view, &$display_id, array &$args) 
       // Never sure what menu_callback will get you with.
       // A view overridding a taxo page.
       $url_tokens = explode('/', $current_page_path);
-      if (isset($url_tokens[2]) && is_numeric($url_tokens[2])) {
+      if (!empty($url_tokens[2]) && is_numeric($url_tokens[2])) {
         $taxonomy_term = taxonomy_term_load($url_tokens[2]);
       }
 
       if ($associated_topic_id = NewsroomHelper::getFieldValue($taxonomy_term, 'field_newsroom_associated_topic', 'tid')) {
         $has_newsroom_topic_argument = FALSE;
         // Check the current display.
-        if (isset($view->display[$view->current_display]->handler->options['arguments'])) {
+        if (!empty($view->display[$view->current_display]->handler->options['arguments'])) {
           foreach ($view->display[$view->current_display]->handler->options['arguments'] as $argument) {
             // Check if this field taxonomy ref to newsroom_topic vocabulary.
-            if ($argument['default_argument_type'] == 'taxonomy_tid' && isset($argument['default_argument_options']['vocabularies']['newsroom_topic'])) {
+            if ($argument['default_argument_type'] == 'taxonomy_tid' && !empty($argument['default_argument_options']['vocabularies']['newsroom_topic'])) {
               $has_newsroom_topic_argument = TRUE;
               break;
             }
@@ -668,11 +668,11 @@ function nexteuropa_newsroom_views_pre_view(&$view, &$display_id, array &$args) 
         }
 
         // Check the default display, if we don't have ovverrides.
-        if (isset($view->display['default']->handler->options['arguments'])) {
+        if (!empty($view->display['default']->handler->options['arguments'])) {
           foreach ($view->display['default']->handler->options['arguments'] as $key => $argument) {
             // Check if this field taxonomy ref to newsroom_topic vocabulary.
             if ($argument['default_argument_type'] == 'taxonomy_tid' &&
-              isset($argument['default_argument_options']['vocabularies']['newsroom_topic'])) {
+              !empty($argument['default_argument_options']['vocabularies']['newsroom_topic'])) {
               $has_newsroom_topic_argument = TRUE;
               break;
             }
@@ -693,7 +693,7 @@ function nexteuropa_newsroom_views_pre_view(&$view, &$display_id, array &$args) 
  */
 function nexteuropa_newsroom_entity_presave($entity, $type) {
   // Set custom updated date from newsroom.
-  if (isset($entity->_feed_changed) && isset($entity->changed)) {
+  if (!empty($entity->_feed_changed) && isset($entity->changed)) {
     $entity->changed = $entity->_feed_changed;
   }
 }
@@ -720,7 +720,7 @@ function nexteuropa_newsroom_feeds_after_save(FeedsSource $source, $entity, $ite
       // Check only active and skip the default language.
       if ($language->enabled && $language->language != NewsroomHelper::getDefaultLanguage()) {
         $config = $source->importer()->processor->getConfig();
-        if (isset($config['mappings'])) {
+        if (!empty($config['mappings'])) {
           $xpath_expression = NULL;
           foreach ($config['mappings'] as $mapping) {
             if ($mapping['target'] == 'title_field:et:' . $language->language) {
@@ -769,7 +769,7 @@ function _nexteuropa_newsroom_set_image_meta_info($image_field, $entity, $source
       ];
 
       $config = $source->importer()->processor->getConfig();
-      if (isset($config['mappings'])) {
+      if (!empty($config['mappings'])) {
         // Save default language at first.
         foreach ($config['mappings'] as $mapping) {
           foreach ($fields as $field => $field_name) {
@@ -876,11 +876,11 @@ function nexteuropa_newsroom_feeds_processor_targets_alter(&$targets, $entity_ty
   }
 
   if ($entity_type == 'node') {
-    if ($bundle_name == NEXTEUROPA_NEWSROOM_CONTENT_TYPE && isset($targets['field_newsroom_item_id'])) {
+    if ($bundle_name == NEXTEUROPA_NEWSROOM_CONTENT_TYPE && !empty($targets['field_newsroom_item_id'])) {
       $targets['field_newsroom_item_id']['unique_callbacks'] = ['_nexteuropa_newsroom_use_as_guid'];
       $targets['field_newsroom_item_id']['optional_unique'] = TRUE;
     }
-    elseif ($bundle_name == NEXTEUROPA_NEWSROOM_ISSUE_CONTENT_TYPE && isset($targets['field_newsroom_newsletter_id'])) {
+    elseif ($bundle_name == NEXTEUROPA_NEWSROOM_ISSUE_CONTENT_TYPE && !empty($targets['field_newsroom_newsletter_id'])) {
       $targets['field_newsroom_newsletter_id']['unique_callbacks'] = ['_nexteuropa_newsroom_use_as_guid'];
       $targets['field_newsroom_newsletter_id']['optional_unique'] = TRUE;
     }
@@ -958,7 +958,7 @@ function nexteuropa_newsroom_feeds_after_parse(FeedsSource $source, FeedsParserR
     $end_date_exp = '';
 
     // Check Xpath expressions for Start date and End date.
-    if (isset($config['mappings'])) {
+    if (!empty($config['mappings'])) {
       foreach ($config['mappings'] as $mapping) {
         if ($mapping['target'] == 'field_newsroom_item_date:start') {
           $start_date_exp = $mapping['source'];
@@ -974,7 +974,7 @@ function nexteuropa_newsroom_feeds_after_parse(FeedsSource $source, FeedsParserR
 
     // If end date is empty we change it to start date.
     foreach ($result->items as &$item) {
-      if (isset($item[$end_date_exp]) && empty($item[$end_date_exp])) {
+      if (empty($item[$end_date_exp])) {
         $item[$end_date_exp] = $item[$start_date_exp];
       }
     }
@@ -1037,9 +1037,9 @@ function nexteuropa_newsroom_context_registry() {
 function nexteuropa_newsroom_block_view_alter(&$data, $block) {
   // Alter agenda breadcrumbs. We leave only first item.
   if ($block->module == 'easy_breadcrumb') {
-    if (isset($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url']) && $data['content']['easy_breadcrumb']['#breadcrumb'][0]['url'] == 'newsroom-agenda') {
+    if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url']) && $data['content']['easy_breadcrumb']['#breadcrumb'][0]['url'] == 'newsroom-agenda') {
       foreach ($data['content']['easy_breadcrumb']['#breadcrumb'] as $key => $item) {
-        if (isset($item['url']) && $item['url'] != 'newsroom-agenda') {
+        if (!empty($item['url']) && $item['url'] != 'newsroom-agenda') {
           unset($data['content']['easy_breadcrumb']['#breadcrumb'][$key]);
         }
         else {
@@ -1075,7 +1075,7 @@ function nexteuropa_newsroom_preprocess_node(&$variables) {
     $nr_contact_email_field = field_get_items('node', $node, 'field_newsroom_item_contact_mail');
     hide($variables['content']['field_newsroom_item_contact_text']);
     if ($nr_contact_email_field) {
-      $nr_contact_text = isset($nr_contact_field[0]['value']) ? $nr_contact_field[0]['value'] : $nr_contact_email_field[0]['value'];
+      $nr_contact_text = !empty($nr_contact_field[0]['value']) ? $nr_contact_field[0]['value'] : $nr_contact_email_field[0]['value'];
       $variables['content']['field_newsroom_item_contact_mail'][0]['#markup'] = l($nr_contact_text, 'mailto:' . $nr_contact_email_field[0]['value'], [
         'absolute' => TRUE,
         'html' => TRUE,
@@ -1085,7 +1085,7 @@ function nexteuropa_newsroom_preprocess_node(&$variables) {
     $nr_type_field = field_get_items('node', $node, 'field_newsroom_item_type');
     $display_date = FALSE;
 
-    if ($nr_type_field && isset($nr_type_field[0]['taxonomy_term'])) {
+    if (!empty($nr_type_field[0]['taxonomy_term'])) {
       $display_date_field = field_get_items('taxonomy_term', $nr_type_field[0]['taxonomy_term'], 'field_newsroom_display_date');
       if ($display_date_field) {
         $display_date = (bool) $display_date_field[0]['value'];

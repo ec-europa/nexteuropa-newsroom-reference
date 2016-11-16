@@ -149,9 +149,9 @@ function _nexteuropa_newsroom_prepare_newsletters($newsletters = [], $subscripti
     $item = new stdClass();
     $item->title = $newsletter->taxonomy_term_data_name;
     $item->description = $newsletter->taxonomy_term_data_description;
-    $item->service_sample = isset($newsletter->field_field_newsroom_service_sample_et[0]) ? drupal_render($newsletter->field_field_newsroom_service_sample_et[0]['rendered']) : NULL;
-    $item->service_id = isset($newsletter->field_field_newsroom_service_id[0]) ? $newsletter->field_field_newsroom_service_id[0]['raw']['value'] : NULL;
-    $item->image = isset($newsletter->field_field_newsroom_service_image[0]) ? drupal_render($newsletter->field_field_newsroom_service_image[0]['rendered']) : NULL;
+    $item->service_sample = !empty($newsletter->field_field_newsroom_service_sample_et[0]) ? drupal_render($newsletter->field_field_newsroom_service_sample_et[0]['rendered']) : NULL;
+    $item->service_id = !empty($newsletter->field_field_newsroom_service_id[0]) ? $newsletter->field_field_newsroom_service_id[0]['raw']['value'] : NULL;
+    $item->image = !empty($newsletter->field_field_newsroom_service_image[0]) ? drupal_render($newsletter->field_field_newsroom_service_image[0]['rendered']) : NULL;
     $item->form = NULL;
     if (!empty($item->service_id)) {
       $subscription_url = NULL;
@@ -195,7 +195,7 @@ function _nexteuropa_newsroom_get_user_subscriptions() {
     $url = variable_get('newsroom_subscription_url');
     if ($url) {
       $request = drupal_http_request($url . '?' . drupal_http_build_query($input));
-      if (isset($request->data)) {
+      if (!empty($request->data)) {
         $subscriptions = drupal_json_decode($request->data);
       }
     }

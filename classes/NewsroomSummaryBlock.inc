@@ -124,7 +124,7 @@ class NewsroomSummaryBlock {
       $selected_types = [];
 
       if ($entity = $this->getEntityFromRequest()) {
-        if (isset($entity->type) && $entity->type == 'newsroom_selection') {
+        if (!empty($entity->type) && $entity->type == 'newsroom_selection') {
 
           if (NewsroomHelper::getFieldValue($entity, 'field_newsroom_topic_operator')) {
             $topic_operator = NewsroomHelper::getFieldValue($entity, 'field_newsroom_topic_operator');
@@ -209,7 +209,7 @@ class NewsroomSummaryBlock {
       // It is a node page take node entity from request.
       $entity = $current_path['map'][1];
     }
-    elseif (isset($current_path['page_arguments'][0]->tid)) {
+    elseif (!empty($current_path['page_arguments'][0]->tid)) {
       // It's taxonomy term without views.
       $entity = $current_path['page_arguments'][0];
     }
