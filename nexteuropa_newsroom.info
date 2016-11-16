@@ -204,7 +204,6 @@ features[node][] = newsroom_newsletter_issue
 features[taxonomy][] = newsroom_item_type
 features[taxonomy][] = newsroom_service
 features[taxonomy][] = newsroom_topic
-features[user_permission][] = administer newsroom advanced settings
 features[user_permission][] = administer newsroom settings
 features[user_permission][] = create newsroom_item content
 features[user_permission][] = delete any newsroom_item content

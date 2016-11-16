@@ -11,15 +11,6 @@
 function nexteuropa_newsroom_user_default_permissions() {
   $permissions = array();
 
-  // Exported permission: 'administer newsroom advanced settings'.
-  $permissions['administer newsroom advanced settings'] = array(
-    'name' => 'administer newsroom advanced settings',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'nexteuropa_newsroom',
-  );
-
   // Exported permission: 'administer newsroom settings'.
   $permissions['administer newsroom settings'] = array(
     'name' => 'administer newsroom settings',

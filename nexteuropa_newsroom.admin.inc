@@ -59,7 +59,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
       Mind the fact that we rely on the enabled languages in your website, so you will not be able to import items in a language that doesn't exist yet."),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
-    '#access' => user_access('administer newsroom advanced settings'),
+    '#access' => user_access(NEXTEUROPA_NEWSROOM_ADMIN_ACCESS),
   ];
 
   $form['newsroom_others']['importers_link'] = [
@@ -99,7 +99,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
             news and events you will get pattern like news/[node:title], events/[node:title], you can override the root path for your elements here. Do not use leading or trailing slashes"),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
-      '#access' => user_access('administer newsroom settings'),
+      '#access' => user_access(NEXTEUROPA_NEWSROOM_ADMIN_ACCESS),
     ];
 
     $form['newsroom_paths']['patterns'] = [
@@ -148,7 +148,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#description' => t('Here you can easily manage the addition or the removal of the newsroom fields from your content types. Refer to the <a href="@documentation">documentation</a> for having detailed information about the usage of the newsroom fields.  They are meant to give you the chance to associate topics to you contents so that matching news coming from the newsroom can be shown or mentioned contextually.', ['@documentation' => 'https://webgate.ec.europa.eu/fpfis/wikis/pages/viewpage.action?spaceKey=MULTISITE&title=%5BFPFIS%5D+Nexteuropa+Newsroom+-+Documentation']),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
-    '#access' => user_access('administer newsroom advanced settings'),
+    '#access' => user_access(NEXTEUROPA_NEWSROOM_ADMIN_ACCESS),
   ];
 
   $form['newsroom_fields']['newsroom_content_types_topic'] = [
@@ -381,21 +381,28 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
       '#type' => 'submit',
       '#value' => t('Run importers'),
       '#submit' => ['_nexteuropa_newsroom_import_importers'],
-      '#access' => user_access('administer newsroom advanced settings'),
+      '#access' => user_access(NEXTEUROPA_NEWSROOM_ADMIN_ACCESS),
+      '#weight' => 9,
+    ];
+    $form['actions']['delete_items'] = [
+      '#type' => 'submit',
+      '#value' => t('Delete existing items'),
+      '#submit' => ['_nexteuropa_newsroom_delete_items'],
+      '#access' => user_access(NEXTEUROPA_NEWSROOM_ADMIN_ACCESS),
       '#weight' => 10,
     ];
     $form['actions']['rebuild'] = [
       '#type' => 'submit',
       '#value' => t('Rebuild importers'),
       '#submit' => ['_nexteuropa_newsroom_admin_rebuild_importers'],
-      '#access' => user_access('administer newsroom advanced settings'),
+      '#access' => user_access(NEXTEUROPA_NEWSROOM_ADMIN_ACCESS),
       '#weight' => 11,
     ];
     $form['actions']['clean_cache'] = [
       '#type' => 'submit',
       '#value' => 'Clean cache',
       '#submit' => ['_nexteuropa_newsroom_admin_clean_cache'],
-      '#access' => user_access('administer newsroom advanced settings'),
+      '#access' => user_access(NEXTEUROPA_NEWSROOM_ADMIN_ACCESS),
       '#weight' => 12,
     ];
   }
@@ -849,15 +856,8 @@ function _nexteuropa_newsroom_admin_prepare_check(array $previous, array $input)
  * Rebuilds multilingual importers.
  */
 function _nexteuropa_newsroom_admin_rebuild_importers() {
-
   // Remove importers.
-  $importers = [
-    NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
-    NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
-    NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
-    NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
-    NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
-  ];
+  $importers = NewsroomHelper::returnImporters();
 
   foreach ($importers as $importer) {
     // WE drop all tampers for the current importer.
@@ -878,17 +878,59 @@ function _nexteuropa_newsroom_admin_rebuild_importers() {
  */
 function _nexteuropa_newsroom_import_importers() {
   // Run the multilingual imports if required.
-  $importers = [
-    NEXTEUROPA_NEWSROOM_TYPE_IMPORTER,
-    NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER,
-    NEXTEUROPA_NEWSROOM_ITEM_IMPORTER,
-    NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER,
-    NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER,
-  ];
-
+  $importers = NewsroomHelper::returnImporters();
   foreach ($importers as $importer) {
     NewsroomHelper::runFeedImporter($importer);
   }
+}
+
+/**
+ * Submit handler.
+ *
+ * @param array $form
+ *   Form array.
+ * @param array $form_state
+ *   Form state array.
+ */
+function _nexteuropa_newsroom_delete_items_confirm_submit(array $form, array &$form_state) {
+  if ($form_state['values']['confirm']) {
+    // Delete the imported items.
+    $importers = NewsroomHelper::returnImporters();
+
+    foreach ($importers as $importer) {
+      NewsroomHelper::deleteItems($importer);
+    }
+
+    drupal_set_message(t('Newsroom data has been removed.'));
+  }
+
+  $form_state['redirect'] = 'admin/config/content/newsroom';
+}
+
+/**
+ * Confirmation form page callback.
+ *
+ * @param array $form
+ *   Form array.
+ *
+ * @return array
+ *   Confirmatio form.
+ */
+function _nexteuropa_newsroom_delete_items_confirm($form) {
+  return confirm_form($form,
+    t('Are you sure you want to clear newsroom items?'),
+    'admin/config/content/newsroom',
+    t('This will remove all data imported by Newsroom connector.'),
+    t('Remove imported data')
+  );
+}
+
+/**
+ * Submit handler, delete items.
+ */
+function _nexteuropa_newsroom_delete_items($form, &$form_state) {
+  drupal_goto('admin/config/content/newsroom/delete');
+  drupal_exit();
 }
 
 /**

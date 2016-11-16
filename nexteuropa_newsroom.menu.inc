@@ -15,9 +15,17 @@ function nexteuropa_newsroom_menu() {
     'description' => 'Configure Newsroom settings',
     'page callback' => 'drupal_get_form',
     'page arguments' => ['nexteuropa_newsroom_admin_settings'],
-    'access arguments' => ['administer newsroom settings'],
+    'access arguments' => [NEXTEUROPA_NEWSROOM_ADMIN_ACCESS],
     'file' => 'nexteuropa_newsroom.admin.inc',
   ];
+  $items['admin/config/content/newsroom/delete'] = array(
+    'title' => 'Delete existing items',
+    'description' => 'Delete items imported by Newsroom connector.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('_nexteuropa_newsroom_delete_items_confirm'),
+    'access arguments' => [NEXTEUROPA_NEWSROOM_ADMIN_ACCESS],
+    'file' => 'nexteuropa_newsroom.admin.inc',
+  );
   $items['news-redirect'] = [
     'title' => 'Newsroom Item Redirect',
     'page callback' => '_nexteuropa_newsroom_item_redirect',

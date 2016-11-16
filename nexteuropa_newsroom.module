@@ -49,7 +49,6 @@ define('NEXTEUROPA_NEWSROOM_PROPOSAL_ACCESS', 'send newsroom item proposal');
 define('NEXTEUROPA_NEWSROOM_IMPORT_ACCESS', 'import newsroom feeds');
 define('NEXTEUROPA_NEWSROOM_EDIT_ACCESS', 'edit remote newsroom item');
 define('NEXTEUROPA_NEWSROOM_ADMIN_ACCESS', 'administer newsroom settings');
-define('NEXTEUROPA_NEWSROOM_ADVANCED_SETTINGS_ACCESS', 'administer newsroom advanced settings');
 
 define('NEXTEUROPA_NEWSROOM_ITEM', 'item');
 define('NEXTEUROPA_NEWSROOM_ISSUE', 'issue');
@@ -166,9 +165,6 @@ function nexteuropa_newsroom_permission() {
   return [
     NEXTEUROPA_NEWSROOM_ADMIN_ACCESS => [
       'title' => t('Administer Newsroom settings'),
-    ],
-    NEXTEUROPA_NEWSROOM_ADVANCED_SETTINGS_ACCESS => [
-      'title' => t('Administer all the newsroom settings'),
     ],
     NEXTEUROPA_NEWSROOM_IMPORT_ACCESS => [
       'title' => t('Import Newsroom feeds'),
