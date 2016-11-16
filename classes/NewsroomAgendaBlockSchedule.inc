@@ -68,7 +68,7 @@ class NewsroomAgendaBlockSchedule extends NewsroomAgendaSchedule {
    */
   protected function processQuery($query) {
 
-    if (count($this->getTopics()) == 0) {
+    if (!empty($this->getTopics())) {
       return $query;
     }
 

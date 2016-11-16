@@ -63,6 +63,7 @@ function nexteuropa_newsroom_install() {
   variable_set('newsroom_display_highlights_begin', 1);
   variable_set('newsroom_order_by_last_update', 1);
   variable_set('newsroom_proposal_script', NEXTEUROPA_NEWSROOM_PROPOSAL_SCRIPT);
+  variable_set('newsroom_docroom_url', 'http://ec.europa.eu/DocsRoom/documents/');
 
   variable_set('newsroom_central_newsletter_title', $t('Central newsletters'));
   variable_set('newsroom_other_newsletter_title', $t('Other newsletters'));
@@ -93,7 +94,7 @@ function nexteuropa_newsroom_install() {
   variable_set('newsroom_agenda_page_items_number', 10);
   variable_set('newsroom_page_items_number', 10);
 
-  $bundles = array('newsroom_item', 'newsroom_selection');
+  $bundles = ['newsroom_item', 'newsroom_selection'];
   $backup = variable_get('nexteuropa_newsroom_view_modes_backup', FALSE);
 
   if (!$backup) {
@@ -159,6 +160,7 @@ function nexteuropa_newsroom_uninstall() {
   variable_del('newsroom_app_key');
   variable_del('newsroom_subscription_url');
   variable_del('newsroom_subsite');
+  variable_del('newsroom_docroom_url');
 
   variable_del('newsroom_central_newsletter_title');
   variable_del('newsroom_other_newsletter_title');
@@ -203,18 +205,18 @@ function nexteuropa_newsroom_update_7101() {
  * Remove obsolete importer content types and nodes.
  */
 function nexteuropa_newsroom_update_7102() {
-  $types = array(
+  $types = [
     'newsroom_type_importer',
     'newsroom_service_importer',
     'newsroom_topic_importer',
     'newsroom_delete_item_importer',
     'newsroom_item_importer',
-  );
+  ];
 
   // Delete types.
   foreach ($types as $type) {
     // Release content type previously featurized.
-    db_update('field_config')->fields(array('custom' => 1, 'locked' => 0))->condition('type', $type)->execute();
+    db_update('field_config')->fields(['custom' => 1, 'locked' => 0])->condition('type', $type)->execute();
     // Delete content type.
     node_type_delete($type);
   }
@@ -222,13 +224,13 @@ function nexteuropa_newsroom_update_7102() {
   // Update feeds_item table to avoid import of the items again
   // Drop ID of the importer content types.
   db_update('feeds_item')
-    ->fields(array('feed_nid' => 0))
-    ->condition('id', array(
+    ->fields(['feed_nid' => 0])
+    ->condition('id', [
       'newsroom_items',
       'newsroom_services',
       'newsroom_topics',
       'newsroom_type',
-    ), 'IN')->execute();
+    ], 'IN')->execute();
 }
 
 /**
@@ -236,12 +238,12 @@ function nexteuropa_newsroom_update_7102() {
  */
 function nexteuropa_newsroom_update_7103() {
   db_update('feeds_item')
-    ->expression('guid', 'CONCAT(:newstring, guid)', array(':newstring' => 'newsroom_topic-'))
+    ->expression('guid', 'CONCAT(:newstring, guid)', [':newstring' => 'newsroom_topic-'])
     ->condition('id', 'newsroom_topics')
     ->execute();
 
   db_update('feeds_item')
-    ->expression('guid', 'CONCAT(:newstring, guid)', array(':newstring' => 'newsroom_type-'))
+    ->expression('guid', 'CONCAT(:newstring, guid)', [':newstring' => 'newsroom_type-'])
     ->condition('id', 'newsroom_type')
     ->execute();
 }
@@ -313,7 +315,7 @@ function nexteuropa_newsroom_update_7107() {
     }
 
     // Update only our fields defines to 'datestamp' in feature.field.
-    if (in_array($field_info['type'], array('datetime', 'date')) && $fields_features_info[$field_name]['type'] == 'datestamp') {
+    if (in_array($field_info['type'], ['datetime', 'date']) && $fields_features_info[$field_name]['type'] == 'datestamp') {
       foreach ($field_info['storage']['details']['sql'] as $info_sql) {
         $table_name = array_shift(array_keys($info_sql));
 
@@ -324,7 +326,7 @@ function nexteuropa_newsroom_update_7107() {
             watchdog('system', sprintf('Update the  column %s of table %s : migrate datas and update to datestamp.', $column_name, $table_name), NULL, WATCHDOG_WARNING);
 
             // Create a temporary date field.
-            $param = array('type' => 'int', 'not null' => FALSE, 'default' => 0);
+            $param = ['type' => 'int', 'not null' => FALSE, 'default' => 0];
             db_add_field($table_name, $column_name . '_temp', $param);
 
             db_update($table_name)
@@ -333,19 +335,19 @@ function nexteuropa_newsroom_update_7107() {
 
             // Delete old column.
             db_drop_field($table_name, $column_name);
-            db_change_field($table_name, $column_name . '_temp', $column_name, array('type' => 'int'));
+            db_change_field($table_name, $column_name . '_temp', $column_name, ['type' => 'int']);
 
           }
           else {
             // If there is no data: just update column to int.
             watchdog('system', sprintf('Update the  column %s of table %s : update to datestamp.', $column_name, $table_name), NULL, WATCHDOG_WARNING);
-            db_change_field($table_name, $column_name, $column_name, array('type' => 'int'));
+            db_change_field($table_name, $column_name, $column_name, ['type' => 'int']);
           }
         }
       }
 
       watchdog('system', sprintf('Saving field config of %s', $field_name), NULL, WATCHDOG_INFO);
-      db_update('field_config')->fields(array('type' => 'datestamp'))->condition('id', $field_info['id'])->execute();
+      db_update('field_config')->fields(['type' => 'datestamp'])->condition('id', $field_info['id'])->execute();
 
       // Error logs.
     }
@@ -369,7 +371,7 @@ function nexteuropa_newsroom_update_7107() {
  * Rename the fields to the same standards.
  */
 function nexteuropa_newsroom_update_7108() {
-  $fields = array();
+  $fields = [];
   $fields['field_associated_newsroom_select'] = 'field_newsroom_associated_select';
   $fields['field_associated_newsroom_topic'] = 'field_newsroom_associated_topic';
   $fields['field_eur_lex_link'] = 'field_newsroom_eur_lex_link';
@@ -400,11 +402,11 @@ function nexteuropa_newsroom_update_7108() {
  * Delete old fieldgroups.
  */
 function nexteuropa_newsroom_update_7109() {
-  $fieldgroups = array(
+  $fieldgroups = [
     'group_event_info',
     'group_lead',
     'group_recommended_reading',
-  );
+  ];
 
   foreach ($fieldgroups as $group_name) {
     if ($group = field_group_load_field_group($group_name, 'node', NEXTEUROPA_NEWSROOM_CONTENT_TYPE, 'default')) {
@@ -436,18 +438,25 @@ function nexteuropa_newsroom_update_7110() {
 function nexteuropa_newsroom_update_7111() {
   variable_del('newsroom_url_prefix');
   ctools_include('export');
-  $views = array(
+  $views = [
     'newsroom_type_featured_item',
     'newsroom',
     'newsroom_term_selection',
     'newsroom_navigation',
-  );
+  ];
   foreach ($views as $view_name) {
     $view = ctools_export_crud_load('views_view', $view_name);
     if ($view) {
       $view->delete();
     }
   }
+}
+
+/**
+ * Update a single item chunck.
+ */
+function nexteuropa_newsroom_update_7112() {
+  variable_set('newsroom_single_item_import_segment', NEXTEUROPA_NEWSROOM_ITEM_SEGMENT);
 }
 
 
@@ -493,7 +502,7 @@ function _nexteuropa_newsroom_rename_field($old_name, $new_name) {
             ->execute();
 
           while ($data = $field_data->fetchAssoc()) {
-            $data_new = array();
+            $data_new = [];
             foreach ($data as $column => $value) {
               $column = str_replace($old_name, $new_name, $column);
               $data_new[$column] = $value;
@@ -512,7 +521,7 @@ function _nexteuropa_newsroom_rename_field($old_name, $new_name) {
             ->execute();
 
           while ($revision = $field_revision->fetchAssoc()) {
-            $revision_new = array();
+            $revision_new = [];
             foreach ($revision as $column => $value) {
               $column = str_replace($old_name, $new_name, $column);
               $revision_new[$column] = $value;

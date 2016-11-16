@@ -8,7 +8,7 @@
 <figure class="newsroom-image">
   <?php if ($zoomable): ?>
     <div class="picContainer zoomable">
-      <?php echo l($image_output . "<span class='zoomIcon'></span>", $path_to_original, array('html' => TRUE, 'attributes' => array('class' => array('fancybox')))); ?>
+      <?php echo l($image_output . "<span class='zoomIcon'></span>", $path_to_original, ['html' => TRUE, 'attributes' => ['class' => ['fancybox']]]); ?>
     </div>
   <?php else: ?>
     <div class="picContainer">

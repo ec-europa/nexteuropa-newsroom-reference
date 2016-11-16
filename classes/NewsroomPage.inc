@@ -180,19 +180,19 @@ class NewsroomPage {
   protected function getNodeImage($node, $field_name, $style_name = 'newsroom_style') {
     $image = NULL;
     if ($style_name == 'newsroom_style') {
-      $display = array(
+      $display = [
         'type' => 'newsroom_zoomable_image',
         'settings' => _nexteuropa_newsroom_zoomable_formatter_settings('newsroom_style'),
-      );
+      ];
     }
     else {
-      $display = array(
+      $display = [
         'type' => 'image',
-        'settings' => array(
+        'settings' => [
           'image_style' => 'newsroom_style',
           'image_link' => 'content',
-        ),
-      );
+        ],
+      ];
     }
 
     $field_image = field_view_field('node', $node, $field_name, $display);
@@ -235,7 +235,7 @@ class NewsroomPage {
       $query = $this->getQueryObject();
       cache_set($cache_total_number_key, $query->extend('PagerDefault')->getCountQuery()->execute()->fetchField(), NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_page_result', 300));
       $items = $query->extend('PagerDefault')->limit($this->getItemsNumber())->execute()->fetchAll();
-      $data = array();
+      $data = [];
       if ($items) {
         foreach ($items as $item) {
           $node = node_load($item->nid);
@@ -247,19 +247,19 @@ class NewsroomPage {
             $image = $this->getNodeImage($node, 'field_newsroom_private_img');
           }
 
-          $data[] = array(
+          $data[] = [
             'nid' => $item->nid,
             'start_date' => $this->getFormatedDateFromTimestamp($item->start_date),
             'end_date' => $this->getFormatedDateFromTimestamp($item->end_date),
             'title' => $short_title ? $short_title : $node->title,
             'teaser' => NewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_teaser'),
-            'type_url' => NewsroomHelper::getNewsroomPageUrl(array($type ? pathauto_cleanstring($type->name) : NEXTEUROPA_NEWSROOM_ALL, NEXTEUROPA_NEWSROOM_ALL)),
+            'type_url' => NewsroomHelper::getNewsroomPageUrl([$type ? pathauto_cleanstring($type->name) : NEXTEUROPA_NEWSROOM_ALL, NEXTEUROPA_NEWSROOM_ALL]),
             'type_title' => $type ? $type->name : NULL,
-            'node_url' => url(NewsroomHelper::getNodeMainUrl($node), array('absolute' => TRUE)),
-            'node_redirect_url' => url('news-redirect/' . NewsroomHelper::getFieldValue($node, 'field_newsroom_item_id'), array('absolute' => TRUE)),
+            'node_url' => url(NewsroomHelper::getNodeMainUrl($node), ['absolute' => TRUE]),
+            'node_redirect_url' => url('news-redirect/' . NewsroomHelper::getFieldValue($node, 'field_newsroom_item_id'), ['absolute' => TRUE]),
             'image' => $image,
             'venue' => NewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_item_venue'),
-          );
+          ];
         }
       }
 
@@ -278,11 +278,11 @@ class NewsroomPage {
   public function getContent() {
     drupal_set_title($this->generateTitle());
     $filter_form = drupal_get_form('nexteuropa_newsroom_newsroom_page_filter_form', $this->getType(), $this->getTopic(), $this->getStartDate(), $this->getEndDate(), $this->getEcContent());
-    $content = theme('newsroom_page', array(
+    $content = theme('newsroom_page', [
       'filter_form' => drupal_render($filter_form),
       'featured_item' => $this->getTypeFeaturedItem(),
       'items' => $this->generateItems('newsroom_page_item'),
-    ));
+    ]);
     return $content;
   }
 
@@ -293,24 +293,24 @@ class NewsroomPage {
    *   HTML.
    */
   public function getRssContent() {
-    $namespaces = array();
+    $namespaces = [];
     if (function_exists('rdf_get_namespaces')) {
       // Merge RDF namespaces in the XML namespaces in case they are used
       // further in the RSS content.
-      $xml_rdf_namespaces = array();
+      $xml_rdf_namespaces = [];
       foreach (rdf_get_namespaces() as $prefix => $uri) {
         $xml_rdf_namespaces['xmlns:' . $prefix] = $uri;
       }
       $namespaces += $xml_rdf_namespaces;
     }
 
-    $content = theme('newsroom_page_rss', array(
+    $content = theme('newsroom_page_rss', [
       'title' => $this->generateTitle(),
-      'link' => url($this->getNavigationUrl(TRUE), array('absolute' => TRUE)),
+      'link' => url($this->getNavigationUrl(TRUE), ['absolute' => TRUE]),
       'namespaces' => drupal_attributes($namespaces),
       'description' => NULL,
       'items' => $this->generateItems('newsroom_page_rss_item'),
-    ));
+    ]);
     return $content;
   }
 
@@ -326,7 +326,7 @@ class NewsroomPage {
       $page_title = $this->getType()->name;
     }
     if ($this->getTopic()) {
-      $page_title .= ' ' . t('about !topic_title', array('!topic_title' => $this->getTopic()->name));
+      $page_title .= ' ' . t('about !topic_title', ['!topic_title' => $this->getTopic()->name]);
     }
     return $page_title;
   }
@@ -371,7 +371,7 @@ class NewsroomPage {
   public function getQueryObject() {
     $query = db_select('node', 'n');
     $query->distinct();
-    $query->fields('n', array('nid', 'created'));
+    $query->fields('n', ['nid', 'created']);
     $query->addField('type_field', 'field_newsroom_item_type_tid', 'type_tid');
     $query->addField('d', 'field_newsroom_item_date_value', 'start_date');
     $query->addField('d', 'field_newsroom_item_date_value2', 'end_date');
@@ -424,7 +424,7 @@ class NewsroomPage {
    *   HTML link.
    */
   public function getNavigationUrl($is_rss = FALSE) {
-    $url_parts = array();
+    $url_parts = [];
     $url_parts[] = $this->getTermUrl($this->getType() ? $this->getType()->name : NULL);
     $url_parts[] = $this->getTermUrl($this->getTopic() ? $this->getTopic()->name : NULL);
     $url_parts[] = $this->getStartDate() ? $this->getStartDate()->format(NewsroomPage::MYSQL_DATE_FORMAT) : NEXTEUROPA_NEWSROOM_ALL;
@@ -462,13 +462,13 @@ class NewsroomPage {
 
           $topic_url = $this->getTermUrl($this->getTopic() ? $this->getTopic()->name : NULL);
 
-          $content = theme('newsroom_page_featured_item', array(
-            'type' => $type ? l($type->name, NewsroomHelper::getNewsroomPageUrl(array($this->getTermUrl($type->name), $topic_url))) : NULL,
+          $content = theme('newsroom_page_featured_item', [
+            'type' => $type ? l($type->name, NewsroomHelper::getNewsroomPageUrl([$this->getTermUrl($type->name), $topic_url])) : NULL,
             'title' => l($featured_node->title, 'node/' . $featured_node->nid),
             'image' => $image,
             'created' => NewsroomHelper::getFormatedDate(NewsroomPage::DATE_FORMAT, $featured_node->created),
             'teaser' => NewsroomHelper::getFieldTranslatedValue($featured_node, 'field_newsroom_teaser'),
-          ));
+          ]);
         }
 
         cache_set($cache_key, $content, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_type_featured_item', 300));

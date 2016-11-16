@@ -10,7 +10,7 @@
  */
 class NewsroomAgendaItem {
 
-  protected $items = array();
+  protected $items = [];
   protected $date = NULL;
 
   /**

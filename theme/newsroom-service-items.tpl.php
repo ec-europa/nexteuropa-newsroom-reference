@@ -6,7 +6,7 @@
  */
 ?>
 
-<?php if (count($items) > 0) : ?>
+<?php if (!empty($items)) : ?>
   <div class="<?php echo $css_class; ?>-items-container serviceItemContainer">
     <h3><?php echo $title; ?></h3>
 

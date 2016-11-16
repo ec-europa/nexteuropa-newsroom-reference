@@ -15,7 +15,7 @@ abstract class NewsroomBlockBase {
   protected $lastestDate = NULL;
   protected $type = NULL;
   protected $operator = NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR;
-  protected $topics = array();
+  protected $topics = [];
 
   /**
    * Contructor of NewsroomBlockBase class.
@@ -150,7 +150,7 @@ abstract class NewsroomBlockBase {
    *   CSS classes array.
    */
   public function getCssClasses() {
-    $classes = array();
+    $classes = [];
     if ($this->getHighlighted()) {
       $classes[] = 'featured';
       $classes[] = 'highlighted';
@@ -197,7 +197,7 @@ abstract class NewsroomBlockBase {
    *   Topic IDs array.
    */
   protected function getTopicsId() {
-    $topic_ids = array();
+    $topic_ids = [];
     foreach ($this->getTopics() as $topic) {
       $topic_ids[] = $topic->tid;
     }
