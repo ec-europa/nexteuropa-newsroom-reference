@@ -133,7 +133,7 @@ class NewsroomBuilder {
         $entity_type = 'node';
         $bundle = NEXTEUROPA_NEWSROOM_CONTENT_TYPE;
         $rss_context = '//channel/item';
-        $import_period = 3600;
+        $import_period = -1;
         $field_mapping = NewsroomBuilder::getItemImporterMappings();
         break;
 
