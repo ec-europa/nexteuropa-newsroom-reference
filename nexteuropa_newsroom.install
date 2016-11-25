@@ -63,7 +63,7 @@ function nexteuropa_newsroom_install() {
   variable_set('newsroom_display_highlights_begin', 1);
   variable_set('newsroom_order_by_last_update', 1);
   variable_set('newsroom_proposal_script', NEXTEUROPA_NEWSROOM_PROPOSAL_SCRIPT);
-  variable_set('newsroom_docroom_url', 'http://ec.europa.eu/DocsRoom/documents/');
+  variable_set('newsroom_docsroom_url', 'http://ec.europa.eu/DocsRoom/documents/');
 
   variable_set('newsroom_central_newsletter_title', $t('Central newsletters'));
   variable_set('newsroom_other_newsletter_title', $t('Other newsletters'));
@@ -160,7 +160,7 @@ function nexteuropa_newsroom_uninstall() {
   variable_del('newsroom_app_key');
   variable_del('newsroom_subscription_url');
   variable_del('newsroom_subsite');
-  variable_del('newsroom_docroom_url');
+  variable_del('newsroom_docsroom_url');
 
   variable_del('newsroom_central_newsletter_title');
   variable_del('newsroom_other_newsletter_title');

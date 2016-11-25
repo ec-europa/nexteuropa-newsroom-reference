@@ -511,13 +511,13 @@ function nexteuropa_newsroom_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_newsroom_docroom_ids'.
-  $field_bases['field_newsroom_docroom_ids'] = array(
+  // Exported field_base: 'field_newsroom_docsroom_ids'.
+  $field_bases['field_newsroom_docsroom_ids'] = array(
     'active' => 1,
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_newsroom_docroom_ids',
+    'field_name' => 'field_newsroom_docsroom_ids',
     'indexes' => array(),
     'locked' => 1,
     'module' => 'number',

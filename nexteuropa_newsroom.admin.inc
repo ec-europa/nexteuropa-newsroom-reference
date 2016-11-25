@@ -282,10 +282,10 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#default_value' => variable_get('newsroom_proposal_script', NEXTEUROPA_NEWSROOM_PROPOSAL_SCRIPT),
   ];
 
-  $form['newsroom_universe']['newsroom_docroom_url'] = [
+  $form['newsroom_universe']['newsroom_docsroom_url'] = [
     '#type' => 'textfield',
-    '#title' => t('Newsroom Docroom URL'),
-    '#default_value' => variable_get('newsroom_docroom_url'),
+    '#title' => t('Newsroom Docsroom URL'),
+    '#default_value' => variable_get('newsroom_docsroom_url'),
   ];
 
   $form['newsroom_pages'] = [

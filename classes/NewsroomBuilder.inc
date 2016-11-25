@@ -496,7 +496,7 @@ class NewsroomBuilder {
         'query' => 'infsonewsroom:itemDisplay/text()',
       ],
       [
-        'field' => 'field_newsroom_docroom_ids',
+        'field' => 'field_newsroom_docsroom_ids',
         'query' => 'enclosure[@external_app="docsroom"]/@external_id',
       ],
       [

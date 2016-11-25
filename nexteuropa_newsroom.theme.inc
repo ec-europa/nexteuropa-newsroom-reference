@@ -156,13 +156,13 @@ function nexteuropa_newsroom_theme($existing, $type, $theme, $path) {
       'template' => 'newsroom-page-rss-item',
       'path' => $theme_path,
     ],
-    'newsroom_docroom' => [
+    'newsroom_docsroom' => [
       'variables' => [
         'url' => NULL,
         'width' => 600,
         'height' => 200,
       ],
-      'template' => 'newsroom-docroom',
+      'template' => 'newsroom-docsroom',
       'path' => $theme_path,
     ],
   ];
