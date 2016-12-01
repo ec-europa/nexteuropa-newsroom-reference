@@ -40,7 +40,7 @@
         </div>
       <?php endif; ?>
       </div>
-    <?php endforeach; ?> 
+    <?php endforeach; ?>
     </div>
   </div>
 <?php endif; ?>

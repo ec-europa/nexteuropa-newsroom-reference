@@ -230,7 +230,7 @@ function nexteuropa_newsroom_field_group_info() {
     'children' => array(
       0 => 'field_newsroom_documents',
       1 => 'field_newsroom_documents',
-      2 => 'field_newsroom_docroom_ids',
+      2 => 'field_newsroom_docsroom_ids',
     ),
     'format_type' => 'div',
     'format_settings' => array(
@@ -482,7 +482,7 @@ function nexteuropa_newsroom_field_group_info() {
       0 => 'field_newsroom_illustrative_img',
       1 => 'field_newsroom_private_img',
       2 => 'field_newsroom_documents',
-      3 => 'field_newsroom_docroom_ids',
+      3 => 'field_newsroom_docsroom_ids',
       4 => 'field_newsroom_files',
       5 => 'field_newsroom_item_image',
     ),

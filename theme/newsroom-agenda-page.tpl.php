@@ -43,4 +43,3 @@
     <div class="no-result"><?php echo t("No results"); ?></div>
   <?php endif; ?>
 </div>
-

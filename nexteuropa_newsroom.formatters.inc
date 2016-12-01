@@ -25,8 +25,8 @@ function nexteuropa_newsroom_field_formatter_info() {
       'field types' => ['image'],
       'settings' => _nexteuropa_newsroom_zoomable_formatter_settings(),
     ],
-    'newsroom_docroom' => [
-      'label' => t('Newsroom Docroom Documents'),
+    'newsroom_docsroom' => [
+      'label' => t('Newsroom Docsroom Documents'),
       'field types' => ['number_integer'],
       'settings' => [
         'display_type' => 'default',
@@ -92,7 +92,7 @@ function nexteuropa_newsroom_field_formatter_settings_form($field, $instance, $v
 
       break;
 
-    case 'newsroom_docroom':
+    case 'newsroom_docsroom':
       $element['display_type'] = [
         '#title' => t('Type of display context'),
         '#type' => 'select',
@@ -137,7 +137,7 @@ function nexteuropa_newsroom_field_formatter_settings_summary($field, $instance,
       return t('Default');
     }
   }
-  elseif ($display['type'] == 'newsroom_docroom') {
+  elseif ($display['type'] == 'newsroom_docsroom') {
     if (!empty($display['settings']['display_type'])) {
       $options = [
         'default' => t('Default iframe presentation'),
@@ -237,18 +237,14 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
         $copyright = NULL;
 
         // Sets copyright.
-        if (!empty($display['settings']['display_copyright'])) {
-          if (!empty($item['field_newsroom_copyrights'][$language->language][0])) {
-            $copyright = $item['field_newsroom_copyrights'][$language->language][0]['safe_value'];
-          }
+        if (!empty($display['settings']['display_copyright']) && !empty($item['field_newsroom_copyrights'][$language->language][0])) {
+          $copyright = $item['field_newsroom_copyrights'][$language->language][0]['safe_value'];
         }
 
         // Sets caption.
         $caption = '';
-        if (!empty($display['settings']['display_caption'])) {
-          if (!empty($item['field_caption'][$language->language][0])) {
-            $caption = $item['field_caption'][$language->language][0]['safe_value'];
-          }
+        if (!empty($display['settings']['display_caption']) && !empty($item['field_caption'][$language->language][0])) {
+          $caption = $item['field_caption'][$language->language][0]['safe_value'];
         }
 
         if (!empty($item['attributes'])) {
@@ -282,19 +278,19 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
 
       break;
 
-    case 'newsroom_docroom':
+    case 'newsroom_docsroom':
       $display_type = !empty($display['settings']['display_type']) ? $display['settings']['display_type'] : 'default';
-      $docroom_ids = [];
+      $docsroom_ids = [];
       foreach ($items as $item) {
-        $docroom_ids[] = $item['value'];
+        $docsroom_ids[] = $item['value'];
       }
-      if (!empty($docroom_ids)) {
+      if (!empty($docsroom_ids)) {
         $url = url(
-          variable_get('newsroom_docroom_url'),
+          variable_get('newsroom_docsroom_url'),
           [
             'external' => TRUE,
             'query' => [
-              'documentsIds' => implode(',', $docroom_ids),
+              'documentsIds' => implode(',', $docsroom_ids),
               'iframe' => 'true',
               'autoHeight' => 'true',
             ],
@@ -302,7 +298,7 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
         );
         if ($display_type == 'default') {
           $elements[0] = [
-            '#theme' => 'newsroom_docroom',
+            '#theme' => 'newsroom_docsroom',
             '#url' => $url,
             '#width' => !empty($display['settings']['width']) ? $display['settings']['width'] : NULL,
             '#height' => !empty($display['settings']['height']) ? $display['settings']['height'] : NULL,
@@ -311,10 +307,10 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
         elseif ($display_type == 'link') {
           $elements[0] = [
             '#theme' => 'link',
-            '#text' => 'Docroom documents',
+            '#text' => 'Docsroom documents',
             '#path' => $url,
             '#options' => [
-              'attributes' => ['class' => ['docroom-link']],
+              'attributes' => ['class' => ['docsroom-link']],
               'html' => FALSE,
             ],
           ];

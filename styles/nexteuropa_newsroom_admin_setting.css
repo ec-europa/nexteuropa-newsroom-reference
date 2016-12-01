@@ -6,7 +6,7 @@
 }
 
 .not-selected {
-  border: 2px solid  #8c2e0b;
+  border: 2px solid #8c2e0b;
   padding: 10px;
   color: #8c2e0b;
 }
@@ -55,7 +55,7 @@
   border-style: solid;
   border-width: 1px;
   cursor: pointer;
-  font-family: "Lucida Grande",Verdana,sans-serif;
+  font-family: "Lucida Grande", Verdana, sans-serif;
   font-size: 1.077em;
   font-weight: normal;
   margin-bottom: 1em;

@@ -33,38 +33,38 @@ class NewsroomBuilder {
 
     $agenda = NULL;
     $current_date = new DateTime();
-    $type = NewsroomBuilder::getType($type_name);
-    $topic = NewsroomBuilder::getTopic($topic_name);
+    $type = self::getType($type_name);
+    $topic = self::getTopic($topic_name);
     switch ($view) {
       case NewsroomAgenda::AGENDA_VIEW_MONTH:
-        $month = NewsroomBuilder::getMonth($arg1);
-        $year = NewsroomBuilder::getYear($arg2);
+        $month = self::getMonth($arg1);
+        $year = self::getYear($arg2);
         $current_date->setDate($year, $month, 1);
 
         $agenda = new NewsroomAgendaMonth($type, $topic, $current_date);
         break;
 
       case NewsroomAgenda::AGENDA_VIEW_WEEK:
-        $week = NewsroomBuilder::getWeek($arg1);
-        $year = NewsroomBuilder::getYear($arg2);
+        $week = self::getWeek($arg1);
+        $year = self::getYear($arg2);
         $current_date->setISODate($year, $week);
 
         $agenda = new NewsroomAgendaWeek($type, $topic, $current_date);
         break;
 
       case NewsroomAgenda::AGENDA_VIEW_DAY:
-        $day = NewsroomBuilder::getDay($arg1);
-        $month = NewsroomBuilder::getMonth($arg2);
-        $year = NewsroomBuilder::getYear($arg3);
+        $day = self::getDay($arg1);
+        $month = self::getMonth($arg2);
+        $year = self::getYear($arg3);
         $current_date->setDate($year, $month, $day);
 
         $agenda = new NewsroomAgendaDay($type, $topic, $current_date);
         break;
 
       default:
-        $day = NewsroomBuilder::getDay($arg1);
-        $month = NewsroomBuilder::getMonth($arg2);
-        $year = NewsroomBuilder::getYear($arg3);
+        $day = self::getDay($arg1);
+        $month = self::getMonth($arg2);
+        $year = self::getYear($arg3);
 
         $current_date->setDate($year, $month, $day);
         $agenda = new NewsroomAgendaSchedule($type, $topic, $current_date);
@@ -126,15 +126,15 @@ class NewsroomBuilder {
    *   Newsroom importer generator.
    */
   public static function buildImporter($importer_id) {
+    $import_period = -1;
+    $rss_context = '//channel/item';
     switch ($importer_id) {
       case NEXTEUROPA_NEWSROOM_ITEM_IMPORTER:
         $title = 'Newsroom Items Multilingual';
         $description = 'Imports Newsroom Items from the Newsroom service.';
         $entity_type = 'node';
         $bundle = NEXTEUROPA_NEWSROOM_CONTENT_TYPE;
-        $rss_context = '//channel/item';
-        $import_period = -1;
-        $field_mapping = NewsroomBuilder::getItemImporterMappings();
+        $field_mapping = self::getItemImporterMappings();
         break;
 
       case NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER:
@@ -142,9 +142,8 @@ class NewsroomBuilder {
         $description = 'Imports newsletter issues.';
         $entity_type = 'node';
         $bundle = NEXTEUROPA_NEWSROOM_NEWSLETTER_CONTENT_TYPE;
-        $rss_context = '//channel/item';
         $import_period = 3600;
-        $field_mapping = NewsroomBuilder::getIssueImporterMappings();
+        $field_mapping = self::getIssueImporterMappings();
         break;
 
       case NEXTEUROPA_NEWSROOM_TYPE_IMPORTER:
@@ -152,9 +151,7 @@ class NewsroomBuilder {
         $description = 'Imports Item Types from the Newsroom service.';
         $entity_type = 'taxonomy_term';
         $bundle = NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY;
-        $rss_context = '//channel/item';
-        $import_period = -1;
-        $field_mapping = NewsroomBuilder::getTypeImporterMappings();
+        $field_mapping = self::getTypeImporterMappings();
         break;
 
       case NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER:
@@ -163,8 +160,7 @@ class NewsroomBuilder {
         $entity_type = 'taxonomy_term';
         $bundle = NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY;
         $rss_context = '//channel/item[infsonewsroom:BasicSvType="Newsroom service"]/category[@domain!="Newsletter" and @lang="' . NewsroomHelper::getDefaultLanguageUppercase() . '"]';
-        $import_period = -1;
-        $field_mapping = NewsroomBuilder::getTopicImporterMappings();
+        $field_mapping = self::getTopicImporterMappings();
         break;
 
       case NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER:
@@ -172,9 +168,7 @@ class NewsroomBuilder {
         $description = 'Imports Services from the Newsroom service.';
         $entity_type = 'taxonomy_term';
         $bundle = NEXTEUROPA_NEWSROOM_SERVICE_VOCABULARY;
-        $rss_context = '//channel/item';
-        $import_period = -1;
-        $field_mapping = NewsroomBuilder::getServiceImporterMappings();
+        $field_mapping = self::getServiceImporterMappings();
         break;
     }
 
@@ -496,7 +490,7 @@ class NewsroomBuilder {
         'query' => 'infsonewsroom:itemDisplay/text()',
       ],
       [
-        'field' => 'field_newsroom_docroom_ids',
+        'field' => 'field_newsroom_docsroom_ids',
         'query' => 'enclosure[@external_app="docsroom"]/@external_id',
       ],
       [
@@ -800,7 +794,7 @@ class NewsroomBuilder {
    *   Taxonomy term object.
    */
   private static function getTopic($topic_url) {
-    $topic = NewsroomBuilder::getTaxonomyTerm($topic_url, NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY);
+    $topic = self::getTaxonomyTerm($topic_url, NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY);
     if ($topic) {
       // Try to find active menu.
       if ($path = NewsroomHelper::fetchActiveMenuPath($topic->tid)) {
@@ -833,7 +827,7 @@ class NewsroomBuilder {
    *   Taxonomy term object.
    */
   private static function getType($type_url) {
-    return NewsroomBuilder::getTaxonomyTerm($type_url, NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY);
+    return self::getTaxonomyTerm($type_url, NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY);
   }
 
   /**
@@ -869,10 +863,10 @@ class NewsroomBuilder {
    *   NewsroomPage object.
    */
   public static function buildNewsroomPage($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL, $ec_content = NEXTEUROPA_NEWSROOM_EC) {
-    $type = NewsroomBuilder::getType($type_url);
-    $topic = NewsroomBuilder::getTopic($topic_url);
-    $start_date = NewsroomBuilder::getDate($start_date);
-    $end_date = NewsroomBuilder::getDate($end_date);
+    $type = self::getType($type_url);
+    $topic = self::getTopic($topic_url);
+    $start_date = self::getDate($start_date);
+    $end_date = self::getDate($end_date);
     return new NewsroomPage($type, $topic, $start_date, $end_date, $ec_content);
   }
 

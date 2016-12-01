@@ -572,8 +572,8 @@ function nexteuropa_newsroom_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-newsroom_item-field_newsroom_docroom_ids'.
-  $field_instances['node-newsroom_item-field_newsroom_docroom_ids'] = array(
+  // Exported field_instance: 'node-newsroom_item-field_newsroom_docsroom_ids'.
+  $field_instances['node-newsroom_item-field_newsroom_docsroom_ids'] = array(
     'bundle' => 'newsroom_item',
     'default_value' => NULL,
     'deleted' => 0,
@@ -585,7 +585,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
         'settings' => array(
           'display_type' => 'default',
         ),
-        'type' => 'newsroom_docroom',
+        'type' => 'newsroom_docsroom',
         'weight' => 11,
       ),
       'newsroom_event' => array(
@@ -596,8 +596,8 @@ function nexteuropa_newsroom_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_newsroom_docroom_ids',
-    'label' => 'Docroom documents',
+    'field_name' => 'field_newsroom_docsroom_ids',
+    'label' => 'Docsroom documents',
     'required' => 0,
     'settings' => array(
       'entity_translation_sync' => FALSE,

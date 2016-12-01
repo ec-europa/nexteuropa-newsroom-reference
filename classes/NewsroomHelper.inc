@@ -20,7 +20,7 @@ class NewsroomHelper {
    *   tids
    */
   public static function getTypeChildren($term_tid) {
-    $children_items = NewsroomHelper::findChildrenById(NewsroomHelper::getNewsroomTypes(), $term_tid);
+    $children_items = self::findChildrenById(self::getNewsroomTypes(), $term_tid);
     // We need parent ID also in the output array to use it in query.
     $parent_children_tids = [$term_tid];
     $children_tids = array_keys($children_items);
@@ -125,11 +125,11 @@ class NewsroomHelper {
 
       case NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER:
       case NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER:
-        $url = NewsroomHelper::getNewsroomUrl(variable_get('newsroom_topic_import_script', NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT));
+        $url = self::getNewsroomUrl(variable_get('newsroom_topic_import_script', NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT));
         break;
 
       case NEXTEUROPA_NEWSROOM_TYPE_IMPORTER:
-        $url = NewsroomHelper::getNewsroomUrl(variable_get('newsroom_type_import_script', NEXTEUROPA_NEWSROOM_TYPE_SCRIPT));
+        $url = self::getNewsroomUrl(variable_get('newsroom_type_import_script', NEXTEUROPA_NEWSROOM_TYPE_SCRIPT));
         break;
 
       case NEXTEUROPA_NEWSROOM_ITEM_IMPORTER:
@@ -140,11 +140,11 @@ class NewsroomHelper {
           $subsite_url_part = '?subsite=' . $subsite;
         }
 
-        $url = NewsroomHelper::getNewsroomUrl(variable_get('newsroom_item_import_script', NEXTEUROPA_NEWSROOM_ITEM_SCRIPT)) . $subsite_url_part;
+        $url = self::getNewsroomUrl(variable_get('newsroom_item_import_script', NEXTEUROPA_NEWSROOM_ITEM_SCRIPT)) . $subsite_url_part;
         break;
 
       case NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER:
-        $url = NewsroomHelper::getNewsroomUrl(variable_get('newsroom_issue_import_script', NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT));
+        $url = self::getNewsroomUrl(variable_get('newsroom_issue_import_script', NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT));
         break;
     }
 
@@ -244,11 +244,11 @@ class NewsroomHelper {
       // Check if they are added to menu.
       $menu_items = [];
       // Fetch entities associated to topic using the special field.
-      $topic_entities = NewsroomHelper::getNodesAssociatedToTopics($topic_id);
+      $topic_entities = self::getNodesAssociatedToTopics($topic_id);
       if (!empty($topic_entities)) {
         foreach ($topic_entities as $entity) {
           // Could use entity_uri() but we would have to load the full entity.
-          $menu_link_items = NewsroomHelper::getMenuByPath(str_replace('_', '/', $entity->entity_type) . '/' . $entity->entity_id);
+          $menu_link_items = self::getMenuByPath(str_replace('_', '/', $entity->entity_type) . '/' . $entity->entity_id);
           if (!empty($menu_link_items)) {
             foreach ($menu_link_items as $menu_item) {
               $menu_items[] = $menu_item;
@@ -333,7 +333,7 @@ class NewsroomHelper {
   public static function getEventsTermsIds() {
     $event_type_ids = &drupal_static(__FUNCTION__);
     if (empty($event_type_ids)) {
-      $types = NewsroomHelper::getNewsroomTypes();
+      $types = self::getNewsroomTypes();
       $behavior_types = [
         'consultation_funding',
         'events',
@@ -341,7 +341,7 @@ class NewsroomHelper {
         'call',
       ];
       foreach ($types as $type) {
-        if (in_array(NewsroomHelper::getFieldValue($type, 'field_newsroom_type'), $behavior_types)) {
+        if (in_array(self::getFieldValue($type, 'field_newsroom_type'), $behavior_types)) {
           $event_type_ids[] = $type->tid;
         }
       }
@@ -356,7 +356,7 @@ class NewsroomHelper {
    *   Universe URL.
    */
   public static function getUniverseUrl() {
-    return variable_get('newsroom_base_url', NEXTEUROPA_NEWSROOM_BASE_URL) . NewsroomHelper::getUniverseId() . '/';
+    return variable_get('newsroom_base_url', NEXTEUROPA_NEWSROOM_BASE_URL) . self::getUniverseId() . '/';
   }
 
   /**
@@ -409,10 +409,10 @@ class NewsroomHelper {
         $taxonomy_terms = [];
 
         if ($vocabulary_name == NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY) {
-          $taxonomy_terms = array_merge($taxonomy_terms, NewsroomHelper::getNewsroomTypes());
+          $taxonomy_terms = array_merge($taxonomy_terms, self::getNewsroomTypes());
         }
         elseif ($vocabulary_name == NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY) {
-          $taxonomy_terms = array_merge($taxonomy_terms, NewsroomHelper::getNewsroomTopics());
+          $taxonomy_terms = array_merge($taxonomy_terms, self::getNewsroomTopics());
         }
         // Compare taxonomy terms modified by pathauto with the current value
         // from the URL.
@@ -458,9 +458,9 @@ class NewsroomHelper {
    *   Drop down options array.
    */
   public static function getNewsroomTypeOptions($events_only = FALSE, $add_empty_value = TRUE) {
-    $type_options = NewsroomHelper::getTaxonomyTermOptions(NewsroomHelper::getNewsroomTypes());
+    $type_options = self::getTaxonomyTermOptions(self::getNewsroomTypes());
     if ($events_only) {
-      $events_types = NewsroomHelper::getEventsTermsIds();
+      $events_types = self::getEventsTermsIds();
       // Filter out non events type.
       if (!empty($events_types)) {
         foreach ($type_options as $key => $type_item) {
@@ -492,7 +492,7 @@ class NewsroomHelper {
    *   Drop down options array.
    */
   public static function getNewsroomTopicOptions($used_topics = [], $add_empty_value = TRUE) {
-    $topic_options = NewsroomHelper::getTaxonomyTermOptions(NewsroomHelper::getNewsroomTopics());
+    $topic_options = self::getTaxonomyTermOptions(self::getNewsroomTopics());
     if (!empty($used_topics)) {
       foreach ($topic_options as $key => $topic) {
         if (!in_array($key, $used_topics)) {
@@ -602,8 +602,8 @@ class NewsroomHelper {
   public static function getNewsroomTopics() {
     $data = &drupal_static(__FUNCTION__);
     if (empty($data)) {
-      $vocabulary = NewsroomHelper::getNewsroomTopicVocabulary();
-      $data = NewsroomHelper::getNewsroomTaxonomyTerms($vocabulary->vid);
+      $vocabulary = self::getNewsroomTopicVocabulary();
+      $data = self::getNewsroomTaxonomyTerms($vocabulary->vid);
     }
     return $data;
   }
@@ -617,8 +617,8 @@ class NewsroomHelper {
   public static function getNewsroomTypes() {
     $data = &drupal_static(__FUNCTION__);
     if (empty($data)) {
-      $vocabulary = NewsroomHelper::getNewsroomTypeVocabulary();
-      $data = NewsroomHelper::getNewsroomTaxonomyTerms($vocabulary->vid);
+      $vocabulary = self::getNewsroomTypeVocabulary();
+      $data = self::getNewsroomTaxonomyTerms($vocabulary->vid);
     }
     return $data;
   }
@@ -639,7 +639,7 @@ class NewsroomHelper {
       $data = $cache->data;
     }
     else {
-      $data = i18n_taxonomy_get_tree($vocabulary_id, NewsroomHelper::getDefaultLanguage(), 0, NULL, TRUE);
+      $data = i18n_taxonomy_get_tree($vocabulary_id, self::getDefaultLanguage(), 0, NULL, TRUE);
       foreach ($data as $key => $taxonomy_term) {
         $i18n_object = i18n_get_object('taxonomy_term', $taxonomy_term->tid);
         $data[$key] = $i18n_object->localize($language->language);
@@ -660,7 +660,7 @@ class NewsroomHelper {
    *   Taxonomy term.
    */
   public static function getNewsroomType($tid = NULL) {
-    return $tid ? NewsroomHelper::findTermById(NewsroomHelper::getNewsroomTypes(), $tid) : NULL;
+    return $tid ? self::findTermById(self::getNewsroomTypes(), $tid) : NULL;
   }
 
   /**
@@ -673,7 +673,7 @@ class NewsroomHelper {
    *   Taxonomy term.
    */
   public static function getNewsroomTopic($tid = NULL) {
-    return $tid ? NewsroomHelper::findTermById(NewsroomHelper::getNewsroomTopics(), $tid) : NULL;
+    return $tid ? self::findTermById(self::getNewsroomTopics(), $tid) : NULL;
   }
 
   /**
@@ -732,7 +732,7 @@ class NewsroomHelper {
    *   URL.
    */
   public static function getNewsroomUrl($url_part) {
-    return NewsroomHelper::getUniverseUrl() . $url_part;
+    return self::getUniverseUrl() . $url_part;
   }
 
   /**
@@ -789,7 +789,7 @@ class NewsroomHelper {
   public static function validateUniverse($universe_id = NULL) {
     if ($universe_id) {
       // logout.cfm is used because it is always available if a universe exists.
-      $test = drupal_http_request(NewsroomHelper::getUniverseUrl() . '/logout.cfm');
+      $test = drupal_http_request(self::getUniverseUrl() . '/logout.cfm');
       return $test->code == 200;
     }
 
@@ -811,7 +811,7 @@ class NewsroomHelper {
       return TRUE;
     }
     else {
-      $request = drupal_http_request(NewsroomHelper::getUniverseUrl() . 'validation.cfm?subsite=' . $subsite);
+      $request = drupal_http_request(self::getUniverseUrl() . 'validation.cfm?subsite=' . $subsite);
       return !empty($request->data) && $request->data == 'True';
     }
 
@@ -944,15 +944,15 @@ class NewsroomHelper {
    */
   public static function getNodeMainUrl($node, $display_name = NULL) {
     $url = 'node/' . $node->nid;
-    $type = NewsroomHelper::getNewsroomType(NewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid'));
-    $click_through = NewsroomHelper::getFieldValue($type, 'field_newsroom_direct_link');
-    $main_link_url = NewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_item_main_link', 'url');
+    $type = self::getNewsroomType(self::getFieldValue($node, 'field_newsroom_item_type', 'tid'));
+    $click_through = self::getFieldValue($type, 'field_newsroom_direct_link');
+    $main_link_url = self::getFieldTranslatedValue($node, 'field_newsroom_item_main_link', 'url');
 
     if (!empty($main_link_url)) {
       if ($click_through == NEXTEUROPA_NEWSROOM_CLICKTHROUGH_FORCE) {
         $url = $main_link_url;
       }
-      elseif (NewsroomHelper::getFieldValue($node, 'field_newsroom_teaser_only')) {
+      elseif (self::getFieldValue($node, 'field_newsroom_teaser_only')) {
         // If item is Teaser only.
         switch ($click_through) {
           case 'always':
@@ -1045,7 +1045,7 @@ class NewsroomHelper {
    *   Importer id.
    */
   public static function setDefaultImporterUrl($importer_id) {
-    $url = NewsroomHelper::getImporterUrl($importer_id);
+    $url = self::getImporterUrl($importer_id);
     if (!empty($url)) {
       $source = feeds_source($importer_id);
       $config = $source->getConfig();
