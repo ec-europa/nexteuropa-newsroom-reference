@@ -288,6 +288,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#default_value' => variable_get('newsroom_docsroom_url'),
   ];
 
+  // Page settings.
   $form['newsroom_pages'] = [
     '#type' => 'fieldset',
     '#title' => t('Newsroom page settings'),
@@ -298,6 +299,12 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#type' => 'textarea',
     '#title' => t('Privacy statement'),
     '#default_value' => variable_get('newsroom_newsletter_privacy'),
+  ];
+  $form['newsroom_pages']['newsroom_featured_type'] = [
+    '#type' => 'select',
+    '#title' => t('Featured newsroom type'),
+    '#options' => NewsroomHelper::getNewsroomTypeOptions(FALSE),
+    '#default_value' => variable_get('newsroom_featured_type'),
   ];
 
   // Settings about the newsroom blocks.

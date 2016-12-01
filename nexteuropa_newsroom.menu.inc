@@ -35,7 +35,7 @@ function nexteuropa_newsroom_menu() {
   $items['news-proposal'] = [
     'title' => 'Newsroom item proposal',
     'page callback' => 'drupal_get_form',
-    'page arguments' => ['nexteuropa_newsroom_newsroom_proposal_form'],
+    'page arguments' => ['nexteuropa_newsroom_proposal_form'],
     'access arguments' => [NEXTEUROPA_NEWSROOM_PROPOSAL_ACCESS],
   ];
   $items['newsroom-agenda'] = [
@@ -65,18 +65,18 @@ function nexteuropa_newsroom_menu() {
     'title' => 'Newsroom item import',
     'page callback' => '_nexteuropa_newsroom_import_item',
     'page arguments' => [1, 2],
-    'access callback' => '_nexteuropa_nexteuropa_newsroom_item_import_access',
+    'access callback' => '_nexteuropa_newsroom_item_import_access',
     'type' => MENU_CALLBACK,
   ];
   $items['newsroom-delete'] = [
     'title' => 'Newsroom item delete',
     'page callback' => '_nexteuropa_newsroom_delete_item',
     'page arguments' => [1, 2],
-    'access callback' => '_nexteuropa_nexteuropa_newsroom_item_import_access',
+    'access callback' => '_nexteuropa_newsroom_item_import_access',
     'type' => MENU_CALLBACK,
   ];
   $items['newsroom'] = [
-    'page callback' => '_nexteuropa_newsroom_newsroom_page',
+    'page callback' => '_nexteuropa_newsroom_page',
     'access arguments' => ['access content'],
     'type' => MENU_CALLBACK,
     'file' => 'nexteuropa_newsroom.pages.inc',
@@ -84,7 +84,7 @@ function nexteuropa_newsroom_menu() {
   $items['newsroom-rss'] = [
     'title' => 'Newsroom RSS feed',
     'description' => 'Newsroom RSS feed',
-    'page callback' => '_nexteuropa_newsroom_newsroom_rss',
+    'page callback' => '_nexteuropa_newsroom_rss',
     'access arguments' => ['access content'],
     'type' => MENU_CALLBACK,
     'file' => 'nexteuropa_newsroom.pages.inc',

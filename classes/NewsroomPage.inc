@@ -277,7 +277,7 @@ class NewsroomPage {
    */
   public function getContent() {
     drupal_set_title($this->generateTitle());
-    $filter_form = drupal_get_form('nexteuropa_newsroom_newsroom_page_filter_form', $this->getType(), $this->getTopic(), $this->getStartDate(), $this->getEndDate(), $this->getEcContent());
+    $filter_form = drupal_get_form('nexteuropa_newsroom_page_filter_form', $this->getType(), $this->getTopic(), $this->getStartDate(), $this->getEndDate(), $this->getEcContent());
     $content = theme('newsroom_page', [
       'filter_form' => drupal_render($filter_form),
       'featured_item' => $this->getTypeFeaturedItem(),
@@ -392,8 +392,8 @@ class NewsroomPage {
 
     $query->condition($db_or);
 
-    $query->orderBy('d.field_newsroom_item_date_value', 'DESC');
-    $query->orderBy('d.field_newsroom_item_date_value2', 'DESC');
+    $query->orderBy('start_date', 'DESC');
+    $query->orderBy('end_date', 'DESC');
 
     if ($this->getType()) {
       $query->condition('type_field.field_newsroom_item_type_tid', NewsroomHelper::getTypeChildren($this->getType()->tid));
@@ -410,6 +410,8 @@ class NewsroomPage {
     if ($this->getEndDate()) {
       $query->condition('n.created', $this->getEndDate()->getTimestamp(), '<=');
     }
+
+    $query->addTag('node_access');
 
     return $query;
   }
@@ -442,7 +444,15 @@ class NewsroomPage {
    */
   protected function getTypeFeaturedItem() {
     $content = NULL;
-    if ($featured_item_id = NewsroomHelper::getFieldValue($this->getType(), 'field_newsroom_featured_item', 'target_id')) {
+    $featured_item_id = NewsroomHelper::getFieldValue($this->getType(), 'field_newsroom_featured_item', 'target_id');
+    if (empty($featured_item_id)) {
+      // If featured item is not set we try to take from feature newsroom type.
+      if ($featured_type = NewsroomHelper::getNewsroomType(variable_get('newsroom_featured_type'))) {
+        $featured_item_id = NewsroomHelper::getFieldValue($featured_type, 'field_newsroom_featured_item', 'target_id');
+      }
+    }
+
+    if ($featured_item_id) {
       $cache_key = 'type_featured_item:' . $this->getType()->tid;
 
       if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {

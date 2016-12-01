@@ -120,6 +120,7 @@ class NewsroomBlock extends NewsroomBlockBase {
       $db_or->condition('newsletter_item.field_newsroom_newsletter_only_value', 1, '<>');
       $db_or->isNull('newsletter_item.field_newsroom_newsletter_only_value');
 
+      $query->condition($db_or);
       $query->condition('n.type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
 
       if (!empty($topic_ids)) {

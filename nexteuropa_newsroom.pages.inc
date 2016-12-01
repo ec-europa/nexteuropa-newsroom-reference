@@ -45,7 +45,7 @@ function _nexteuropa_newsroom_agenda($view = NewsroomAgenda::AGENDA_VIEW_SCHEDUL
  * @return string
  *   Newsroom page content,
  */
-function _nexteuropa_newsroom_newsroom_page($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL, $ec_content = NEXTEUROPA_NEWSROOM_EC) {
+function _nexteuropa_newsroom_page($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL, $ec_content = NEXTEUROPA_NEWSROOM_EC) {
   $newsroom_page = NewsroomBuilder::buildNewsroomPage($type_url, $topic_url, $start_date, $end_date, $ec_content);
   $output = $newsroom_page->getContent();
   $output .= theme('pager');
@@ -61,7 +61,7 @@ function _nexteuropa_newsroom_newsroom_page($type_url = NULL, $topic_url = NULL,
  * @param string $topic_url
  *   Topic url part.
  */
-function _nexteuropa_newsroom_newsroom_rss($type_url = NULL, $topic_url = NULL) {
+function _nexteuropa_newsroom_rss($type_url = NULL, $topic_url = NULL) {
   $newsroom_page = NewsroomBuilder::buildNewsroomPage($type_url, $topic_url);
   drupal_add_http_header('Content-Type', 'application/rss+xml; charset=utf-8');
   echo $newsroom_page->getRssContent();
@@ -145,32 +145,34 @@ function _nexteuropa_newsroom_newsletters_page() {
  */
 function _nexteuropa_newsroom_prepare_newsletters($newsletters = [], $subscriptions = []) {
   $output = [];
-  foreach ($newsletters as $newsletter) {
-    $item = new stdClass();
-    $item->title = $newsletter->taxonomy_term_data_name;
-    $item->description = $newsletter->taxonomy_term_data_description;
-    $item->service_sample = !empty($newsletter->field_field_newsroom_service_sample_et[0]) ? drupal_render($newsletter->field_field_newsroom_service_sample_et[0]['rendered']) : NULL;
-    $item->service_id = !empty($newsletter->field_field_newsroom_service_id[0]) ? $newsletter->field_field_newsroom_service_id[0]['raw']['value'] : NULL;
-    $item->image = !empty($newsletter->field_field_newsroom_service_image[0]) ? drupal_render($newsletter->field_field_newsroom_service_image[0]['rendered']) : NULL;
-    $item->form = NULL;
-    if (!empty($item->service_id)) {
-      $subscription_url = NULL;
-      foreach ($subscriptions as $user_subscription) {
-        if ($user_subscription['NEWSLETTERID'] == $item->service_id) {
-          $subscription_url = $user_subscription['UNSUBSCRIPTIONLINK'];
-          break;
+  if (empty($newsletters)) {
+    foreach ($newsletters as $newsletter) {
+      $item = new stdClass();
+      $item->title = $newsletter->taxonomy_term_data_name;
+      $item->description = $newsletter->taxonomy_term_data_description;
+      $item->service_sample = !empty($newsletter->field_field_newsroom_service_sample_et[0]) ? drupal_render($newsletter->field_field_newsroom_service_sample_et[0]['rendered']) : NULL;
+      $item->service_id = !empty($newsletter->field_field_newsroom_service_id[0]) ? $newsletter->field_field_newsroom_service_id[0]['raw']['value'] : NULL;
+      $item->image = !empty($newsletter->field_field_newsroom_service_image[0]) ? drupal_render($newsletter->field_field_newsroom_service_image[0]['rendered']) : NULL;
+      $item->form = NULL;
+      if (!empty($item->service_id)) {
+        $subscription_url = NULL;
+        foreach ($subscriptions as $user_subscription) {
+          if ($user_subscription['NEWSLETTERID'] == $item->service_id) {
+            $subscription_url = $user_subscription['UNSUBSCRIPTIONLINK'];
+            break;
+          }
         }
-      }
-      if ($subscription_url) {
-        $form = drupal_get_form('nexteuropa_newsroom_unsubscription_newsletter_form', $subscription_url);
-      }
-      else {
-        $form = drupal_get_form('nexteuropa_newsroom_subscription_newsletter_form', $item->service_id);
-      }
+        if ($subscription_url) {
+          $form = drupal_get_form('nexteuropa_newsroom_unsubscription_newsletter_form', $subscription_url);
+        }
+        else {
+          $form = drupal_get_form('nexteuropa_newsroom_subscription_newsletter_form', $item->service_id);
+        }
 
-      $item->form = drupal_render($form);
+        $item->form = drupal_render($form);
+      }
+      $output[] = $item;
     }
-    $output[] = $item;
   }
   return $output;
 }
