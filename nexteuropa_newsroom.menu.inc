@@ -54,21 +54,21 @@ function nexteuropa_newsroom_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'nexteuropa_newsroom.pages.inc',
   ];
-  $items['newsroom-redirect'] = [
+  $items['newsroom-redirect/%/%'] = [
     'title' => 'Newsroom item redirect',
     'page callback' => '_nexteuropa_newsroom_redirect',
     'page arguments' => [1, 2],
     'access arguments' => ['access content'],
     'type' => MENU_CALLBACK,
   ];
-  $items['newsroom-import'] = [
+  $items['newsroom-import/%/%'] = [
     'title' => 'Newsroom item import',
     'page callback' => '_nexteuropa_newsroom_import_item',
     'page arguments' => [1, 2],
     'access callback' => '_nexteuropa_newsroom_item_import_access',
     'type' => MENU_CALLBACK,
   ];
-  $items['newsroom-delete'] = [
+  $items['newsroom-delete/%/%'] = [
     'title' => 'Newsroom item delete',
     'page callback' => '_nexteuropa_newsroom_delete_item',
     'page arguments' => [1, 2],
