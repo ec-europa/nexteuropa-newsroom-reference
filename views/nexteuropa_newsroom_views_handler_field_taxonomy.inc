@@ -10,6 +10,8 @@
  *
  * @ingroup views_field_handlers
  */
+
+// @codingStandardsIgnoreLine
 class nexteuropa_newsroom_views_handler_field_taxonomy extends views_handler_field_taxonomy {
   /**
    * Constructor to provide additional field to add.
@@ -27,22 +29,27 @@ class nexteuropa_newsroom_views_handler_field_taxonomy extends views_handler_fie
    * @return array
    *   Options.
    */
+
+  // @codingStandardsIgnoreLine
   public function option_definition() {
     $options = parent::option_definition();
-    $options['convert_path_auto'] = array('default' => FALSE, 'bool' => TRUE);
+    $options['convert_path_auto'] = ['default' => FALSE, 'bool' => TRUE];
     return $options;
   }
 
   /**
    * Provides link to taxonomy option.
    */
+
+  // @codingStandardsIgnoreLine
   public function options_form(&$form, &$form_state) {
-    $form['convert_path_auto'] = array(
+    $form['convert_path_auto'] = [
       '#title' => t('Convert URL with pathauto'),
       '#description' => t('Use pathauto clean function to get proper URL.'),
       '#type' => 'checkbox',
       '#default_value' => !empty($this->options['convert_path_auto']),
-    );
+    ];
+
     parent::options_form($form, $form_state);
   }
 
@@ -51,8 +58,11 @@ class nexteuropa_newsroom_views_handler_field_taxonomy extends views_handler_fie
    *
    * Data should be made XSS safe prior to calling this function.
    */
+
+  // @codingStandardsIgnoreLine
   public function render_link($data, $values) {
     $tid = $this->get_value($values, 'tid');
+
     if (!empty($this->options['link_to_taxonomy']) && !empty($tid) && $data !== NULL && $data !== '') {
       $term = new stdClass();
       $term->tid = $tid;

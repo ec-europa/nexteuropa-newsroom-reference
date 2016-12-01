@@ -68,20 +68,16 @@ class NewsroomAgendaBlockSchedule extends NewsroomAgendaSchedule {
    */
   protected function processQuery($query) {
 
-    if (count($this->getTopics()) == 0) {
+    if (empty($this->getTopics())) {
       return $query;
     }
 
-    $topic_ids = $this->getTopicsId();
     if ($this->getOperator() == NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR) {
-      $query->condition('topic_data.tid', $topic_ids);
+      $query->condition('topic_data.tid', $this->getTopicsId());
 
     }
-    else {
-      $nids = NewsroomHelper::getNodeRelatedToTopic($this->getTopicsId());
-      if ($nids) {
-        $query->condition('nid', $nids, 'IN');
-      }
+    elseif ($nids = NewsroomHelper::getNodeRelatedToTopic($this->getTopicsId())) {
+      $query->condition('nid', $nids, 'IN');
     }
 
     return $query;

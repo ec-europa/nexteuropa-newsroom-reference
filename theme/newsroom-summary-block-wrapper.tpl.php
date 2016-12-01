@@ -12,7 +12,7 @@
   <?php echo $content; ?>
   <div class="newsroom_more">
     <?php $title = '<span class="more">More</span> <span class="more_type"><em class="placeholder">' . $title . '</em></span>'; ?>
-    <?php echo l($title, $url, array('html' => TRUE)); ?>
+    <?php echo l($title, $url, ['html' => TRUE]); ?>
   </div>
 </div>
 <?php endif; ?>

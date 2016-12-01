@@ -229,7 +229,8 @@ function nexteuropa_newsroom_field_group_info() {
     'weight' => '6',
     'children' => array(
       0 => 'field_newsroom_documents',
-      1 => 'field_newsroom_files',
+      1 => 'field_newsroom_documents',
+      2 => 'field_newsroom_docsroom_ids',
     ),
     'format_type' => 'div',
     'format_settings' => array(
@@ -324,18 +325,20 @@ function nexteuropa_newsroom_field_group_info() {
     ),
     'format_type' => 'div',
     'format_settings' => array(
-      'formatter' => 'open',
+      'label' => 'Event information',
       'instance_settings' => array(
+        'id' => '',
+        'classes' => 'group-newsroom-links field-group-div section',
         'description' => '',
         'show_label' => 0,
         'label_element' => 'h3',
         'effect' => 'none',
-        'speed' => 'fast',
-        'classes' => 'group-newsroom-item-links field-group-div',
-        'id' => '',
+        'speed' => 'none',
       ),
+      'formatter' => 'open',
     ),
   );
+
   $field_groups['group_newsroom_item_links|node|newsroom_item|default'] = $field_group;
 
   $field_group = new stdClass();
@@ -479,8 +482,9 @@ function nexteuropa_newsroom_field_group_info() {
       0 => 'field_newsroom_illustrative_img',
       1 => 'field_newsroom_private_img',
       2 => 'field_newsroom_documents',
-      3 => 'field_newsroom_files',
-      4 => 'field_newsroom_item_image',
+      3 => 'field_newsroom_docsroom_ids',
+      4 => 'field_newsroom_files',
+      5 => 'field_newsroom_item_image',
     ),
     'format_type' => 'tab',
     'format_settings' => array(
@@ -502,7 +506,7 @@ function nexteuropa_newsroom_field_group_info() {
   $field_group->entity_type = 'node';
   $field_group->bundle = 'newsroom_item';
   $field_group->mode = 'form';
-  $field_group->parent_name = 'group_newsroom_item_form_section';
+  $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Links',
     'weight' => '11',
@@ -734,6 +738,7 @@ function nexteuropa_newsroom_field_group_info() {
       1 => 'field_newsroom_service_active',
       2 => 'field_newsroom_service_type',
       3 => 'field_newsroom_topic',
+      4 => 'field_newsroom_service_sample',
     ),
     'format_type' => 'tab',
     'format_settings' => array(
@@ -752,7 +757,7 @@ function nexteuropa_newsroom_field_group_info() {
   $field_group->identifier = 'group_newsroom_technical|taxonomy_term|newsroom_topic|form';
   $field_group->group_name = 'group_newsroom_technical';
   $field_group->entity_type = 'taxonomy_term';
-  $field_group->bundle = 'newsroom_service';
+  $field_group->bundle = 'newsroom_topic';
   $field_group->mode = 'form';
   $field_group->parent_name = '';
   $field_group->data = array(

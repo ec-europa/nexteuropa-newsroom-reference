@@ -35,15 +35,14 @@ class NewsroomBlockAgenda extends NewsroomBlockBase {
    *   Agenda block content.
    */
   public function generateContent() {
-    $builder = new NewsroomBuilder();
-    $agenda = $builder->buildAgenda(NewsroomAgenda::AGENDA_VIEW_SCHEDULE_BLOCK, $this->getType(), $this->getTopics(), new DateTime(), $this->getOperator());
-    $content = theme('newsroom_summary_block_wrapper', array(
+    $agenda = NewsroomBuilder::buildAgenda(NewsroomAgenda::AGENDA_VIEW_SCHEDULE_BLOCK, $this->getType(), $this->getTopics(), new DateTime(), $this->getOperator());
+    $content = theme('newsroom_summary_block_wrapper', [
       'content' => $agenda->getBlockAgenda(),
       'css_classes' => $this->getCssClasses(),
       'title' => $this->getTitle(),
       'type_url' => 'agenda',
       'url' => 'newsroom-agenda/' . NewsroomAgenda::AGENDA_VIEW_SCHEDULE . '/' . $this->getTypeUrl() . '/' . $this->getTopicUrl(),
-    ));
+    ]);
     return $content;
   }
 

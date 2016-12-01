@@ -10,8 +10,8 @@
  */
 class NewsroomSummaryBlock {
 
-  protected $types = array();
-  protected $topics = array();
+  protected $types = [];
+  protected $topics = [];
   protected $operator = NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR;
 
   /**
@@ -86,7 +86,7 @@ class NewsroomSummaryBlock {
     $topic_name = NULL;
 
     // We take only first topic if we have multiple.
-    if (count($topics) > 0) {
+    if (!empty($topics)) {
       $topic_name = $topics[0]->name;
       $topic_url = pathauto_cleanstring($topics[0]->name);
     }
@@ -94,14 +94,14 @@ class NewsroomSummaryBlock {
       $url_parts[] = NEXTEUROPA_NEWSROOM_ALL;
     }
 
-    $rss_path = NewsroomHelper::getNewsroomRssUrl(array(NEXTEUROPA_NEWSROOM_ALL, $topic_url));
+    $rss_path = NewsroomHelper::getNewsroomRssUrl([NEXTEUROPA_NEWSROOM_ALL, $topic_url]);
     $rss_title = !empty($topic_name) ? 'RSS feed : ' . $topic_name : 'RSS feed';
 
     $rss = '<div class="newsroom_rss">';
-    $rss .= theme('feed_icon', array(
+    $rss .= theme('feed_icon', [
       'url' => $rss_path,
       'title' => $rss_title,
-    ));
+    ]);
     $rss .= l($rss_title, $rss_path);
     $rss .= '</div>';
 
@@ -120,11 +120,11 @@ class NewsroomSummaryBlock {
     }
     else {
       $topic_operator = NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR;
-      $selected_topics = array();
-      $selected_types = array();
+      $selected_topics = [];
+      $selected_types = [];
 
       if ($entity = $this->getEntityFromRequest()) {
-        if (isset($entity->type) && $entity->type == 'newsroom_selection') {
+        if (!empty($entity->type) && $entity->type == 'newsroom_selection') {
 
           if (NewsroomHelper::getFieldValue($entity, 'field_newsroom_topic_operator')) {
             $topic_operator = NewsroomHelper::getFieldValue($entity, 'field_newsroom_topic_operator');
@@ -151,8 +151,8 @@ class NewsroomSummaryBlock {
         }
       }
 
-      $types = array();
-      if (count($selected_types) > 0) {
+      $types = [];
+      if (!empty($selected_types)) {
         foreach ($selected_types as $type_id) {
           $types[] = NewsroomHelper::getNewsroomType($type_id);
         }
@@ -167,7 +167,7 @@ class NewsroomSummaryBlock {
         }
       }
 
-      $topics = array();
+      $topics = [];
       foreach ($selected_topics as $topic_id) {
         if ($topic_term = NewsroomHelper::getNewsroomTopic($topic_id)) {
           $topics[] = $topic_term;
@@ -209,7 +209,7 @@ class NewsroomSummaryBlock {
       // It is a node page take node entity from request.
       $entity = $current_path['map'][1];
     }
-    elseif (isset($current_path['page_arguments'][0]->tid)) {
+    elseif (!empty($current_path['page_arguments'][0]->tid)) {
       // It's taxonomy term without views.
       $entity = $current_path['page_arguments'][0];
     }
@@ -232,11 +232,12 @@ class NewsroomSummaryBlock {
   public function generateContent() {
     $this->getFilters();
     $events_terms = NewsroomHelper::getEventsTermsIds();
-    $blocks = array();
+    $blocks = [];
     $output = NULL;
 
     foreach ($this->getTypes() as $key => $type) {
-      if (in_array($type->tid, $events_terms)) {
+      // We exclude event content types, because we display them as agenda.
+      if (!empty($events_terms) && in_array($type->tid, $events_terms)) {
         continue;
       }
 
@@ -245,14 +246,14 @@ class NewsroomSummaryBlock {
 
     $blocks[] = new NewsroomBlockAgenda(NULL, $this->getTopics(), $this->getOperator());
 
-    usort($blocks, array('NewsroomSummaryBlock', 'sortBlocks'));
+    usort($blocks, ['NewsroomSummaryBlock', 'sortBlocks']);
     foreach ($blocks as $block) {
       $output .= $block->generateContent();
     }
-    return theme('newsroom_summary_block', array(
+    return theme('newsroom_summary_block', [
       'content' => $output,
       'rss' => $this->generateRss(),
-    ));
+    ]);
   }
 
   /**
@@ -262,10 +263,7 @@ class NewsroomSummaryBlock {
     $display_highlights_begin = variable_get('newsroom_display_highlights_begin', 0);
     $agenda_after_highlights = variable_get('newsroom_agenda_after_highlights', 0);
     $order_by_last_update = variable_get('newsroom_order_by_last_update', 0);
-    if ($a->getHighlighted() < $b->getHighlighted()) {
-      return $display_highlights_begin ? 1 : -1;
-    }
-    elseif ($a->getHighlighted() > $b->getHighlighted()) {
+    if ($a->getHighlighted() > $b->getHighlighted()) {
       return $display_highlights_begin ? -1 : 1;
     }
     elseif ($a->getIsAgenda() < $b->getIsAgenda()) {
@@ -274,11 +272,20 @@ class NewsroomSummaryBlock {
     elseif ($a->getIsAgenda() > $b->getIsAgenda()) {
       return $agenda_after_highlights ? -1 : 1;
     }
-    elseif ($a->getLatestDate() < $b->getLatestDate()) {
-      return $order_by_last_update ? 1 : -1;
+    elseif ($order_by_last_update) {
+      return $a->getLatestDate() < $b->getLatestDate() ? 1 : -1;
     }
-    elseif ($a->getLatestDate() > $b->getLatestDate()) {
-      return $order_by_last_update ? -1 : 1;
+    elseif ($a->getType()->depth > $b->getType()->depth) {
+      return 1;
+    }
+    elseif ($a->getType()->depth < $b->getType()->depth) {
+      return -1;
+    }
+    elseif ($a->getType()->weight > $b->getType()->weight) {
+      return 1;
+    }
+    elseif ($a->getType()->weight < $b->getType()->weight) {
+      return -1;
     }
     else {
       return 0;

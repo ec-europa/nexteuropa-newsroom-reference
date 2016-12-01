@@ -9,7 +9,7 @@
  * NewsroomBlock class base class.
  */
 class NewsroomBlock extends NewsroomBlockBase {
-  protected $items = array();
+  protected $items = [];
 
   /**
    * Contructor of NewsroomBlock class.
@@ -65,7 +65,7 @@ class NewsroomBlock extends NewsroomBlockBase {
    *   Type URL.
    */
   public function getTypeUrl() {
-    return pathauto_cleanstring($this->getType()->name);
+    return pathauto_cleanstring($this->getTitle());
   }
 
   /**
@@ -105,30 +105,34 @@ class NewsroomBlock extends NewsroomBlockBase {
     else {
       $query = db_select('node', 'n');
       $query->distinct();
-      $query->fields('n', array('nid', 'title', 'created'));
-      $query->fields('tt', array('name'));
+      $query->fields('n', ['nid', 'title', 'created']);
+      $query->fields('tt', ['name']);
       $query->addField('tt', 'tid', 'type_id');
       $query->join('field_data_field_newsroom_item_type', 'tf', 'tf.entity_id = n.nid');
       $query->join('taxonomy_term_data', 'tt', 'tt.tid = tf.field_newsroom_item_type_tid');
       $query->leftJoin('field_data_field_newsroom_topics', 'topic_field', 'topic_field.entity_id = n.nid');
       $query->leftJoin('taxonomy_term_data', 'topic_data', 'topic_data.tid = topic_field.field_newsroom_topics_tid');
+      $query->leftJoin('field_data_field_newsroom_newsletter_only', 'newsletter_item', 'newsletter_item.entity_id = n.nid');
+
       $query->condition('n.status', 1);
+
+      $db_or = db_or();
+      $db_or->condition('newsletter_item.field_newsroom_newsletter_only_value', 1, '<>');
+      $db_or->isNull('newsletter_item.field_newsroom_newsletter_only_value');
+
+      $query->condition($db_or);
       $query->condition('n.type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
 
-      if (count($topic_ids) > 0) {
+      if (!empty($topic_ids)) {
         if ($this->getOperator() == NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR) {
           $query->condition('topic_data.tid', $topic_ids);
         }
-        else {
-          $nids = NewsroomHelper::getNodeRelatedToTopic($this->getTopicsId());
-          if ($nids) {
-            $query->condition('nid', $nids, 'IN');
-          }
+        elseif ($nids = NewsroomHelper::getNodeRelatedToTopic($topic_ids)) {
+          $query->condition('nid', $nids, 'IN');
         }
       }
 
-      $type = $this->getType();
-      $query->condition('tt.tid', NewsroomHelper::getTypeChildren($type->tid));
+      $query->condition('tt.tid', NewsroomHelper::getTypeChildren($this->getType()->tid));
       $query->range(0, NewsroomHelper::getBlockItemsNumber($this->getHighlighted()));
       $query->orderBy('n.created', 'DESC');
       $result = $query->execute()->fetchAll();
@@ -155,13 +159,13 @@ class NewsroomBlock extends NewsroomBlockBase {
    *   Block content.
    */
   public function generateContent() {
-    return theme('newsroom_summary_block_wrapper', array(
+    return theme('newsroom_summary_block_wrapper', [
       'content' => $this->getContent(),
       'css_classes' => $this->getCssClasses(),
       'title' => $this->getTitle(),
       'type_url' => $this->getTypeUrl(),
-      'url' => NewsroomHelper::getNewsroomPageUrl(array($this->getTypeUrl(), $this->getTopicUrl())),
-    ));
+      'url' => NewsroomHelper::getNewsroomPageUrl([$this->getTypeUrl(), $this->getTopicUrl()]),
+    ]);
   }
 
   /**
@@ -171,9 +175,9 @@ class NewsroomBlock extends NewsroomBlockBase {
    *   Block items content.
    */
   protected function getContent() {
-    return theme('newsroom_summary_block_item', array(
+    return theme('newsroom_summary_block_item', [
       'items' => $this->getItems(),
-    ));
+    ]);
   }
 
 }

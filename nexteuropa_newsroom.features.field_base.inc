@@ -47,6 +47,36 @@ function nexteuropa_newsroom_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
+  // Exported field_base: 'field_newsroom_service_sample'.
+  $field_bases['field_newsroom_service_sample'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_newsroom_service_sample',
+    'indexes' => array(),
+    'locked' => 1,
+    'module' => 'link',
+    'settings' => array(
+      'attributes' => array(
+        'class' => '',
+        'rel' => '',
+        'target' => 'default',
+      ),
+      'display' => array(
+        'url_cutoff' => 80,
+      ),
+      'enable_tokens' => 1,
+      'entity_translation_sync' => FALSE,
+      'title' => 'optional',
+      'title_maxlength' => 128,
+      'title_value' => '',
+      'url' => 0,
+    ),
+    'translatable' => 1,
+    'type' => 'link_field',
+  );
+
   // Exported field_base: 'field_newsroom_nl_issue_date'.
   $field_bases['field_newsroom_nl_issue_date'] = array(
     'active' => 1,
@@ -427,8 +457,8 @@ function nexteuropa_newsroom_field_default_field_bases() {
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
-        0 => 'Central mailing',
-        1 => 'Basic mailing',
+        0 => 'Basic mailing',
+        1 => 'Central mailing',
       ),
       'allowed_values_function' => '',
       'entity_translation_sync' => FALSE,
@@ -479,6 +509,23 @@ function nexteuropa_newsroom_field_default_field_bases() {
     ),
     'translatable' => 1,
     'type' => 'text',
+  );
+
+  // Exported field_base: 'field_newsroom_docsroom_ids'.
+  $field_bases['field_newsroom_docsroom_ids'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_newsroom_docsroom_ids',
+    'indexes' => array(),
+    'locked' => 1,
+    'module' => 'number',
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+    ),
+    'translatable' => 0,
+    'type' => 'number_integer',
   );
 
   // Exported field_base: 'field_newsroom_documents'.
@@ -1053,6 +1100,32 @@ function nexteuropa_newsroom_field_default_field_bases() {
     'type' => 'geofield',
   );
 
+  // Exported field_base: 'field_newsroom_mailing_exists'.
+  $field_bases['field_newsroom_mailing_exists'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_newsroom_mailing_exists',
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 1,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        0 => ' Mailing does not exist',
+        1 => ' Mailing exists',
+      ),
+      'allowed_values_function' => '',
+      'entity_translation_sync' => FALSE,
+    ),
+    'translatable' => 0,
+    'type' => 'list_boolean',
+  );
+
   // Exported field_base: 'field_newsroom_organiser'.
   $field_bases['field_newsroom_organiser'] = array(
     'active' => 1,
@@ -1260,28 +1333,6 @@ function nexteuropa_newsroom_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'image',
-  );
-
-  // Exported field_base: 'field_newsroom_service_id'.
-  $field_bases['field_newsroom_service_id'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_newsroom_service_id',
-    'indexes' => array(
-      'format' => array(
-        0 => 'format',
-      ),
-    ),
-    'locked' => 1,
-    'module' => 'text',
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'max_length' => 255,
-    ),
-    'translatable' => 0,
-    'type' => 'text',
   );
 
   // Exported field_base: 'field_newsroom_newsletter_id'.
