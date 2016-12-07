@@ -19,7 +19,9 @@ function nexteuropa_newsroom_enable() {
     db_create_table(NEXTEUROPA_NEWSROOM_CACHE_TABLE, drupal_get_schema_unprocessed('system', 'cache'));
   }
   // Add to solR.
-  multisite_drupal_toolbox_config_solr_bundle(NEXTEUROPA_NEWSROOM_CONTENT_TYPE, 'add');
+  if (module_exists('apachesolr')) {
+    multisite_drupal_toolbox_config_solr_bundle(NEXTEUROPA_NEWSROOM_CONTENT_TYPE, 'add');
+  }
 }
 
 /**
@@ -31,7 +33,9 @@ function nexteuropa_newsroom_disable() {
     db_drop_table(NEXTEUROPA_NEWSROOM_CACHE_TABLE);
   }
   // Delete from solR.
-  multisite_drupal_toolbox_config_solr_bundle(NEXTEUROPA_NEWSROOM_CONTENT_TYPE, 'delete');
+  if (module_exists('apachesolr')) {
+    multisite_drupal_toolbox_config_solr_bundle(NEXTEUROPA_NEWSROOM_CONTENT_TYPE, 'delete');
+  }
 }
 
 /**
