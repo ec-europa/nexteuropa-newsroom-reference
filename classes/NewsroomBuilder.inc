@@ -303,11 +303,11 @@ class NewsroomBuilder {
       ],
       [
         'field' => 'field_newsroom_documents:url',
-        'query' => 'enclosure[not(@type="image/jpeg")]/@url',
+        'query' => 'enclosure[not(@type="image/jpeg") and not(@external_app="DocsRoom")]/@url',
       ],
       [
         'field' => 'field_newsroom_documents:title',
-        'query' => 'enclosure[not(@type="image/jpeg")]/@title',
+        'query' => 'enclosure[not(@type="image/jpeg") and not(@external_app="DocsRoom")]/@title',
       ],
       [
         'field' => 'promote',
@@ -491,7 +491,7 @@ class NewsroomBuilder {
       ],
       [
         'field' => 'field_newsroom_docsroom_ids',
-        'query' => 'enclosure[@external_app="docsroom"]/@external_id',
+        'query' => 'enclosure[@external_app="DocsRoom"]/@external_id',
       ],
       [
         'field' => 'language',

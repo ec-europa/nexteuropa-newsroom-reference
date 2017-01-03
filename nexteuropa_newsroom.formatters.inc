@@ -279,12 +279,13 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
       break;
 
     case 'newsroom_docsroom':
-      $display_type = !empty($display['settings']['display_type']) ? $display['settings']['display_type'] : 'default';
       $docsroom_ids = [];
       foreach ($items as $item) {
         $docsroom_ids[] = $item['value'];
       }
+
       if (!empty($docsroom_ids)) {
+        $display_type = !empty($display['settings']['display_type']) ? $display['settings']['display_type'] : 'default';
         $url = url(
           variable_get('newsroom_docsroom_url'),
           [
