@@ -1036,15 +1036,8 @@ function nexteuropa_newsroom_context_registry() {
 function nexteuropa_newsroom_block_view_alter(&$data, $block) {
   // Alter agenda breadcrumbs. We leave only first item.
   if ($block->module == 'easy_breadcrumb') {
-    if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url']) && $data['content']['easy_breadcrumb']['#breadcrumb'][0]['url'] == 'newsroom-agenda') {
-      foreach ($data['content']['easy_breadcrumb']['#breadcrumb'] as $key => $item) {
-        if (!empty($item['url']) && $item['url'] != 'newsroom-agenda') {
-          unset($data['content']['easy_breadcrumb']['#breadcrumb'][$key]);
-        }
-        else {
-          unset($data['content']['easy_breadcrumb']['#breadcrumb'][$key]);
-        }
-      }
+    if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url']) &&
+      in_array($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url'], ['newsroom-agenda', 'newsroom'])) {
       $data['content']['easy_breadcrumb']['#segments_quantity'] = 1;
     }
   }
