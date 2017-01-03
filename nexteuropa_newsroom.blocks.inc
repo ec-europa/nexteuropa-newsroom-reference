@@ -44,12 +44,12 @@ function nexteuropa_newsroom_block_view($delta = '') {
   switch ($delta) {
     case 'newsroom_summary_blocks':
       $block['subject'] = l(t('Newsroom'), NewsroomHelper::getNewsroomPageUrl([NEXTEUROPA_NEWSROOM_ALL]));
-      $block['content'] = _nexteuropa_nexteuropa_get_summary_blocks();
+      $block['content'] = _nexteuropa_newsroom_get_summary_blocks();
       break;
 
     case 'newsroom_related_content':
       $block['subject'] = t('Related content');
-      $block['content'] = _nexteuropa_nexteuropa_related_content();
+      $block['content'] = _nexteuropa_newsroom_related_content();
       break;
 
     case 'newsroom_admin_tools':
@@ -83,7 +83,7 @@ function nexteuropa_newsroom_block_view($delta = '') {
  */
 function _nexteuropa_newsroom_agenda_block() {
   $content = '';
-  if ($type = _nexteuropa_nexteuropa_get_type_from_agenda_block_context()) {
+  if ($type = _nexteuropa_newsroom_get_type_from_agenda_block_context()) {
     $agenda_block = new NewsroomBlockAgenda($type, [], NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR);
     $content = $agenda_block->generateContent();
   }
@@ -97,7 +97,7 @@ function _nexteuropa_newsroom_agenda_block() {
  * @return object
  *   Taxonomy term.
  */
-function _nexteuropa_nexteuropa_get_type_from_agenda_block_context() {
+function _nexteuropa_newsroom_get_type_from_agenda_block_context() {
   $type = NULL;
   $active_contexts = context_active_contexts();
   foreach ($active_contexts as $active_context) {
@@ -120,7 +120,7 @@ function _nexteuropa_nexteuropa_get_type_from_agenda_block_context() {
  * @return string
  *   Summary block content.
  */
-function _nexteuropa_nexteuropa_get_summary_blocks() {
+function _nexteuropa_newsroom_get_summary_blocks() {
   $summary_block = new NewsroomSummaryBlock();
   return $summary_block->generateContent();
 }
@@ -131,11 +131,11 @@ function _nexteuropa_nexteuropa_get_summary_blocks() {
  * @return string
  *   Content.
  */
-function _nexteuropa_nexteuropa_related_content() {
+function _nexteuropa_newsroom_related_content() {
   $content = '';
   if ($node = menu_get_object()) {
-    $children_related_items = _nexteuropa_nexteuropa_get_related_content('field_newsroom_related_content', $node);
-    $parent_related_items = _nexteuropa_nexteuropa_get_related_content('field_newsroom_parent_content', $node);
+    $children_related_items = _nexteuropa_newsroom_get_related_content('field_newsroom_related_content', $node);
+    $parent_related_items = _nexteuropa_newsroom_get_related_content('field_newsroom_parent_content', $node);
     $brother_items = [];
     $parent_item = NULL;
     if (count($parent_related_items) > 0) {
@@ -184,7 +184,7 @@ function _nexteuropa_newsroom_get_related_children($field_name, $parent_nid, $cu
       if (!empty($result['node'])) {
         // Exclude the current item ID from array.
         $ids = array_diff(array_keys($result['node']), [$current_nid]);
-        $items = _nexteuropa_nexteuropa_prepare_related_content_array($ids);
+        $items = _nexteuropa_newsroom_prepare_related_content_array($ids);
       }
       cache_set($cache_key, $items, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_node_relative_items', 86400));
     }
@@ -204,12 +204,12 @@ function _nexteuropa_newsroom_get_related_children($field_name, $parent_nid, $cu
  * @return array
  *   Related nodes.
  */
-function _nexteuropa_nexteuropa_get_related_content($field_name, $node) {
+function _nexteuropa_newsroom_get_related_content($field_name, $node) {
   $items = [];
   $node_ids = NewsroomHelper::getFieldValue($node, $field_name, 'target_id');
   if ($node_ids) {
     $node_ids = is_array($node_ids) ? $node_ids : [$node_ids];
-    $items = _nexteuropa_nexteuropa_prepare_related_content_array($node_ids);
+    $items = _nexteuropa_newsroom_prepare_related_content_array($node_ids);
   }
   return $items;
 }
@@ -223,7 +223,7 @@ function _nexteuropa_nexteuropa_get_related_content($field_name, $node) {
  * @return array
  *   Array of objects to display.
  */
-function _nexteuropa_nexteuropa_prepare_related_content_array($ids) {
+function _nexteuropa_newsroom_prepare_related_content_array($ids) {
   $items = [];
   if (!empty($ids)) {
     foreach ($ids as $id) {

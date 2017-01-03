@@ -237,18 +237,14 @@ function nexteuropa_newsroom_field_formatter_view($entity_type, $entity, $field,
         $copyright = NULL;
 
         // Sets copyright.
-        if (!empty($display['settings']['display_copyright'])) {
-          if (!empty($item['field_newsroom_copyrights'][$language->language][0])) {
-            $copyright = $item['field_newsroom_copyrights'][$language->language][0]['safe_value'];
-          }
+        if (!empty($display['settings']['display_copyright']) && !empty($item['field_newsroom_copyrights'][$language->language][0])) {
+          $copyright = $item['field_newsroom_copyrights'][$language->language][0]['safe_value'];
         }
 
         // Sets caption.
         $caption = '';
-        if (!empty($display['settings']['display_caption'])) {
-          if (!empty($item['field_caption'][$language->language][0])) {
-            $caption = $item['field_caption'][$language->language][0]['safe_value'];
-          }
+        if (!empty($display['settings']['display_caption']) && !empty($item['field_caption'][$language->language][0])) {
+          $caption = $item['field_caption'][$language->language][0]['safe_value'];
         }
 
         if (!empty($item['attributes'])) {

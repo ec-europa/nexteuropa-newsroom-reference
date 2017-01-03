@@ -288,6 +288,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#default_value' => variable_get('newsroom_docsroom_url'),
   ];
 
+  // Page settings.
   $form['newsroom_pages'] = [
     '#type' => 'fieldset',
     '#title' => t('Newsroom page settings'),
@@ -298,6 +299,12 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#type' => 'textarea',
     '#title' => t('Privacy statement'),
     '#default_value' => variable_get('newsroom_newsletter_privacy'),
+  ];
+  $form['newsroom_pages']['newsroom_featured_type'] = [
+    '#type' => 'select',
+    '#title' => t('Featured newsroom type'),
+    '#options' => NewsroomHelper::getNewsroomTypeOptions(FALSE),
+    '#default_value' => variable_get('newsroom_featured_type'),
   ];
 
   // Settings about the newsroom blocks.
@@ -644,8 +651,8 @@ function _nexteuropa_newsroom_admin_clean_cache() {
  */
 function _nexteuropa_newsroom_admin_add_fields($type = 'topic', $sel_ct = []) {
   $field_name = 'field_newsroom_associated_' . $type;
-
   if (!empty($sel_ct)) {
+
     foreach ($sel_ct as $machine_name => $content_type) {
       $exist = field_info_instance('node', $field_name, $machine_name);
       // Check for existing instances.
@@ -660,7 +667,7 @@ function _nexteuropa_newsroom_admin_add_fields($type = 'topic', $sel_ct = []) {
         ];
         field_create_instance($instance);
         // Call the field_group helper function, we surely have to update it.
-        _nexteuropa_newsroom_admin_field_group($machine_name, $field_name);
+        _nexteuropa_newsroom_admin_field_group($machine_name);
         // Set a message to inform the user about the field instance creation.
         drupal_set_message(t('Created instance of @field in the @bundle content type.', ['@field' => $field_name, '@bundle' => $machine_name]));
       }
@@ -673,15 +680,14 @@ function _nexteuropa_newsroom_admin_add_fields($type = 'topic', $sel_ct = []) {
  *
  * @param string $machine_name
  *   Content type machine name.
- * @param string $field_name
- *   Field machine name.
  */
-function _nexteuropa_newsroom_admin_field_group($machine_name, $field_name) {
+function _nexteuropa_newsroom_admin_field_group($machine_name) {
   // Get info about the group, it's likely to be already in the database.
   $groups = field_group_info_groups('node', $machine_name, 'form', TRUE);
   $fields = ['topic', 'select'];
-  $group_name = 'group_' . $machine_name . '_newsroom';
+  $group_name = 'group_newsroom_fields';
   $instances = FALSE;
+
   // Check for instances of the newsroom fields inside the given content type.
   foreach ($fields as $field) {
     $field_name = 'field_newsroom_associated_' . $field;
@@ -689,13 +695,15 @@ function _nexteuropa_newsroom_admin_field_group($machine_name, $field_name) {
       $instances[] = field_info_instance('node', $field_name, $machine_name);
     }
   }
+
   // If the group is already there, remove it.
   if (!empty($groups[$group_name])) {
     db_delete('field_group')
       ->condition('bundle', $machine_name, '=')
-      ->condition('group_name', 'group_' . $machine_name . '_newsroom', '=')
+      ->condition('group_name', $group_name, '=')
       ->execute();
   }
+
   // Create the group with the right children.
   if ($instances) {
     $field_group = (object) [
@@ -726,7 +734,6 @@ function _nexteuropa_newsroom_admin_field_group($machine_name, $field_name) {
 
     field_group_group_save($field_group);
   }
-  // Remove the group since we don't have fields to show.
   else {
     drupal_set_message(t('Removed the fieldgroup @name from the @content_type content type.', ['@name' => $group_name, '@content_type' => $machine_name]), 'status');
   }

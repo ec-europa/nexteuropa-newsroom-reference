@@ -12,10 +12,6 @@
   padding-bottom: 0.5em;
 }
 
-.newsroomPage-container .views-field {
-  margin: 0.3em 0;
-}
-
 .newsroomPage-container .newsroom-read-more:hover::after {
   border-color: transparent transparent transparent #003556;
 }
@@ -622,10 +618,6 @@
 
 .newsroom_rss {
   text-align: right;
-}
-
-.date-row {
-  margin: 1.5em 0;
 }
 
 .newsroom_more {
