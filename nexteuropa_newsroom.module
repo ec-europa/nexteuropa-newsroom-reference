@@ -348,7 +348,7 @@ function nexteuropa_newsroom_node_presave($node) {
         if ($conf = variable_get('newsroom_' . $type_name . '_root', FALSE)) {
           $node->path['pathauto'] = FALSE;
           $node->path['alias'] = $conf . '/' . pathauto_cleanstring($node->title);
-          pathauto_alias_uniquify($node->path['alias'], 'node/' . $node->nid, NewsroomHelper::getDefaultLanguage());
+          pathauto_alias_uniquify($node->path['alias'], !empty($node->nid) ? 'node/' . $node->nid : NULL, NewsroomHelper::getDefaultLanguage());
         }
       }
     }
