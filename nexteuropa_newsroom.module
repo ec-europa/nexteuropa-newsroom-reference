@@ -345,11 +345,10 @@ function nexteuropa_newsroom_node_presave($node) {
     if ($type_tid = NewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid')) {
       if ($type = NewsroomHelper::getNewsroomType($type_tid)) {
         $type_name = pathauto_cleanstring($type->name);
-        $conf = variable_get('newsroom_' . $type_name . '_root', FALSE);
-        if ($conf) {
+        if ($conf = variable_get('newsroom_' . $type_name . '_root', FALSE)) {
           $node->path['pathauto'] = FALSE;
           $node->path['alias'] = $conf . '/' . pathauto_cleanstring($node->title);
-          pathauto_alias_uniquify($node->path['alias'], 'node/' . $node->nid);
+          pathauto_alias_uniquify($node->path['alias'], 'node/' . $node->nid, NewsroomHelper::getDefaultLanguage());
         }
       }
     }
