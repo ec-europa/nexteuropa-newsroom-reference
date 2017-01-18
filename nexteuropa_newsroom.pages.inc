@@ -145,7 +145,7 @@ function _nexteuropa_newsroom_newsletters_page() {
  */
 function _nexteuropa_newsroom_prepare_newsletters($newsletters = [], $subscriptions = []) {
   $output = [];
-  if (empty($newsletters)) {
+  if (!empty($newsletters)) {
     foreach ($newsletters as $newsletter) {
       $item = new stdClass();
       $item->title = $newsletter->taxonomy_term_data_name;

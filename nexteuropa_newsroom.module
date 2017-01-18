@@ -345,11 +345,10 @@ function nexteuropa_newsroom_node_presave($node) {
     if ($type_tid = NewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid')) {
       if ($type = NewsroomHelper::getNewsroomType($type_tid)) {
         $type_name = pathauto_cleanstring($type->name);
-        $conf = variable_get('newsroom_' . $type_name . '_root', FALSE);
-        if ($conf) {
+        if ($conf = variable_get('newsroom_' . $type_name . '_root', FALSE)) {
           $node->path['pathauto'] = FALSE;
           $node->path['alias'] = $conf . '/' . pathauto_cleanstring($node->title);
-          pathauto_alias_uniquify($node->path['alias'], 'node/' . $node->nid);
+          pathauto_alias_uniquify($node->path['alias'], !empty($node->nid) ? 'node/' . $node->nid : NULL, NewsroomHelper::getDefaultLanguage());
         }
       }
     }
@@ -1037,15 +1036,8 @@ function nexteuropa_newsroom_context_registry() {
 function nexteuropa_newsroom_block_view_alter(&$data, $block) {
   // Alter agenda breadcrumbs. We leave only first item.
   if ($block->module == 'easy_breadcrumb') {
-    if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url']) && $data['content']['easy_breadcrumb']['#breadcrumb'][0]['url'] == 'newsroom-agenda') {
-      foreach ($data['content']['easy_breadcrumb']['#breadcrumb'] as $key => $item) {
-        if (!empty($item['url']) && $item['url'] != 'newsroom-agenda') {
-          unset($data['content']['easy_breadcrumb']['#breadcrumb'][$key]);
-        }
-        else {
-          unset($data['content']['easy_breadcrumb']['#breadcrumb'][$key]);
-        }
-      }
+    if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url']) &&
+      in_array($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url'], ['newsroom-agenda', 'newsroom'])) {
       $data['content']['easy_breadcrumb']['#segments_quantity'] = 1;
     }
   }
