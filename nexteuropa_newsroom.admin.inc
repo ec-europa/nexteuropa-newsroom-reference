@@ -374,6 +374,43 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#default_value' => variable_get('newsroom_days_number_for_new_user', 14),
   ];
 
+  $form['viewmodes'] = [
+    '#type' => 'fieldset',
+    '#title' => 'Newsroom View Modes',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  ];
+
+  $form['viewmodes']['newsroom_events_type_id'] = [
+    '#type' => 'textfield',
+    '#title' => t('Event type ID'),
+    '#description' => t('Newsroom event type ID'),
+    '#default_value' => variable_get('newsroom_events_type_id'),
+    '#size' => 10,
+  ];
+
+  $form['viewmodes']['newsroom_fundings_type_id'] = [
+    '#type' => 'textfield',
+    '#title' => t('Fundings type ID'),
+    '#description' => t('Newsroom fundings type ID'),
+    '#default_value' => variable_get('newsroom_fundings_type_id'),
+    '#size' => 10,
+  ];
+
+  $form['viewmodes']['newsroom_consultations_type_id'] = [
+    '#type' => 'textfield',
+    '#title' => t('Consultations type ID'),
+    '#description' => t('Newsroom consultations type ID'),
+    '#default_value' => variable_get('newsroom_consultations_type_id'),
+    '#size' => 10,
+  ];
+
+  $form['viewmodes']['newsroom_use_default_view_mode'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Use the newsroom default view mode'),
+    '#default_value' => variable_get('newsroom_use_default_view_mode', 1),
+  ];
+
   // Attach a css to the admin settings form.
   $form['#attached']['css'] = [
     drupal_get_path('module', 'nexteuropa_newsroom') . '/styles/nexteuropa_newsroom_admin_setting.css',

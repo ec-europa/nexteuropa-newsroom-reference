@@ -228,9 +228,8 @@ function nexteuropa_newsroom_field_group_info() {
     'label' => 'Files',
     'weight' => '6',
     'children' => array(
-      0 => 'field_newsroom_documents',
+      0 => 'field_newsroom_docsroom_ids',
       1 => 'field_newsroom_documents',
-      2 => 'field_newsroom_docsroom_ids',
     ),
     'format_type' => 'div',
     'format_settings' => array(
@@ -338,7 +337,6 @@ function nexteuropa_newsroom_field_group_info() {
       'formatter' => 'open',
     ),
   );
-
   $field_groups['group_newsroom_item_links|node|newsroom_item|default'] = $field_group;
 
   $field_group = new stdClass();
@@ -598,6 +596,119 @@ function nexteuropa_newsroom_field_group_info() {
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
   $field_group->api_version = 1;
+  $field_group->identifier = 'group_newsroom_meta|node|newsroom_item|newsroom_consultations';
+  $field_group->group_name = 'group_newsroom_meta';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'newsroom_item';
+  $field_group->mode = 'newsroom_consultations';
+  $field_group->parent_name = '';
+  $field_group->data = array(
+    'label' => 'Meta',
+    'weight' => '0',
+    'children' => array(
+      0 => 'field_newsroom_item_type',
+      1 => 'post_date',
+    ),
+    'format_type' => 'meta_wrapper',
+    'format_settings' => array(
+      'formatter' => '',
+      'instance_settings' => array(
+        'modifier' => '',
+        'classes' => 'group-newsroom-meta field-group-meta_wrapper',
+        'required_fields' => 1,
+      ),
+    ),
+  );
+  $field_groups['group_newsroom_meta|node|newsroom_item|newsroom_consultations'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_newsroom_meta|node|newsroom_item|newsroom_default';
+  $field_group->group_name = 'group_newsroom_meta';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'newsroom_item';
+  $field_group->mode = 'newsroom_default';
+  $field_group->parent_name = '';
+  $field_group->data = array(
+    'label' => 'Meta data',
+    'weight' => '0',
+    'children' => array(
+      0 => 'field_newsroom_item_type',
+      1 => 'post_date',
+    ),
+    'format_type' => 'meta_wrapper',
+    'format_settings' => array(
+      'formatter' => '',
+      'instance_settings' => array(
+        'modifier' => '',
+        'classes' => 'group-newsroom-meta field-group-meta_wrapper',
+        'required_fields' => 1,
+      ),
+    ),
+  );
+  $field_groups['group_newsroom_meta|node|newsroom_item|newsroom_default'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_newsroom_meta|node|newsroom_item|newsroom_events';
+  $field_group->group_name = 'group_newsroom_meta';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'newsroom_item';
+  $field_group->mode = 'newsroom_events';
+  $field_group->parent_name = '';
+  $field_group->data = array(
+    'label' => 'Meta data',
+    'weight' => '0',
+    'children' => array(
+      0 => 'field_newsroom_item_type',
+      1 => 'field_newsroom_item_venue',
+      2 => 'post_date',
+    ),
+    'format_type' => 'meta_wrapper',
+    'format_settings' => array(
+      'formatter' => '',
+      'instance_settings' => array(
+        'modifier' => '',
+        'classes' => 'group-newsroom-meta field-group-meta_wrapper',
+        'required_fields' => 1,
+      ),
+    ),
+  );
+  $field_groups['group_newsroom_meta|node|newsroom_item|newsroom_events'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_newsroom_meta|node|newsroom_item|newsroom_fundings';
+  $field_group->group_name = 'group_newsroom_meta';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'newsroom_item';
+  $field_group->mode = 'newsroom_fundings';
+  $field_group->parent_name = '';
+  $field_group->data = array(
+    'label' => 'Meta',
+    'weight' => '0',
+    'children' => array(
+      0 => 'field_newsroom_item_type',
+      1 => 'post_date',
+    ),
+    'format_type' => 'meta_wrapper',
+    'format_settings' => array(
+      'formatter' => '',
+      'instance_settings' => array(
+        'modifier' => '',
+        'classes' => 'group-newsroom-meta field-group-meta_wrapper',
+        'required_fields' => 1,
+      ),
+    ),
+  );
+  $field_groups['group_newsroom_meta|node|newsroom_item|newsroom_fundings'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
   $field_group->identifier = 'group_newsroom_project_info|node|newsroom_item|form';
   $field_group->group_name = 'group_newsroom_project_info';
   $field_group->entity_type = 'node';
@@ -685,6 +796,126 @@ function nexteuropa_newsroom_field_group_info() {
     ),
   );
   $field_groups['group_newsroom_relationships|node|newsroom_item|form'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_newsroom_sharethis|node|newsroom_item|newsroom_consultations';
+  $field_group->group_name = 'group_newsroom_sharethis';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'newsroom_item';
+  $field_group->mode = 'newsroom_consultations';
+  $field_group->parent_name = '';
+  $field_group->data = array(
+    'label' => 'Share this page',
+    'weight' => '11',
+    'children' => array(
+      0 => 'share_buttons',
+    ),
+    'format_type' => 'section_group',
+    'format_settings' => array(
+      'label' => 'Share this page',
+      'instance_settings' => array(
+        'classes' => 'group-newsroom-sharethis field-group-section_group',
+        'show_label' => '1',
+        'label_element' => 'h2',
+        'attributes' => '',
+        'modifier' => '',
+        'layout' => '',
+      ),
+    ),
+  );
+  $field_groups['group_newsroom_sharethis|node|newsroom_item|newsroom_consultations'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_newsroom_sharethis|node|newsroom_item|newsroom_default';
+  $field_group->group_name = 'group_newsroom_sharethis';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'newsroom_item';
+  $field_group->mode = 'newsroom_default';
+  $field_group->parent_name = '';
+  $field_group->data = array(
+    'label' => 'Share this page',
+    'weight' => '10',
+    'children' => array(
+      0 => 'share_buttons',
+    ),
+    'format_type' => 'section_group',
+    'format_settings' => array(
+      'label' => 'Share this page',
+      'instance_settings' => array(
+        'classes' => 'group-newsroom-sharethis field-group-section_group',
+        'show_label' => '1',
+        'label_element' => 'h2',
+        'attributes' => '',
+        'modifier' => '',
+        'layout' => '',
+      ),
+    ),
+  );
+  $field_groups['group_newsroom_sharethis|node|newsroom_item|newsroom_default'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_newsroom_sharethis|node|newsroom_item|newsroom_events';
+  $field_group->group_name = 'group_newsroom_sharethis';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'newsroom_item';
+  $field_group->mode = 'newsroom_events';
+  $field_group->parent_name = '';
+  $field_group->data = array(
+    'label' => 'Share this page',
+    'weight' => '15',
+    'children' => array(
+      0 => 'share_buttons',
+    ),
+    'format_type' => 'section_group',
+    'format_settings' => array(
+      'label' => 'Share this page',
+      'instance_settings' => array(
+        'classes' => 'group-newsroom-sharethis field-group-section_group',
+        'show_label' => '1',
+        'label_element' => 'h2',
+        'attributes' => '',
+        'modifier' => '',
+        'layout' => '',
+      ),
+    ),
+  );
+  $field_groups['group_newsroom_sharethis|node|newsroom_item|newsroom_events'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_newsroom_sharethis|node|newsroom_item|newsroom_fundings';
+  $field_group->group_name = 'group_newsroom_sharethis';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'newsroom_item';
+  $field_group->mode = 'newsroom_fundings';
+  $field_group->parent_name = '';
+  $field_group->data = array(
+    'label' => 'Share this page',
+    'weight' => '12',
+    'children' => array(
+      0 => 'share_buttons',
+    ),
+    'format_type' => 'section_group',
+    'format_settings' => array(
+      'label' => 'Share this page',
+      'instance_settings' => array(
+        'classes' => 'group-newsroom-sharethis field-group-section_group',
+        'show_label' => '1',
+        'label_element' => 'h2',
+        'attributes' => '',
+        'modifier' => '',
+        'layout' => '',
+      ),
+    ),
+  );
+  $field_groups['group_newsroom_sharethis|node|newsroom_item|newsroom_fundings'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -823,11 +1054,14 @@ function nexteuropa_newsroom_field_group_info() {
   t('Lead');
   t('Links');
   t('Main content');
+  t('Meta');
+  t('Meta data');
   t('Project');
   t('Project information');
   t('Recommended reading');
   t('Relationships');
   t('Section');
+  t('Share this page');
   t('Slide');
   t('Technical Fields');
   t('Technical fields');

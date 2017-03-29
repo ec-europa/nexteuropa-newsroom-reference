@@ -1,4 +1,10 @@
 <?php
+/**
+ * @file
+ * Code for the Nexteuropa Newsroom feature.
+ */
+
+include_once 'nexteuropa_newsroom.features.inc';
 
 /**
  * @file
@@ -361,6 +367,7 @@ function nexteuropa_newsroom_node_presave($node) {
 function nexteuropa_newsroom_date_format_types() {
   return [
     'newsroom_date_only' => t('Date only'),
+    'newsroom_long_type_without_time' => t('Long date without time'),
   ];
 }
 
@@ -372,6 +379,11 @@ function nexteuropa_newsroom_date_formats() {
     [
       'type' => 'newsroom_date_only',
       'format' => 'd/m/Y',
+      'locales' => [],
+    ],
+    [
+      'type' => 'newsroom_long_type_without_time',
+      'format' => 'l, j F, Y',
       'locales' => [],
     ],
   ];
@@ -1100,4 +1112,36 @@ function nexteuropa_newsroom_ctools_plugin_directory($owner, $plugin_type) {
   if ($owner == 'feeds_tamper' && $plugin_type == 'plugins') {
     return 'tamper_plugins';
   }
+}
+
+/**
+ * Implements theme_entity_view_mode_alter().
+ */
+function nexteuropa_newsroom_entity_view_mode_alter(&$view_mode, $context) {
+  if (!empty($context['entity']->type) && $context['entity']->type == 'newsroom_item') {
+    if (variable_get('newsroom_use_default_view_mode')) {
+      $view_mode = 'newsroom_default';
+    }
+    if ($terms = field_get_items('node', $context['entity'], 'field_newsroom_item_type')) {
+      if ($term = taxonomy_term_load($terms[0]['tid'])) {
+        if (!empty($term->field_newsroom_type_id[LANGUAGE_NONE][0]['value'])) {
+          switch ($term->field_newsroom_type_id[LANGUAGE_NONE][0]['value']) {
+            case variable_get('newsroom_events_type_id'):
+              $view_mode = 'newsroom_events';
+              break;
+
+            case variable_get('newsroom_fundings_type_id'):
+              $view_mode = 'newsroom_fundings';
+              break;
+
+            case variable_get('newsroom_consultations_type_id'):
+              $view_mode = 'newsroom_consultations';
+              break;
+          }
+        }
+      }
+    }
+  }
+
+//  var_dump($view_mode);
 }
