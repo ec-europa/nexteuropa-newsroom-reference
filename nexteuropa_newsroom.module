@@ -1142,6 +1142,13 @@ function nexteuropa_newsroom_entity_view_mode_alter(&$view_mode, $context) {
       }
     }
   }
+}
 
-//  var_dump($view_mode);
+/**
+ * Implements hook_post_features_enable_feature().
+ */
+function nexteuropa_newsroom_post_features_revert($component) {
+  if ($component == 'ds_field_settings') {
+    cache_clear_all('ds_field_settings', 'cache');
+  }
 }
