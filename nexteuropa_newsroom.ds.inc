@@ -479,6 +479,68 @@ function nexteuropa_newsroom_ds_layout_settings_info() {
 
   $ds_layout = new stdClass();
   $ds_layout->api_version = 1;
+  $ds_layout->id = 'node|newsroom_item|newsroom_consultations';
+  $ds_layout->entity_type = 'node';
+  $ds_layout->bundle = 'newsroom_item';
+  $ds_layout->view_mode = 'newsroom_consultations';
+  $ds_layout->layout = 'ne_bootstrap_1col_stacked';
+  $ds_layout->settings = array(
+    'regions' => array(
+      'left_header' => array(
+        0 => 'group_newsroom_meta',
+        1 => 'title',
+        2 => 'field_newsroom_item_type',
+        4 => 'post_date',
+      ),
+      'central' => array(
+        3 => 'field_newsroom_item_date',
+        5 => 'ds_newsroom_teaser',
+        6 => 'field_newsroom_item_quote_box',
+        7 => 'body',
+        8 => 'newsroom_related_documents',
+        9 => 'field_newsroom_docsroom_ids',
+        10 => 'field_newsroom_item_linked_obj',
+        11 => 'field_newsroom_item_other_link',
+        12 => 'field_newsroom_item_main_link',
+        13 => 'group_newsroom_sharethis',
+        14 => 'share_buttons',
+      ),
+    ),
+    'fields' => array(
+      'group_newsroom_meta' => 'left_header',
+      'title' => 'left_header',
+      'field_newsroom_item_type' => 'left_header',
+      'field_newsroom_item_date' => 'central',
+      'post_date' => 'left_header',
+      'ds_newsroom_teaser' => 'central',
+      'field_newsroom_item_quote_box' => 'central',
+      'body' => 'central',
+      'newsroom_related_documents' => 'central',
+      'field_newsroom_docsroom_ids' => 'central',
+      'field_newsroom_item_linked_obj' => 'central',
+      'field_newsroom_item_other_link' => 'central',
+      'field_newsroom_item_main_link' => 'central',
+      'group_newsroom_sharethis' => 'central',
+      'share_buttons' => 'central',
+    ),
+    'classes' => array(),
+    'wrappers' => array(
+      'left_header' => 'div',
+      'right_header' => 'div',
+      'top' => 'div',
+      'central' => 'div',
+    ),
+    'layout_wrapper' => 'div',
+    'layout_attributes' => '',
+    'layout_attributes_merge' => 1,
+    'layout_link_attribute' => '',
+    'layout_link_custom' => '',
+    'layout_disable_css' => FALSE,
+  );
+  $export['node|newsroom_item|newsroom_consultations'] = $ds_layout;
+
+  $ds_layout = new stdClass();
+  $ds_layout->api_version = 1;
   $ds_layout->id = 'node|newsroom_item|newsroom_default';
   $ds_layout->entity_type = 'node';
   $ds_layout->bundle = 'newsroom_item';
@@ -608,6 +670,68 @@ function nexteuropa_newsroom_ds_layout_settings_info() {
     'layout_disable_css' => FALSE,
   );
   $export['node|newsroom_item|newsroom_events'] = $ds_layout;
+
+  $ds_layout = new stdClass();
+  $ds_layout->api_version = 1;
+  $ds_layout->id = 'node|newsroom_item|newsroom_fundings';
+  $ds_layout->entity_type = 'node';
+  $ds_layout->bundle = 'newsroom_item';
+  $ds_layout->view_mode = 'newsroom_fundings';
+  $ds_layout->layout = 'ne_bootstrap_1col_stacked';
+  $ds_layout->settings = array(
+    'regions' => array(
+      'left_header' => array(
+        0 => 'group_newsroom_meta',
+        1 => 'title',
+        2 => 'field_newsroom_item_type',
+        4 => 'post_date',
+      ),
+      'central' => array(
+        3 => 'share_buttons',
+        5 => 'field_newsroom_item_date',
+        6 => 'ds_newsroom_teaser',
+        7 => 'field_newsroom_item_quote_box',
+        8 => 'body',
+        9 => 'newsroom_related_documents',
+        10 => 'field_newsroom_docsroom_ids',
+        11 => 'field_newsroom_item_linked_obj',
+        12 => 'field_newsroom_item_other_link',
+        13 => 'field_newsroom_item_main_link',
+        14 => 'group_newsroom_sharethis',
+      ),
+    ),
+    'fields' => array(
+      'group_newsroom_meta' => 'left_header',
+      'title' => 'left_header',
+      'field_newsroom_item_type' => 'left_header',
+      'share_buttons' => 'central',
+      'post_date' => 'left_header',
+      'field_newsroom_item_date' => 'central',
+      'ds_newsroom_teaser' => 'central',
+      'field_newsroom_item_quote_box' => 'central',
+      'body' => 'central',
+      'newsroom_related_documents' => 'central',
+      'field_newsroom_docsroom_ids' => 'central',
+      'field_newsroom_item_linked_obj' => 'central',
+      'field_newsroom_item_other_link' => 'central',
+      'field_newsroom_item_main_link' => 'central',
+      'group_newsroom_sharethis' => 'central',
+    ),
+    'classes' => array(),
+    'wrappers' => array(
+      'left_header' => 'div',
+      'right_header' => 'div',
+      'top' => 'div',
+      'central' => 'div',
+    ),
+    'layout_wrapper' => 'div',
+    'layout_attributes' => '',
+    'layout_attributes_merge' => 1,
+    'layout_link_attribute' => '',
+    'layout_link_custom' => '',
+    'layout_disable_css' => FALSE,
+  );
+  $export['node|newsroom_item|newsroom_fundings'] = $ds_layout;
 
   return $export;
 }

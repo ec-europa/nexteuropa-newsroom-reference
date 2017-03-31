@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * nexteuropa_newsroom.context.inc
@@ -50,7 +49,6 @@ function nexteuropa_newsroom_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('newsroom');
-
   $export['newsroom_item'] = $context;
 
   return $export;

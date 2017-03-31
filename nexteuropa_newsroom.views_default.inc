@@ -373,13 +373,6 @@ function nexteuropa_newsroom_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'nexteuropa_bem_listing';
   $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['row_options']['default_field_elements'] = FALSE;
-  /* No results behavior: Global: Text area */
-  $handler->display->display_options['empty']['area']['id'] = 'area';
-  $handler->display->display_options['empty']['area']['table'] = 'views';
-  $handler->display->display_options['empty']['area']['field'] = 'area';
-  $handler->display->display_options['empty']['area']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area']['content'] = 'NOTHING';
-  $handler->display->display_options['empty']['area']['format'] = 'full_html';
   /* Field: URL */
   $handler->display->display_options['fields']['field_newsroom_documents']['id'] = 'field_newsroom_documents';
   $handler->display->display_options['fields']['field_newsroom_documents']['table'] = 'field_data_field_newsroom_documents';
@@ -442,6 +435,11 @@ function nexteuropa_newsroom_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'newsroom_item' => 'newsroom_item',
   );
+  /* Filter criterion: Content: Related Documents (field_newsroom_documents:url) */
+  $handler->display->display_options['filters']['field_newsroom_documents_url']['id'] = 'field_newsroom_documents_url';
+  $handler->display->display_options['filters']['field_newsroom_documents_url']['table'] = 'field_data_field_newsroom_documents';
+  $handler->display->display_options['filters']['field_newsroom_documents_url']['field'] = 'field_newsroom_documents_url';
+  $handler->display->display_options['filters']['field_newsroom_documents_url']['operator'] = 'not empty';
 
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block');

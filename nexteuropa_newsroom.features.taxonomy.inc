@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * nexteuropa_newsroom.features.taxonomy.inc
@@ -10,16 +9,16 @@
  */
 function nexteuropa_newsroom_taxonomy_default_vocabularies() {
   return array(
-    'newsroom_item_type' => (object) array(
+    'newsroom_item_type' => array(
       'name' => 'Newsroom Item Type',
       'machine_name' => 'newsroom_item_type',
       'description' => 'Newsroom Item Type',
-      'entity_type' => 'taxonomy_vocabulary',
       'hierarchy' => 1,
       'module' => 'taxonomy',
       'weight' => 0,
       'language' => 'und',
       'i18n_mode' => 4,
+      'entity_type' => 'taxonomy_vocabulary',
       'rdf_mapping' => array(
         'rdftype' => array(
           0 => 'skos:ConceptScheme',
@@ -36,16 +35,16 @@ function nexteuropa_newsroom_taxonomy_default_vocabularies() {
         ),
       ),
     ),
-    'newsroom_service' => (object) array(
+    'newsroom_service' => array(
       'name' => 'Newsroom Service',
       'machine_name' => 'newsroom_service',
       'description' => 'Newsroom Service',
-      'entity_type' => 'taxonomy_vocabulary',
       'hierarchy' => 1,
       'module' => 'taxonomy',
       'weight' => 0,
       'language' => 'und',
       'i18n_mode' => 4,
+      'entity_type' => 'taxonomy_vocabulary',
       'rdf_mapping' => array(
         'rdftype' => array(
           0 => 'skos:ConceptScheme',
@@ -62,16 +61,16 @@ function nexteuropa_newsroom_taxonomy_default_vocabularies() {
         ),
       ),
     ),
-    'newsroom_topic' => (object) array(
+    'newsroom_topic' => array(
       'name' => 'Newsroom Topic',
       'machine_name' => 'newsroom_topic',
       'description' => '',
-      'entity_type' => 'taxonomy_vocabulary',
       'hierarchy' => 0,
       'module' => 'taxonomy',
       'weight' => 0,
       'language' => 'und',
       'i18n_mode' => 4,
+      'entity_type' => 'taxonomy_vocabulary',
       'rdf_mapping' => array(
         'rdftype' => array(
           0 => 'skos:ConceptScheme',
