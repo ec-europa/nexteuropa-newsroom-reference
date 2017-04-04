@@ -402,14 +402,11 @@ function nexteuropa_newsroom_views_default_views() {
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
   $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['label'] = '';
-  $handler->display->display_options['fields']['nothing']['alter']['text'] = '<div class="file">
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '<div>
   <span class="icon icon--file file__icon"></span>
   <div class="file__metadata">
-    <span class="file__title">[field_newsroom_documents_1]</span>
+     <a href="[field_newsroom_documents]">[field_newsroom_documents_1]</a>
   </div>
-  <a href="[field_newsroom_documents]" class="btn btn-default file__btn">
-    Download
-  </a>
 </div>';
   $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
   /* Contextual filter: Content: Nid */
