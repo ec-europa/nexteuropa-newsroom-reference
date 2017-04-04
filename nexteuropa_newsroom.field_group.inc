@@ -800,126 +800,6 @@ function nexteuropa_newsroom_field_group_info() {
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
   $field_group->api_version = 1;
-  $field_group->identifier = 'group_newsroom_sharethis|node|newsroom_item|newsroom_consultations';
-  $field_group->group_name = 'group_newsroom_sharethis';
-  $field_group->entity_type = 'node';
-  $field_group->bundle = 'newsroom_item';
-  $field_group->mode = 'newsroom_consultations';
-  $field_group->parent_name = '';
-  $field_group->data = array(
-    'label' => 'Share this page',
-    'weight' => '11',
-    'children' => array(
-      0 => 'share_buttons',
-    ),
-    'format_type' => 'section_group',
-    'format_settings' => array(
-      'label' => 'Share this page',
-      'instance_settings' => array(
-        'classes' => 'group-newsroom-sharethis field-group-section_group',
-        'show_label' => '1',
-        'label_element' => 'h2',
-        'attributes' => '',
-        'modifier' => '',
-        'layout' => '',
-      ),
-    ),
-  );
-  $field_groups['group_newsroom_sharethis|node|newsroom_item|newsroom_consultations'] = $field_group;
-
-  $field_group = new stdClass();
-  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
-  $field_group->api_version = 1;
-  $field_group->identifier = 'group_newsroom_sharethis|node|newsroom_item|newsroom_default';
-  $field_group->group_name = 'group_newsroom_sharethis';
-  $field_group->entity_type = 'node';
-  $field_group->bundle = 'newsroom_item';
-  $field_group->mode = 'newsroom_default';
-  $field_group->parent_name = '';
-  $field_group->data = array(
-    'label' => 'Share this page',
-    'weight' => '10',
-    'children' => array(
-      0 => 'share_buttons',
-    ),
-    'format_type' => 'section_group',
-    'format_settings' => array(
-      'label' => 'Share this page',
-      'instance_settings' => array(
-        'classes' => 'group-newsroom-sharethis field-group-section_group',
-        'show_label' => '1',
-        'label_element' => 'h2',
-        'attributes' => '',
-        'modifier' => '',
-        'layout' => '',
-      ),
-    ),
-  );
-  $field_groups['group_newsroom_sharethis|node|newsroom_item|newsroom_default'] = $field_group;
-
-  $field_group = new stdClass();
-  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
-  $field_group->api_version = 1;
-  $field_group->identifier = 'group_newsroom_sharethis|node|newsroom_item|newsroom_events';
-  $field_group->group_name = 'group_newsroom_sharethis';
-  $field_group->entity_type = 'node';
-  $field_group->bundle = 'newsroom_item';
-  $field_group->mode = 'newsroom_events';
-  $field_group->parent_name = '';
-  $field_group->data = array(
-    'label' => 'Share this page',
-    'weight' => '15',
-    'children' => array(
-      0 => 'share_buttons',
-    ),
-    'format_type' => 'section_group',
-    'format_settings' => array(
-      'label' => 'Share this page',
-      'instance_settings' => array(
-        'classes' => 'group-newsroom-sharethis field-group-section_group',
-        'show_label' => '1',
-        'label_element' => 'h2',
-        'attributes' => '',
-        'modifier' => '',
-        'layout' => '',
-      ),
-    ),
-  );
-  $field_groups['group_newsroom_sharethis|node|newsroom_item|newsroom_events'] = $field_group;
-
-  $field_group = new stdClass();
-  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
-  $field_group->api_version = 1;
-  $field_group->identifier = 'group_newsroom_sharethis|node|newsroom_item|newsroom_fundings';
-  $field_group->group_name = 'group_newsroom_sharethis';
-  $field_group->entity_type = 'node';
-  $field_group->bundle = 'newsroom_item';
-  $field_group->mode = 'newsroom_fundings';
-  $field_group->parent_name = '';
-  $field_group->data = array(
-    'label' => 'Share this page',
-    'weight' => '12',
-    'children' => array(
-      0 => 'share_buttons',
-    ),
-    'format_type' => 'section_group',
-    'format_settings' => array(
-      'label' => 'Share this page',
-      'instance_settings' => array(
-        'classes' => 'group-newsroom-sharethis field-group-section_group',
-        'show_label' => '1',
-        'label_element' => 'h2',
-        'attributes' => '',
-        'modifier' => '',
-        'layout' => '',
-      ),
-    ),
-  );
-  $field_groups['group_newsroom_sharethis|node|newsroom_item|newsroom_fundings'] = $field_group;
-
-  $field_group = new stdClass();
-  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
-  $field_group->api_version = 1;
   $field_group->identifier = 'group_newsroom_technical|taxonomy_term|newsroom_item_type|form';
   $field_group->group_name = 'group_newsroom_technical';
   $field_group->entity_type = 'taxonomy_term';
@@ -1061,7 +941,6 @@ function nexteuropa_newsroom_field_group_info() {
   t('Recommended reading');
   t('Relationships');
   t('Section');
-  t('Share this page');
   t('Slide');
   t('Technical Fields');
   t('Technical fields');

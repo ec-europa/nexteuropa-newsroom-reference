@@ -159,24 +159,24 @@ function nexteuropa_newsroom_strongarm() {
             'visible' => TRUE,
           ),
           'newsroom_consultations' => array(
-            'weight' => '12',
-            'visible' => TRUE,
+            'weight' => '14',
+            'visible' => FALSE,
           ),
           'newsroom_events' => array(
-            'weight' => '11',
-            'visible' => TRUE,
+            'weight' => '18',
+            'visible' => FALSE,
           ),
           'newsroom_fundings' => array(
-            'weight' => '2',
-            'visible' => TRUE,
+            'weight' => '15',
+            'visible' => FALSE,
           ),
           'full' => array(
             'weight' => '9',
             'visible' => TRUE,
           ),
           'newsroom_default' => array(
-            'weight' => '10',
-            'visible' => TRUE,
+            'weight' => '15',
+            'visible' => FALSE,
           ),
           'newsroom_event' => array(
             'weight' => '10',
