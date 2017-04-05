@@ -29,12 +29,6 @@ function nexteuropa_newsroom_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'nexteuropa_newsroom-newsroom_related_content' => array(
-          'module' => 'nexteuropa_newsroom',
-          'delta' => 'newsroom_related_content',
-          'region' => 'content',
-          'weight' => '48',
-        ),
         'nexteuropa_newsroom-newsroom_admin_tools' => array(
           'module' => 'nexteuropa_newsroom',
           'delta' => 'newsroom_admin_tools',

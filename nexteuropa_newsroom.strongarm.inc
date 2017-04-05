@@ -159,15 +159,15 @@ function nexteuropa_newsroom_strongarm() {
             'visible' => TRUE,
           ),
           'newsroom_consultations' => array(
-            'weight' => '14',
+            'weight' => '40',
             'visible' => FALSE,
           ),
           'newsroom_events' => array(
-            'weight' => '18',
+            'weight' => '44',
             'visible' => FALSE,
           ),
           'newsroom_fundings' => array(
-            'weight' => '15',
+            'weight' => '40',
             'visible' => FALSE,
           ),
           'full' => array(
@@ -175,7 +175,7 @@ function nexteuropa_newsroom_strongarm() {
             'visible' => TRUE,
           ),
           'newsroom_default' => array(
-            'weight' => '15',
+            'weight' => '39',
             'visible' => FALSE,
           ),
           'newsroom_event' => array(

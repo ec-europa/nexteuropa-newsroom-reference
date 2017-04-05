@@ -8,7 +8,7 @@
 <?php $cnt_children = count($children_items); ?>
 <?php $cnt_brother = count($brother_items); ?>
 <?php if ($parent_item || $cnt_children > 0 || $cnt_brother > 0): ?>
-  <ul>  
+  <ul>
       <?php if ($parent_item): ?>
       <li>
         <?php echo l($parent_item->title, 'node/' . $parent_item->id); ?>
@@ -17,14 +17,13 @@
         <?php endif; ?>
       <?php endif; ?>
 
-
       <?php if ($cnt_children > 0): ?>
-      <li>  
+      <li>
         <?php echo l($current_item->title, 'node/' . $current_item->nid); ?>
-        <ul> 
+        <ul>
           <?php foreach ($children_items as $item): ?>
             <li>
-              <?php echo l($item->title, 'node/' . $item->id); ?>
+                <?php echo l($item->title, 'node/' . $item->id); ?>
             </li>
           <?php endforeach; ?>
         </ul>

@@ -34,6 +34,10 @@ function nexteuropa_newsroom_block_info() {
     'info' => t('Newsroom agenda block'),
     'cache' => DRUPAL_CACHE_PER_PAGE,
   ];
+  $blocks['newsroom_share_block'] = [
+    'info' => t('Newsroom share block'),
+    'cache' => DRUPAL_CACHE_PER_PAGE,
+  ];
   return $blocks;
 }
 
@@ -71,6 +75,11 @@ function nexteuropa_newsroom_block_view($delta = '') {
       $block['subject'] = NULL;
       $block['content'] = _nexteuropa_newsroom_agenda_block();
       break;
+
+    case 'newsroom_share_block':
+      $block['subject'] = NULL;
+      $block['content'] = _nexteuropa_newsroom_share_block();
+      break;
   }
   return $block;
 }
@@ -89,6 +98,27 @@ function _nexteuropa_newsroom_agenda_block() {
   }
 
   return $content;
+
+}
+
+/**
+ * Gets newsroom share block content.
+ *
+ * @return string
+ *   Content.
+ */
+function _nexteuropa_newsroom_share_block() {
+  drupal_add_js('//europa.eu/webtools/load.js', 'file');
+  $output = '<h2 class="share-this-header">' . t('Share this page') . '</h2>';
+  $output .= '<div class="shareThis hideWhenSmall">';
+  $output .= '<script type="application/json">{';
+  $output .= '"service": "sbkm",';
+  $output .= '"popup": false,';
+  $output .= '"counter": false,';
+  $output .= '"to": ["facebook","twitter","googleplus","linkedin","e-mail","more"]';
+  $output .= '}</script></div>';
+  var_dump($output);
+  return $output;
 }
 
 /**
