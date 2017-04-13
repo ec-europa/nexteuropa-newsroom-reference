@@ -8,13 +8,13 @@
 
 <?php if (!empty($items)) : ?>
   <div class="<?php echo $css_class; ?>-items-container serviceItemContainer">
-    <h3><?php echo $title; ?></h3>
+    <h2><?php echo $title; ?></h2>
 
     <div class="subscrNewsletterList">
     <?php foreach ($items as $item) : ?>
 
       <div class="subscrNewsletterItem clearfix">
-        <h4><?php echo $item->title; ?></h4>
+        <h3><?php echo $item->title; ?></h3>
         
       <?php if($item->image || $item->service_id): ?>
         <div class="image">

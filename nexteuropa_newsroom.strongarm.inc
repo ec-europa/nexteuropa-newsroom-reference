@@ -149,6 +149,18 @@ function nexteuropa_newsroom_strongarm() {
       'newsroom_default' => array(
         'custom_settings' => TRUE,
       ),
+      'dag_node_on_term' => array(
+        'custom_settings' => FALSE,
+      ),
+      'dag_self_teaser' => array(
+        'custom_settings' => FALSE,
+      ),
+      'dag_title_intro_listing' => array(
+        'custom_settings' => FALSE,
+      ),
+      'newsroom_teaser' => array(
+        'custom_settings' => TRUE,
+      ),
     ),
     'extra_fields' => array(
       'form' => array(),
@@ -181,6 +193,14 @@ function nexteuropa_newsroom_strongarm() {
           'newsroom_event' => array(
             'weight' => '10',
             'visible' => TRUE,
+          ),
+          'teaser' => array(
+            'weight' => '2',
+            'visible' => TRUE,
+          ),
+          'newsroom_teaser' => array(
+            'weight' => '32',
+            'visible' => FALSE,
           ),
         ),
       ),

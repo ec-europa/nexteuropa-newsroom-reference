@@ -117,7 +117,6 @@ function _nexteuropa_newsroom_share_block() {
   $output .= '"counter": false,';
   $output .= '"to": ["facebook","twitter","googleplus","linkedin","e-mail","more"]';
   $output .= '}</script></div>';
-  var_dump($output);
   return $output;
 }
 

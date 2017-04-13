@@ -88,7 +88,7 @@ class NewsroomHelper {
   public static function deleteItems($importer_id) {
     $source = feeds_source($importer_id);
     $source->startClear();
-    $progress = $source->progressClearing();
+    $source->progressClearing();
   }
 
   /**

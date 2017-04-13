@@ -221,6 +221,7 @@ class NewsroomPage {
    * Gets data from DB.
    */
   protected function getData() {
+
     $key_hash_part = $this->getUniqueCachePart();
     $cache_key = 'page_result:' . $key_hash_part;
     $cache_total_number_key = 'page_total_number:' . $key_hash_part;
@@ -238,28 +239,7 @@ class NewsroomPage {
       $data = [];
       if ($items) {
         foreach ($items as $item) {
-          $node = node_load($item->nid);
-          $type = NewsroomHelper::getNewsroomType($item->type_tid);
-          $short_title = NewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_item_short_title');
-
-          $image = $this->getNodeImage($node, 'field_newsroom_illustrative_img');
-          if (empty($image)) {
-            $image = $this->getNodeImage($node, 'field_newsroom_private_img');
-          }
-
-          $data[] = [
-            'nid' => $item->nid,
-            'start_date' => $this->getFormatedDateFromTimestamp($item->start_date),
-            'end_date' => $this->getFormatedDateFromTimestamp($item->end_date),
-            'title' => $short_title ? $short_title : $node->title,
-            'teaser' => NewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_teaser'),
-            'type_url' => NewsroomHelper::getNewsroomPageUrl([$type ? pathauto_cleanstring($type->name) : NEXTEUROPA_NEWSROOM_ALL, NEXTEUROPA_NEWSROOM_ALL]),
-            'type_title' => $type ? $type->name : NULL,
-            'node_url' => url(NewsroomHelper::getNodeMainUrl($node), ['absolute' => TRUE]),
-            'node_redirect_url' => url('news-redirect/' . NewsroomHelper::getFieldValue($node, 'field_newsroom_item_id'), ['absolute' => TRUE]),
-            'image' => $image,
-            'venue' => NewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_item_venue'),
-          ];
+          $data[] = node_load($item->nid);
         }
       }
 
@@ -341,11 +321,7 @@ class NewsroomPage {
    *   Output string.
    */
   protected function generateItems($template_name) {
-    $output = NULL;
-    foreach ($this->getData() as $item) {
-      $output .= theme($template_name, $item);
-    }
-    return $output;
+    return theme($template_name, ['items' => $this->getData()]);
   }
 
   /**

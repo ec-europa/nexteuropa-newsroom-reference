@@ -1119,6 +1119,9 @@ function nexteuropa_newsroom_ctools_plugin_directory($owner, $plugin_type) {
  */
 function nexteuropa_newsroom_entity_view_mode_alter(&$view_mode, $context) {
   if (!empty($context['entity']->type) && $context['entity']->type == 'newsroom_item') {
+    if ($view_mode == 'newsroom_teaser') {
+      return;
+    }
     if (variable_get('newsroom_use_default_view_mode')) {
       $view_mode = 'newsroom_default';
     }
