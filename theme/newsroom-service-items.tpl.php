@@ -14,7 +14,7 @@
     <?php foreach ($items as $item) : ?>
 
       <div class="subscrNewsletterItem clearfix">
-        <h3><?php echo $item->title; ?></h3>
+        <h3><?php echo check_plain($item->title); ?></h3>
         
       <?php if($item->image || $item->service_id): ?>
         <div class="image">

@@ -7,7 +7,7 @@
 ?>
 <?php foreach($items as $item): ?>
     <item>
-        <title><?php echo $item->title; ?></title>
+        <title><?php echo check_plain($item->title); ?></title>
         <link><?php echo url($item->nid); ?></link>
         <?php $field = field_get_items('node', $item, 'field_newsroom_teaser'); ?>
         <?php $teaser = field_view_value('node', $item, 'field_newsroom_teaser', $field[0]); ?>

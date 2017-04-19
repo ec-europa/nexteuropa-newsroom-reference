@@ -13,6 +13,7 @@
 
 // @codingStandardsIgnoreLine
 class nexteuropa_newsroom_views_handler_field_taxonomy extends views_handler_field_taxonomy {
+
   /**
    * Constructor to provide additional field to add.
    *

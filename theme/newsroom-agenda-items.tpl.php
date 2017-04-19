@@ -18,7 +18,8 @@
                     </div>
                     <?php $prefix = $item->new ? '<span class="itemFlag flagHot newItem">New</span> ' : NULL; ?>
                     <h3 class="listing__title">
-                        <?php echo l($prefix . $item->title, $item->url, ['html' => TRUE, 'absolute' => TRUE]); ?>
+                        <?php $title_text = $prefix . check_plain($item->title); ?>
+                        <?php echo l($title_text, $item->url, ['html' => TRUE, 'absolute' => TRUE]); ?>
                     </h3>
                     <div class="listing__author">
                       <?php echo t('From @start_date', ['@start_date' => $item->prepared_start_date]); ?>

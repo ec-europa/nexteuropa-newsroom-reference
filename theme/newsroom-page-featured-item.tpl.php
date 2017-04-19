@@ -4,7 +4,7 @@
  * @file
  * Page newsroom featured item.
  */
-    $l = variable_get('newsroom_legacy', 1);
+    $l = variable_get('nexteuropa_newsroom_legacy', 1);
 ?>
 
 <div class="newsroom-item newsroom-featured-item">

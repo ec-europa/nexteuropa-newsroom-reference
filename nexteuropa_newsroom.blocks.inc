@@ -47,7 +47,7 @@ function nexteuropa_newsroom_block_info() {
 function nexteuropa_newsroom_block_view($delta = '') {
   switch ($delta) {
     case 'newsroom_summary_blocks':
-      $block['subject'] = l(t('Newsroom'), NewsroomHelper::getNewsroomPageUrl([NEXTEUROPA_NEWSROOM_ALL]));
+      $block['subject'] = l(t('Newsroom'), NexteuropaNewsroomHelper::getPageUrl([NEXTEUROPA_NEWSROOM_ALL]));
       $block['content'] = _nexteuropa_newsroom_get_summary_blocks();
       break;
 
@@ -134,7 +134,7 @@ function _nexteuropa_newsroom_get_type_from_agenda_block_context() {
       foreach ($active_context->reactions as $reaction_type => $current_reaction) {
         if ($reaction_type == 'newsroom_agenda_block') {
           if (!empty($current_reaction['type_id'])) {
-            $type = NewsroomHelper::getNewsroomType($current_reaction['type_id']);
+            $type = NexteuropaNewsroomHelper::getNewsroomType($current_reaction['type_id']);
           }
         }
       }
@@ -150,7 +150,7 @@ function _nexteuropa_newsroom_get_type_from_agenda_block_context() {
  *   Summary block content.
  */
 function _nexteuropa_newsroom_get_summary_blocks() {
-  $summary_block = new NewsroomSummaryBlock();
+  $summary_block = new NexteuropaNewsroomSummaryBlock();
   return $summary_block->generateContent();
 }
 
@@ -215,7 +215,7 @@ function _nexteuropa_newsroom_get_related_children($field_name, $parent_nid, $cu
         $ids = array_diff(array_keys($result['node']), [$current_nid]);
         $items = _nexteuropa_newsroom_prepare_related_content_array($ids);
       }
-      cache_set($cache_key, $items, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_node_relative_items', 86400));
+      cache_set($cache_key, $items, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_node_relative_items', 86400));
     }
   }
 
@@ -235,7 +235,7 @@ function _nexteuropa_newsroom_get_related_children($field_name, $parent_nid, $cu
  */
 function _nexteuropa_newsroom_get_related_content($field_name, $node) {
   $items = [];
-  $node_ids = NewsroomHelper::getFieldValue($node, $field_name, 'target_id');
+  $node_ids = NexteuropaNewsroomHelper::getFieldValue($node, $field_name, 'target_id');
   if ($node_ids) {
     $node_ids = is_array($node_ids) ? $node_ids : [$node_ids];
     $items = _nexteuropa_newsroom_prepare_related_content_array($node_ids);
@@ -258,7 +258,7 @@ function _nexteuropa_newsroom_prepare_related_content_array($ids) {
     foreach ($ids as $id) {
       $std = new stdClass();
       $std->id = $id;
-      $std->title = NewsroomHelper::getNodeTitle($id);
+      $std->title = NexteuropaNewsroomHelper::getNodeTitle($id);
       $items[] = $std;
     }
   }
@@ -281,7 +281,7 @@ function _nexteuropa_newsroom_tools() {
     if (user_access(NEXTEUROPA_NEWSROOM_EDIT_ACCESS)) {
       $links['edit'] = [
         'text' => '<span class="glyphicon glyphicon-edit"></span> Edit item in the Newsroom',
-        'path' => NewsroomHelper::getNewsroomUrl(variable_get('newsroom_single_item_edit_segment', NEXTEUROPA_NEWSROOM_ITEM_EDIT_SEGMENT) . $newsroom_id),
+        'path' => NexteuropaNewsroomHelper::getNewsroomUrl(variable_get('nexteuropa_newsroom_single_item_edit_segment', NEXTEUROPA_NEWSROOM_ITEM_EDIT_SEGMENT) . $newsroom_id),
         'options' => [
           'external' => TRUE,
           'html' => TRUE,
@@ -352,15 +352,15 @@ function _nexteuropa_newsroom_block_news_proposal() {
   // Try to get Topic ID from the entity.
   if ($node = menu_get_object()) {
     // First try to get topic from the current node.
-    if ($associated_topic_id = NewsroomHelper::getFieldValue($node, 'field_newsroom_associated_topic', 'tid')) {
+    if ($associated_topic_id = NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_associated_topic', 'tid')) {
       $topic_id = $associated_topic_id;
     }
-    elseif ($group_id = NewsroomHelper::getFieldValue($node, 'og_group_ref', 'target_id')) {
+    elseif ($group_id = NexteuropaNewsroomHelper::getFieldValue($node, 'og_group_ref', 'target_id')) {
       // Try get topic from Organic group, if it exists.
       $group_id = is_array($group_id) ? $group_id[0] : $group_id;
       $group = node_load($group_id);
 
-      if ($group && $group_associated_topic_id = NewsroomHelper::getFieldValue($group, 'field_newsroom_associated_topic', 'tid')) {
+      if ($group && $group_associated_topic_id = NexteuropaNewsroomHelper::getFieldValue($group, 'field_newsroom_associated_topic', 'tid')) {
         $topic_id = $group_associated_topic_id;
       }
     }
@@ -377,7 +377,7 @@ function _nexteuropa_newsroom_block_news_proposal() {
       if (!empty($url_tokens[2]) && is_numeric($url_tokens[2])) {
         $taxonomy_term = taxonomy_term_load($url_tokens[2]);
         // First try to get topic from the current taxonomy term.
-        if ($taxonomy_term && $associated_topic_id = NewsroomHelper::getFieldValue($taxonomy_term, 'field_newsroom_associated_topic', 'tid')) {
+        if ($taxonomy_term && $associated_topic_id = NexteuropaNewsroomHelper::getFieldValue($taxonomy_term, 'field_newsroom_associated_topic', 'tid')) {
           $topic_id = $associated_topic_id;
         }
       }
