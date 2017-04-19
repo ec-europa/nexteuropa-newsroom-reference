@@ -3,13 +3,13 @@
 
 /**
  * @file
- * Code for the NewsroomImporterGenerator class.
+ * Code for the NexteuropaNewsroomImporterGenerator class.
  */
 
 /**
- * NewsroomImporterGenerator class.
+ * NexteuropaNewsroomImporterGenerator class.
  */
-class NewsroomImporterGenerator {
+class NexteuropaNewsroomImporterGenerator {
   private $id = NULL;
   private $fieldMapping = NULL;
   private $title = NULL;
@@ -25,7 +25,7 @@ class NewsroomImporterGenerator {
   private $languages = NULL;
 
   /**
-   * NewsroomImporterGenerator constructor.
+   * NexteuropaNewsroomImporterGenerator constructor.
    *
    * @param int $id
    *   Importer ID.
@@ -295,7 +295,7 @@ class NewsroomImporterGenerator {
    */
   protected function addTranslatableQuery($query, $language) {
     if ($this->getId() == NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER) {
-      $query = ($language == NewsroomHelper::getDefaultLanguage()) ? $query : '//channel/item[infsonewsroom:BasicSvType="Newsroom service"]/category[@domain!="Newsletter" and @lang="' . $language . '" and @infsonewsroom:TopicId="$Temporary target 1"]/' . $query;
+      $query = ($language == NexteuropaNewsroomHelper::getDefaultLanguage()) ? $query : '//channel/item[infsonewsroom:BasicSvType="Newsroom service"]/category[@domain!="Newsletter" and @lang="' . $language . '" and @infsonewsroom:TopicId="$Temporary target 1"]/' . $query;
     }
     else {
       $query = $query . '[@lang="' . $language . '"]/text()';
@@ -345,7 +345,7 @@ class NewsroomImporterGenerator {
     $save->save();
 
     // Set default URLS for importers.
-    NewsroomHelper::setDefaultImporterUrl($this->getId());
+    NexteuropaNewsroomHelper::setDefaultImporterUrl($this->getId());
   }
 
   /**
@@ -405,7 +405,7 @@ class NewsroomImporterGenerator {
 
         $default_language_source = NULL;
         foreach ($this->getLanguages() as $language) {
-          if ($language == NewsroomHelper::getDefaultLanguageUppercase()) {
+          if ($language == NexteuropaNewsroomHelper::getDefaultLanguageUppercase()) {
             $default_language_source = $this->getXpathString();
           }
           else {
@@ -445,10 +445,10 @@ class NewsroomImporterGenerator {
 
       // We need to put the default language on top. Like this we can create
       // tampers easily.
-      $default_language = array_search(NewsroomHelper::getDefaultLanguageUppercase(), $language_keys);
+      $default_language = array_search(NexteuropaNewsroomHelper::getDefaultLanguageUppercase(), $language_keys);
       if ($default_language) {
         unset($language_keys[$default_language]);
-        array_unshift($language_keys, NewsroomHelper::getDefaultLanguageUppercase());
+        array_unshift($language_keys, NexteuropaNewsroomHelper::getDefaultLanguageUppercase());
       }
 
       $this->languages = $language_keys;

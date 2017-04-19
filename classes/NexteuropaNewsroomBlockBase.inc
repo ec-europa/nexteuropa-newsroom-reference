@@ -2,13 +2,13 @@
 
 /**
  * @file
- * Code for the NewsroomBlockBase class.
+ * Code for the NexteuropaNewsroomBlockBase class.
  */
 
 /**
- * NewsroomBlockBase base class.
+ * NexteuropaNewsroomBlockBase base class.
  */
-abstract class NewsroomBlockBase {
+abstract class NexteuropaNewsroomBlockBase {
 
   protected $highlighted = 0;
   protected $isAgenda = FALSE;
@@ -18,7 +18,7 @@ abstract class NewsroomBlockBase {
   protected $topics = [];
 
   /**
-   * Contructor of NewsroomBlockBase class.
+   * Contructor of NexteuropaNewsroomBlockBase class.
    *
    * @param object $type
    *   Newsroom type taxonomy term.

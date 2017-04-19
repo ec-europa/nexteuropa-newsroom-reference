@@ -2,13 +2,13 @@
 
 /**
  * @file
- * Code for the NewsroomAgendaItem class.
+ * Code for the NexteuropaNewsroomAgendaItem class.
  */
 
 /**
- * NewsroomAgendaItem class.
+ * NexteuropaNewsroomAgendaItem class.
  */
-class NewsroomAgendaItem {
+class NexteuropaNewsroomAgendaItem {
 
   protected $items = [];
   protected $date = NULL;
@@ -42,7 +42,7 @@ class NewsroomAgendaItem {
   public function addItem($value) {
     $node = node_load($value->nid);
     $value->title = $node->title;
-    $value->url = NewsroomHelper::getNodeMainUrl($node);
+    $value->url = NexteuropaNewsroomHelper::getNodeMainUrl($node);
     $this->items[] = $value;
   }
 

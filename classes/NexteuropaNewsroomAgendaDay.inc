@@ -2,37 +2,35 @@
 
 /**
  * @file
- * Code for the NewsroomAgendaWeek class.
+ * Code for the NexteuropaNewsroomAgendaDay class.
  */
 
 /**
- * Description of NewsroomAgendaWeek.
+ * Description of NexteuropaNewsroomAgendaDay.
  */
-class NewsroomAgendaWeek extends NewsroomAgenda {
+class NexteuropaNewsroomAgendaDay extends NexteuropaNewsroomAgenda {
 
   /**
-   * NewsroomAgendaWeek constructor.
+   * NexteuropaNewsroomAgendaDay constructor.
    *
    * @param object $type
    *   Newsroom type.
    * @param array $topics
    *   Newsroom topics.
    * @param object $current_day
-   *   Current month.
+   *   Current day.
    */
   public function __construct($type, $topics, $current_day) {
-    $this->setView('week');
+    $this->setView('day');
     $this->setCurrentDate($current_day);
 
     $next_day = clone $current_day;
-    $next_day->modify('+7 day');
+    $next_day->modify('+1 day');
     $this->setUpcomingDate($next_day);
 
     $previous_day = clone $current_day;
-    $previous_day->modify('-7 day');
+    $previous_day->modify('-1 day');
     $this->setPreviousDate($previous_day);
-
-    $this->setDisplayCalendar(FALSE);
 
     parent::__construct($type, $topics);
   }
@@ -45,7 +43,8 @@ class NewsroomAgendaWeek extends NewsroomAgenda {
    */
   protected function setUrlItems($date) {
     if ($date) {
-      $this->addUrlPart((int) $date->format('W'));
+      $this->addUrlPart($date->format('j'));
+      $this->addUrlPart($date->format('n'));
       $this->addUrlPart($date->format('Y'));
     }
   }

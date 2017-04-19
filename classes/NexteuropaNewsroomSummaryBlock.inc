@@ -2,13 +2,13 @@
 
 /**
  * @file
- * Code for the NewsroomBlock class.
+ * Code for the NexteuropaNewsroomBlock class.
  */
 
 /**
- * NewsroomBlock class base class.
+ * NexteuropaNexteuropaNewsroomBlock class base class.
  */
-class NewsroomSummaryBlock {
+class NexteuropaNewsroomSummaryBlock {
 
   protected $types = [];
   protected $topics = [];
@@ -90,11 +90,8 @@ class NewsroomSummaryBlock {
       $topic_name = $topics[0]->name;
       $topic_url = pathauto_cleanstring($topics[0]->name);
     }
-    else {
-      $url_parts[] = NEXTEUROPA_NEWSROOM_ALL;
-    }
 
-    $rss_path = NewsroomHelper::getNewsroomRssUrl([NEXTEUROPA_NEWSROOM_ALL, $topic_url]);
+    $rss_path = NexteuropaNewsroomHelper::getRssUrl([NEXTEUROPA_NEWSROOM_ALL, $topic_url]);
     $rss_title = !empty($topic_name) ? 'RSS feed : ' . $topic_name : 'RSS feed';
 
     $rss = '<div class="newsroom_rss">';
@@ -126,8 +123,8 @@ class NewsroomSummaryBlock {
       if ($entity = $this->getEntityFromRequest()) {
         if (!empty($entity->type) && $entity->type == 'newsroom_selection') {
 
-          if (NewsroomHelper::getFieldValue($entity, 'field_newsroom_topic_operator')) {
-            $topic_operator = NewsroomHelper::getFieldValue($entity, 'field_newsroom_topic_operator');
+          if (NexteuropaNewsroomHelper::getFieldValue($entity, 'field_newsroom_topic_operator')) {
+            $topic_operator = NexteuropaNewsroomHelper::getFieldValue($entity, 'field_newsroom_topic_operator');
           }
 
           // Get topics from newsroom selection.
@@ -145,7 +142,7 @@ class NewsroomSummaryBlock {
             }
           }
         }
-        elseif ($associated_topic_id = NewsroomHelper::getFieldValue($entity, 'field_newsroom_associated_topic', 'tid')) {
+        elseif ($associated_topic_id = NexteuropaNewsroomHelper::getFieldValue($entity, 'field_newsroom_associated_topic', 'tid')) {
           // If it has the associated field, try to load topic.
           $selected_topics[] = $associated_topic_id;
         }
@@ -154,11 +151,11 @@ class NewsroomSummaryBlock {
       $types = [];
       if (!empty($selected_types)) {
         foreach ($selected_types as $type_id) {
-          $types[] = NewsroomHelper::getNewsroomType($type_id);
+          $types[] = NexteuropaNewsroomHelper::getNewsroomType($type_id);
         }
       }
       else {
-        $types = NewsroomHelper::getNewsroomTypes();
+        $types = NexteuropaNewsroomHelper::getNewsroomTypes();
         // We need only the first level of types.
         foreach ($types as $key => $type) {
           if ($type->depth > 0) {
@@ -169,7 +166,7 @@ class NewsroomSummaryBlock {
 
       $topics = [];
       foreach ($selected_topics as $topic_id) {
-        if ($topic_term = NewsroomHelper::getNewsroomTopic($topic_id)) {
+        if ($topic_term = NexteuropaNewsroomHelper::getNewsroomTopic($topic_id)) {
           $topics[] = $topic_term;
         }
       }
@@ -178,7 +175,7 @@ class NewsroomSummaryBlock {
       $config['topic_operator'] = $topic_operator;
       $config['type'] = $types;
 
-      cache_set($cache_key, $config, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_summary_filter', 3600));
+      cache_set($cache_key, $config, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_summary_filter', 3600));
     }
 
     $this->setTopics($config['topic']);
@@ -215,7 +212,7 @@ class NewsroomSummaryBlock {
     }
 
     // Check if selection config is set.
-    if ($newsroom_selection_id = NewsroomHelper::getFieldValue($entity, 'field_newsroom_associated_select', 'target_id')) {
+    if ($newsroom_selection_id = NexteuropaNewsroomHelper::getFieldValue($entity, 'field_newsroom_associated_select', 'target_id')) {
       // If it has the selection field, try to load config.
       $entity = node_load($newsroom_selection_id);
     }
@@ -231,22 +228,22 @@ class NewsroomSummaryBlock {
    */
   public function generateContent() {
     $this->getFilters();
-    $events_terms = NewsroomHelper::getEventsTermsIds();
+    $events_terms = NexteuropaNewsroomHelper::getEventsTermsIds();
     $blocks = [];
     $output = NULL;
 
-    foreach ($this->getTypes() as $key => $type) {
+    foreach ($this->getTypes() as $type) {
       // We exclude event content types, because we display them as agenda.
       if (!empty($events_terms) && in_array($type->tid, $events_terms)) {
         continue;
       }
 
-      $blocks[] = new NewsroomBlock($type, $this->getTopics(), $this->getOperator());
+      $blocks[] = new NexteuropaNewsroomBlock($type, $this->getTopics(), $this->getOperator());
     }
 
-    $blocks[] = new NewsroomBlockAgenda(NULL, $this->getTopics(), $this->getOperator());
+    $blocks[] = new NexteuropaNewsroomBlockAgenda(NULL, $this->getTopics(), $this->getOperator());
 
-    usort($blocks, ['NewsroomSummaryBlock', 'sortBlocks']);
+    usort($blocks, ['NexteuropaNewsroomSummaryBlock', 'sortBlocks']);
     foreach ($blocks as $block) {
       $output .= $block->generateContent();
     }
@@ -260,9 +257,9 @@ class NewsroomSummaryBlock {
    * Callback: sorts newsroom boxes.
    */
   public function sortBlocks($a, $b) {
-    $display_highlights_begin = variable_get('newsroom_display_highlights_begin', 0);
-    $agenda_after_highlights = variable_get('newsroom_agenda_after_highlights', 0);
-    $order_by_last_update = variable_get('newsroom_order_by_last_update', 0);
+    $display_highlights_begin = variable_get('nexteuropa_newsroom_display_highlights_begin', 0);
+    $agenda_after_highlights = variable_get('nexteuropa_newsroom_agenda_after_highlights', 0);
+    $order_by_last_update = variable_get('nexteuropa_newsroom_order_by_last_update', 0);
     if ($a->getHighlighted() > $b->getHighlighted()) {
       return $display_highlights_begin ? -1 : 1;
     }
