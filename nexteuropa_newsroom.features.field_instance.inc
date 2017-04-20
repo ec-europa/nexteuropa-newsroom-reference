@@ -1119,7 +1119,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
           'image_style' => 'newsroom_style',
         ),
         'type' => 'image',
-        'weight' => 4,
+        'weight' => 5,
       ),
       'popup' => array(
         'label' => 'above',
@@ -1503,7 +1503,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
         'weight' => 2,
       ),
       'newsroom_teaser' => array(
-        'label' => 'inline',
+        'label' => 'hidden',
         'module' => 'date',
         'settings' => array(
           'format_type' => 'date_only',
@@ -3543,7 +3543,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
           'image_style' => 'newsroom_style',
         ),
         'type' => 'image',
-        'weight' => 5,
+        'weight' => 6,
       ),
       'popup' => array(
         'label' => 'above',
