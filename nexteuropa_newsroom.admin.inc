@@ -866,8 +866,8 @@ function _nexteuropa_newsroom_admin_check_deletion($type, $checks = []) {
  */
 function _nexteuropa_newsroom_admin_prepare_check(array $previous, array $input) {
   // Set some values.
-  $selected['topic'] = array_filter($input['newsroom_content_types_topic']);
-  $selected['select'] = array_filter($input['newsroom_content_types_select']);
+  $selected['topic'] = array_filter($input['nexteuropa_newsroom_content_types_topic']);
+  $selected['select'] = array_filter($input['nexteuropa_newsroom_content_types_select']);
   $check_topic = [];
   $check_select = [];
   // Check the two array for differences. we need to catch also a deselection.
@@ -884,8 +884,8 @@ function _nexteuropa_newsroom_admin_prepare_check(array $previous, array $input)
       'select' => $selected['select'],
     ],
     'delete' => [
-      'topic' => $input['newsroom_content_types_delete_topic'],
-      'select' => $input['newsroom_content_types_delete_select'],
+      'topic' => $input['nexteuropa_newsroom_content_types_delete_topic'],
+      'select' => $input['nexteuropa_newsroom_content_types_delete_select'],
     ],
     'check' => [
       'topic' => $check_topic,

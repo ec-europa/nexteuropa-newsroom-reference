@@ -360,7 +360,12 @@ class NexteuropaNewsroomPage {
 
     $query->condition('n.status', 1);
     $query->condition('n.type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
-    $query->condition('ec.field_newsroom_ec_content_value', $this->getEcContent() == NEXTEUROPA_NEWSROOM_EC ? 1 : 0);
+
+    $db_or = db_or();
+    $db_or->condition('ec.field_newsroom_ec_content_value', $this->getEcContent() == NEXTEUROPA_NEWSROOM_EC ? 1 : 0);
+    $db_or->isNull('ec.field_newsroom_ec_content_value');
+
+    $query->condition($db_or);
 
     $db_or = db_or();
     $db_or->condition('newsletter_item.field_newsroom_newsletter_only_value', 1, '<>');
