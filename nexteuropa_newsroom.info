@@ -1,7 +1,6 @@
 name = Nexteuropa Newsroom
 description = Integration with the Newsroom application
 core = 7.x
-php = 5.2.4
 package = NextEuropa
 dependencies[] = feeds_et
 dependencies[] = feeds_tamper_ui
