@@ -109,7 +109,8 @@ function _nexteuropa_newsroom_agenda_block() {
  */
 function _nexteuropa_newsroom_share_block() {
   drupal_add_js('//europa.eu/webtools/load.js', 'file');
-  $output = '<h2 class="share-this-header">' . t('Share this page') . '</h2>';
+  $output = '<div class="social-media-links--webtool-horizontal">';
+  $output .= '<span class="social-media-links__label">' . t('Share this page') . '</span>';
   $output .= '<div class="shareThis hideWhenSmall">';
   $output .= '<script type="application/json">{';
   $output .= '"service": "sbkm",';
@@ -117,6 +118,7 @@ function _nexteuropa_newsroom_share_block() {
   $output .= '"counter": false,';
   $output .= '"to": ["facebook","twitter","googleplus","linkedin","e-mail","more"]';
   $output .= '}</script></div>';
+  $output .= '</div>';
   return $output;
 }
 
