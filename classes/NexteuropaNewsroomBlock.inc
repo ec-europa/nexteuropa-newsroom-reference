@@ -2,17 +2,17 @@
 
 /**
  * @file
- * Code for the NewsroomBlock class.
+ * Code for the NexteuropaNewsroomBlock class.
  */
 
 /**
- * NewsroomBlock class base class.
+ * NexteuropaNewsroomBlock class base class.
  */
-class NewsroomBlock extends NewsroomBlockBase {
+class NexteuropaNewsroomBlock extends NexteuropaNewsroomBlockBase {
   protected $items = [];
 
   /**
-   * Contructor of NewsroomBlock class.
+   * Contructor of NexteuropaNewsroomBlock class.
    *
    * @param object $type
    *   Newsroom type taxonomy term.
@@ -89,7 +89,7 @@ class NewsroomBlock extends NewsroomBlockBase {
    * Sets is block highlighted.
    */
   public function setHighlighted() {
-    $this->highlighted = NewsroomHelper::getFieldValue($this->getType(), 'field_newsroom_highlighted');
+    $this->highlighted = NexteuropaNewsroomHelper::getFieldValue($this->getType(), 'field_newsroom_highlighted');
   }
 
   /**
@@ -127,17 +127,17 @@ class NewsroomBlock extends NewsroomBlockBase {
         if ($this->getOperator() == NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR) {
           $query->condition('topic_data.tid', $topic_ids);
         }
-        elseif ($nids = NewsroomHelper::getNodeRelatedToTopic($topic_ids)) {
+        elseif ($nids = NexteuropaNewsroomHelper::getNodeRelatedToTopic($topic_ids)) {
           $query->condition('nid', $nids, 'IN');
         }
       }
 
-      $query->condition('tt.tid', NewsroomHelper::getTypeChildren($this->getType()->tid));
-      $query->range(0, NewsroomHelper::getBlockItemsNumber($this->getHighlighted()));
+      $query->condition('tt.tid', NexteuropaNewsroomHelper::getTypeChildren($this->getType()->tid));
+      $query->range(0, NexteuropaNewsroomHelper::getBlockItemsNumber($this->getHighlighted()));
       $query->orderBy('n.created', 'DESC');
       $result = $query->execute()->fetchAll();
 
-      cache_set($cache_key, $result, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_summary_block', 3600));
+      cache_set($cache_key, $result, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_summary_block', 3600));
     }
 
     if ($result) {
@@ -145,8 +145,8 @@ class NewsroomBlock extends NewsroomBlockBase {
     }
 
     foreach ($result as $key => $item) {
-      $result[$key]->new = NewsroomHelper::isNewItem($item->created, $item->nid);
-      $result[$key]->created = NewsroomHelper::getFormatedDate('d/m/Y', $item->created);
+      $result[$key]->new = NexteuropaNewsroomHelper::isNewItem($item->created, $item->nid);
+      $result[$key]->created = NexteuropaNewsroomHelper::getFormatedDate('d/m/Y', $item->created);
     }
 
     $this->setItems($result);
@@ -164,7 +164,7 @@ class NewsroomBlock extends NewsroomBlockBase {
       'css_classes' => $this->getCssClasses(),
       'title' => $this->getTitle(),
       'type_url' => $this->getTypeUrl(),
-      'url' => NewsroomHelper::getNewsroomPageUrl([$this->getTypeUrl(), $this->getTopicUrl()]),
+      'url' => NexteuropaNewsroomHelper::getPageUrl([$this->getTypeUrl(), $this->getTopicUrl()]),
     ]);
   }
 

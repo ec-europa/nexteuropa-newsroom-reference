@@ -5,8 +5,10 @@
  * Agenda date.
  */
 ?>
-<div class="date-date">
-  <span class="day"><?php echo $day; ?></span>
-  <span class="month"><?php echo $month; ?></span>
-  <span class="year"><?php echo $year; ?></span>
+<div class="listing__column-second">
+    <div class="date-block">
+        <span class="date-block__day-text"><?php echo $month; ?></span>
+        <span class="date-block__day"><?php echo $day; ?></span>
+        <span class="date-block__month"><?php echo $year; ?></span>
+    </div>
 </div>

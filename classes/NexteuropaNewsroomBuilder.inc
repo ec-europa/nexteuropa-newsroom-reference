@@ -2,13 +2,13 @@
 
 /**
  * @file
- * Code for the NewsroomBuilder class.
+ * Code for the NexteuropaNewsroomBuilder class.
  */
 
 /**
- * NewsroomBuilder class.
+ * NexteuropaNewsroomBuilder class.
  */
-class NewsroomBuilder {
+class NexteuropaNewsroomBuilder {
 
   /**
    * Builds agenda base on url params.
@@ -29,36 +29,36 @@ class NewsroomBuilder {
    * @return object
    *   Agenda item.
    */
-  public static function buildPageAgenda($view = NewsroomAgenda::AGENDA_VIEW_SCHEDULE, $type_name = NEXTEUROPA_NEWSROOM_ALL, $topic_name = NEXTEUROPA_NEWSROOM_ALL, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
+  public static function buildPageAgenda($view = NexteuropaNewsroomAgenda::AGENDA_VIEW_SCHEDULE, $type_name = NEXTEUROPA_NEWSROOM_ALL, $topic_name = NEXTEUROPA_NEWSROOM_ALL, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
 
     $agenda = NULL;
     $current_date = new DateTime();
     $type = self::getType($type_name);
     $topic = self::getTopic($topic_name);
     switch ($view) {
-      case NewsroomAgenda::AGENDA_VIEW_MONTH:
+      case NexteuropaNewsroomAgenda::AGENDA_VIEW_MONTH:
         $month = self::getMonth($arg1);
         $year = self::getYear($arg2);
         $current_date->setDate($year, $month, 1);
 
-        $agenda = new NewsroomAgendaMonth($type, $topic, $current_date);
+        $agenda = new NexteuropaNewsroomAgendaMonth($type, $topic, $current_date);
         break;
 
-      case NewsroomAgenda::AGENDA_VIEW_WEEK:
+      case NexteuropaNewsroomAgenda::AGENDA_VIEW_WEEK:
         $week = self::getWeek($arg1);
         $year = self::getYear($arg2);
         $current_date->setISODate($year, $week);
 
-        $agenda = new NewsroomAgendaWeek($type, $topic, $current_date);
+        $agenda = new NexteuropaNewsroomAgendaWeek($type, $topic, $current_date);
         break;
 
-      case NewsroomAgenda::AGENDA_VIEW_DAY:
+      case NexteuropaNewsroomAgenda::AGENDA_VIEW_DAY:
         $day = self::getDay($arg1);
         $month = self::getMonth($arg2);
         $year = self::getYear($arg3);
         $current_date->setDate($year, $month, $day);
 
-        $agenda = new NewsroomAgendaDay($type, $topic, $current_date);
+        $agenda = new NexteuropaNewsroomAgendaDay($type, $topic, $current_date);
         break;
 
       default:
@@ -67,7 +67,7 @@ class NewsroomBuilder {
         $year = self::getYear($arg3);
 
         $current_date->setDate($year, $month, $day);
-        $agenda = new NewsroomAgendaSchedule($type, $topic, $current_date);
+        $agenda = new NexteuropaNewsroomAgendaSchedule($type, $topic, $current_date);
 
     }
 
@@ -86,30 +86,30 @@ class NewsroomBuilder {
    * @param object $date
    *   Current date.
    *
-   * @return NewsroomAgenda|null
+   * @return NexteuropaNewsroomAgenda|null
    *   Agenda item.
    */
   public static function buildAgenda($view, $type, $topics, $date, $operator = NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR) {
     $agenda = NULL;
     switch ($view) {
-      case NewsroomAgenda::AGENDA_VIEW_MONTH:
-        $agenda = new NewsroomAgendaMonth($type, $topics, $date);
+      case NexteuropaNewsroomAgenda::AGENDA_VIEW_MONTH:
+        $agenda = new NexteuropaNewsroomAgendaMonth($type, $topics, $date);
         break;
 
-      case NewsroomAgenda::AGENDA_VIEW_WEEK:
-        $agenda = new NewsroomAgendaWeek($type, $topics, $date);
+      case NexteuropaNewsroomAgenda::AGENDA_VIEW_WEEK:
+        $agenda = new NexteuropaNewsroomAgendaWeek($type, $topics, $date);
         break;
 
-      case NewsroomAgenda::AGENDA_VIEW_DAY:
-        $agenda = new NewsroomAgendaDay($type, $topics, $date);
+      case NexteuropaNewsroomAgenda::AGENDA_VIEW_DAY:
+        $agenda = new NexteuropaNewsroomAgendaDay($type, $topics, $date);
         break;
 
-      case NewsroomAgenda::AGENDA_VIEW_SCHEDULE_BLOCK:
-        $agenda = new NewsroomAgendaBlockSchedule($type, $topics, $date, $operator);
+      case NexteuropaNewsroomAgenda::AGENDA_VIEW_SCHEDULE_BLOCK:
+        $agenda = new NexteuropaNewsroomAgendaBlockSchedule($type, $topics, $date, $operator);
         break;
 
       default:
-        $agenda = new NewsroomAgendaSchedule($type, $topics, $date);
+        $agenda = new NexteuropaNewsroomAgendaSchedule($type, $topics, $date);
 
     }
 
@@ -159,7 +159,7 @@ class NewsroomBuilder {
         $description = 'Imports Topics from the Newsroom service';
         $entity_type = 'taxonomy_term';
         $bundle = NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY;
-        $rss_context = '//channel/item[infsonewsroom:BasicSvType="Newsroom service"]/category[@domain!="Newsletter" and @lang="' . NewsroomHelper::getDefaultLanguageUppercase() . '"]';
+        $rss_context = '//channel/item[infsonewsroom:BasicSvType="Newsroom service"]/category[@domain!="Newsletter" and @lang="' . NexteuropaNewsroomHelper::getDefaultLanguageUppercase() . '"]';
         $field_mapping = self::getTopicImporterMappings();
         break;
 
@@ -186,7 +186,7 @@ class NewsroomBuilder {
     $field_mapping = [
       [
         'field' => 'title',
-        'query' => 'title[@lang="' . NewsroomHelper::getDefaultLanguageUppercase() . '"]/text()',
+        'query' => 'title[@lang="' . NexteuropaNewsroomHelper::getDefaultLanguageUppercase() . '"]/text()',
       ],
       [
         'field' => 'title_field',
@@ -498,7 +498,7 @@ class NewsroomBuilder {
         'source' => 'Blank source 1',
         'tamper' => [
           'plugin_id' => 'default_value',
-          'default_value' => NewsroomHelper::getDefaultLanguage(),
+          'default_value' => NexteuropaNewsroomHelper::getDefaultLanguage(),
         ],
       ],
     ];
@@ -516,7 +516,7 @@ class NewsroomBuilder {
     $field_mapping = [
       [
         'field' => 'title',
-        'query' => 'title[@lang="' . NewsroomHelper::getDefaultLanguageUppercase() . '"]/text()',
+        'query' => 'title[@lang="' . NexteuropaNewsroomHelper::getDefaultLanguageUppercase() . '"]/text()',
       ],
       [
         'field' => 'title_field',
@@ -571,7 +571,7 @@ class NewsroomBuilder {
         'source' => 'Blank source 1',
         'tamper' => [
           'plugin_id' => 'default_value',
-          'default_value' => NewsroomHelper::getDefaultLanguage(),
+          'default_value' => NexteuropaNewsroomHelper::getDefaultLanguage(),
         ],
       ],
     ];
@@ -599,7 +599,7 @@ class NewsroomBuilder {
       ],
       [
         'field' => 'name',
-        'query' => 'title[@lang="' . NewsroomHelper::getDefaultLanguageUppercase() . '"]/text()',
+        'query' => 'title[@lang="' . NexteuropaNewsroomHelper::getDefaultLanguageUppercase() . '"]/text()',
       ],
       [
         'field' => 'name_field',
@@ -684,7 +684,7 @@ class NewsroomBuilder {
       ],
       [
         'field' => 'name',
-        'query' => 'title[@lang="' . NewsroomHelper::getDefaultLanguageUppercase() . '"]/text()',
+        'query' => 'title[@lang="' . NexteuropaNewsroomHelper::getDefaultLanguageUppercase() . '"]/text()',
       ],
       [
         'field' => 'name_field',
@@ -731,7 +731,6 @@ class NewsroomBuilder {
     return $field_mapping;
   }
 
-
   /**
    * Validates and returns day number.
    *
@@ -742,7 +741,7 @@ class NewsroomBuilder {
    *   Day number.
    */
   private static function getDay($value) {
-    return preg_match('/^\d{1,2}$/', $value) ? (int) $value : NewsroomHelper::getFormatedDate('d');
+    return preg_match('/^\d{1,2}$/', $value) ? (int) $value : NexteuropaNewsroomHelper::getFormatedDate('d');
   }
 
   /**
@@ -755,7 +754,7 @@ class NewsroomBuilder {
    *   Week number.
    */
   private static function getWeek($value) {
-    return preg_match('/^\d{1,2}$/', $value) ? (int) $value : NewsroomHelper::getFormatedDate('W');
+    return preg_match('/^\d{1,2}$/', $value) ? (int) $value : NexteuropaNewsroomHelper::getFormatedDate('W');
   }
 
   /**
@@ -768,7 +767,7 @@ class NewsroomBuilder {
    *   Month number.
    */
   private static function getMonth($value) {
-    return preg_match('/^\d{1,2}$/', $value) ? (int) $value : NewsroomHelper::getFormatedDate('n');
+    return preg_match('/^\d{1,2}$/', $value) ? (int) $value : NexteuropaNewsroomHelper::getFormatedDate('n');
   }
 
   /**
@@ -781,7 +780,7 @@ class NewsroomBuilder {
    *   Year number.
    */
   private static function getYear($value) {
-    return preg_match('/^\d{4}$/', $value) ? (int) $value : NewsroomHelper::getFormatedDate('Y');
+    return preg_match('/^\d{4}$/', $value) ? (int) $value : NexteuropaNewsroomHelper::getFormatedDate('Y');
   }
 
   /**
@@ -797,7 +796,7 @@ class NewsroomBuilder {
     $topic = self::getTaxonomyTerm($topic_url, NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY);
     if ($topic) {
       // Try to find active menu.
-      if ($path = NewsroomHelper::fetchActiveMenuPath($topic->tid)) {
+      if ($path = NexteuropaNewsroomHelper::fetchActiveMenuPath($topic->tid)) {
         menu_tree_set_path('main-menu', $path);
       }
     }
@@ -814,7 +813,7 @@ class NewsroomBuilder {
    *   Date string.
    */
   private static function getDate($value) {
-    return NewsroomHelper::checkDateFormat($value);
+    return NexteuropaNewsroomHelper::checkDateFormat($value);
   }
 
   /**
@@ -842,7 +841,7 @@ class NewsroomBuilder {
    *   Taxonomy term object.
    */
   private static function getTaxonomyTerm($taxonomy_term_url, $vocabulary_name) {
-    return $taxonomy_term_url == NEXTEUROPA_NEWSROOM_ALL ? NULL : NewsroomHelper::getTermFromRequest($taxonomy_term_url, $vocabulary_name);
+    return $taxonomy_term_url == NEXTEUROPA_NEWSROOM_ALL ? NULL : NexteuropaNewsroomHelper::getTermFromRequest($taxonomy_term_url, $vocabulary_name);
   }
 
   /**
@@ -859,15 +858,15 @@ class NewsroomBuilder {
    * @param string $ec_content
    *   EC content.
    *
-   * @return NewsroomPage
-   *   NewsroomPage object.
+   * @return NexteuropaNewsroomPage
+   *   NexteuropaNewsroomPage object.
    */
   public static function buildNewsroomPage($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL, $ec_content = NEXTEUROPA_NEWSROOM_EC) {
     $type = self::getType($type_url);
     $topic = self::getTopic($topic_url);
     $start_date = self::getDate($start_date);
     $end_date = self::getDate($end_date);
-    return new NewsroomPage($type, $topic, $start_date, $end_date, $ec_content);
+    return new NexteuropaNewsroomPage($type, $topic, $start_date, $end_date, $ec_content);
   }
 
 }

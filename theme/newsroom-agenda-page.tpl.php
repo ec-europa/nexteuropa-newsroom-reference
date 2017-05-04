@@ -8,7 +8,7 @@
 <div class="<?php echo !$is_block ? 'newsroomAgenda-container' : NULL; ?>">
   <?php if (!empty($filter_form)): ?>
     <div class="newsroomAgenda-filterForm">
-      <h3><?php echo t('filter by'); ?></h3>
+      <h2><?php echo t('Filter by'); ?></h2>
       <?php echo $filter_form; ?>
     </div>
   <?php endif; ?>
@@ -20,7 +20,7 @@
     <?php endif; ?>
     <?php if (!empty($next_event_items)) : ?>
       <div class="furtherDates">
-        <h4 class="newsroom_title"><?php echo t('Upcoming'); ?></h4>
+        <h2 class="newsroom_title"><?php echo t('Upcoming'); ?></h2>
         <?php echo $next_event_items; ?>
       </div>
     <?php endif; ?>

@@ -2,16 +2,16 @@
 
 /**
  * @file
- * Code for the NewsroomAgendaMonth class.
+ * Code for the NexteuropaNewsroomAgendaMonth class.
  */
 
 /**
- * NewsroomAgendaMonth class.
+ * NexteuropaNewsroomAgendaMonth class.
  */
-class NewsroomAgendaMonth extends NewsroomAgenda {
+class NexteuropaNewsroomAgendaMonth extends NexteuropaNewsroomAgenda {
 
   /**
-   * NewsroomAgendaMonth constructor.
+   * NexteuropaNewsroomAgendaMonth constructor.
    *
    * @param object $type
    *   Newsroom type.

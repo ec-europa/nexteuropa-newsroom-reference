@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * nexteuropa_newsroom.features.inc
@@ -11,6 +10,9 @@
 function nexteuropa_newsroom_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "context" && $api == "context") {
     return array("version" => "3");
+  }
+  if ($module == "ds" && $api == "ds") {
+    return array("version" => "1");
   }
   if ($module == "feeds" && $api == "feeds_importer_default") {
     return array("version" => "1");
@@ -46,16 +48,16 @@ function nexteuropa_newsroom_node_info() {
       'title_label' => t('Title'),
       'help' => '',
     ),
-    'newsroom_selection' => array(
-      'name' => t('Newsroom Selection'),
+    'newsroom_newsletter_issue' => array(
+      'name' => t('Newsroom newsletter issue'),
       'base' => 'node_content',
       'description' => '',
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
     ),
-    'newsroom_newsletter_issue' => array(
-      'name' => t('Newsroom newsletter issue'),
+    'newsroom_selection' => array(
+      'name' => t('Newsroom Selection'),
       'base' => 'node_content',
       'description' => '',
       'has_title' => '1',

@@ -2,17 +2,17 @@
 
 /**
  * @file
- * Code for the NewsroomAgendaBlockSchedule class.
+ * Code for the NexteuropaNewsroomAgendaBlockSchedule class.
  */
 
 /**
- * NewsroomAgendaBlockSchedule class.
+ * NexteuropaNewsroomAgendaBlockSchedule class.
  */
-class NewsroomAgendaBlockSchedule extends NewsroomAgendaSchedule {
+class NexteuropaNewsroomAgendaBlockSchedule extends NexteuropaNewsroomAgendaSchedule {
   private $operator = NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR;
 
   /**
-   * NewsroomAgendaBlockSchedule constructor.
+   * NexteuropaNewsroomAgendaBlockSchedule constructor.
    *
    * @param object $type
    *   Newsroom type taxonomy term.
@@ -34,7 +34,7 @@ class NewsroomAgendaBlockSchedule extends NewsroomAgendaSchedule {
    *   Number of items.
    */
   public function getItemsNumber() {
-    return NewsroomHelper::getBlockItemsNumber(FALSE);
+    return NexteuropaNewsroomHelper::getBlockItemsNumber(FALSE);
   }
 
   /**
@@ -76,7 +76,7 @@ class NewsroomAgendaBlockSchedule extends NewsroomAgendaSchedule {
       $query->condition('topic_data.tid', $this->getTopicsId());
 
     }
-    elseif ($nids = NewsroomHelper::getNodeRelatedToTopic($this->getTopicsId())) {
+    elseif ($nids = NexteuropaNewsroomHelper::getNodeRelatedToTopic($this->getTopicsId())) {
       $query->condition('nid', $nids, 'IN');
     }
 

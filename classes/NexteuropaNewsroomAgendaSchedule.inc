@@ -2,18 +2,18 @@
 
 /**
  * @file
- * Code for the NewsroomAgendaSchedule class.
+ * Code for the NexteuropaNewsroomAgendaSchedule class.
  */
 
 /**
- * NewsroomAgendaSchedule class.
+ * NexteuropaNewsroomAgendaSchedule class.
  */
-class NewsroomAgendaSchedule extends NewsroomAgenda {
+class NexteuropaNewsroomAgendaSchedule extends NexteuropaNewsroomAgenda {
 
   protected $lastAgendaDate = NULL;
 
   /**
-   * NewsroomAgendaSchedule constructor.
+   * NexteuropaNewsroomAgendaSchedule constructor.
    *
    * @param object $type
    *   Newsroom type.
@@ -157,7 +157,7 @@ class NewsroomAgendaSchedule extends NewsroomAgenda {
           $current_date->modify('+1 day');
         }
       }
-      cache_set($cache_key, $upcoming_date, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_upcoming_date', 3600));
+      cache_set($cache_key, $upcoming_date, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_upcoming_date', 3600));
     }
 
     $this->setUpcomingDate($upcoming_date);
@@ -190,7 +190,7 @@ class NewsroomAgendaSchedule extends NewsroomAgenda {
           $current_date->modify('-1 day');
         }
       }
-      cache_set($cache_key, $previous_date, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_previous_date', 3600));
+      cache_set($cache_key, $previous_date, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_previous_date', 3600));
     }
 
     $this->setPreviousDate($previous_date);

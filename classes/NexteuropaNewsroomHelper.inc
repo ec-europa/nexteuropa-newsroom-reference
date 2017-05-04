@@ -6,9 +6,9 @@
  */
 
 /**
- * NewsroomHelper class.
+ * NexteuropaNewsroomHelper class.
  */
-class NewsroomHelper {
+class NexteuropaNewsroomHelper {
 
   /**
    * Merges a term_tid and it's children into one array.
@@ -40,7 +40,7 @@ class NewsroomHelper {
    * @return string
    *   Newsroom page URL.
    */
-  public static function getNewsroomPageUrl($url_parts = []) {
+  public static function getPageUrl($url_parts = []) {
     return 'newsroom/' . implode('/', $url_parts);
   }
 
@@ -53,7 +53,7 @@ class NewsroomHelper {
    * @return string
    *   Newsroom rss URL.
    */
-  public static function getNewsroomRssUrl($url_parts = []) {
+  public static function getRssUrl($url_parts = []) {
     return 'newsroom-rss/' . implode('/', $url_parts);
   }
 
@@ -88,7 +88,7 @@ class NewsroomHelper {
   public static function deleteItems($importer_id) {
     $source = feeds_source($importer_id);
     $source->startClear();
-    $progress = $source->progressClearing();
+    $source->progressClearing();
   }
 
   /**
@@ -125,26 +125,26 @@ class NewsroomHelper {
 
       case NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER:
       case NEXTEUROPA_NEWSROOM_SERVICE_IMPORTER:
-        $url = self::getNewsroomUrl(variable_get('newsroom_topic_import_script', NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT));
+        $url = self::getNewsroomUrl(variable_get('nexteuropa_newsroom_topic_import_script', NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT));
         break;
 
       case NEXTEUROPA_NEWSROOM_TYPE_IMPORTER:
-        $url = self::getNewsroomUrl(variable_get('newsroom_type_import_script', NEXTEUROPA_NEWSROOM_TYPE_SCRIPT));
+        $url = self::getNewsroomUrl(variable_get('nexteuropa_newsroom_type_import_script', NEXTEUROPA_NEWSROOM_TYPE_SCRIPT));
         break;
 
       case NEXTEUROPA_NEWSROOM_ITEM_IMPORTER:
-        $subsite = variable_get('newsroom_subsite', FALSE);
+        $subsite = variable_get('nexteuropa_newsroom_subsite', FALSE);
         $subsite_url_part = '?';
 
         if ($subsite) {
           $subsite_url_part = '?subsite=' . $subsite;
         }
 
-        $url = self::getNewsroomUrl(variable_get('newsroom_item_import_script', NEXTEUROPA_NEWSROOM_ITEM_SCRIPT)) . $subsite_url_part;
+        $url = self::getNewsroomUrl(variable_get('nexteuropa_newsroom_item_import_script', NEXTEUROPA_NEWSROOM_ITEM_SCRIPT)) . $subsite_url_part;
         break;
 
       case NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER:
-        $url = self::getNewsroomUrl(variable_get('newsroom_issue_import_script', NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT));
+        $url = self::getNewsroomUrl(variable_get('nexteuropa_newsroom_issue_import_script', NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT));
         break;
     }
 
@@ -191,7 +191,7 @@ class NewsroomHelper {
         ->condition('ml.link_path', $path)
         ->execute();
       $data = $query->fetchAll();
-      cache_set($cache_key, $data, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_get_menu_by_path', 86400));
+      cache_set($cache_key, $data, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_get_menu_by_path', 86400));
     }
     return $data;
   }
@@ -220,7 +220,7 @@ class NewsroomHelper {
       $query->condition('f.field_newsroom_associated_topic_tid', $topic_ids);
       $data = $query->execute()->fetchAll();
 
-      cache_set($cache_key, $data, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_get_topic_entities', 3600));
+      cache_set($cache_key, $data, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_get_topic_entities', 3600));
     }
     return $data;
   }
@@ -273,22 +273,21 @@ class NewsroomHelper {
               'p7', 'p8', 'p9',
               'plid', 'weight', 'mlid',
             ];
-            $result = 0;
             foreach ($fields as $field) {
               if ($a->{$field} == $b->{$field}) {
                 continue;
               }
               else {
-                $result = $a->{$field} < $b->{$field} ? -1 : 1;
+                return $a->{$field} < $b->{$field} ? -1 : 1;
               }
             }
-            return $result;
+            return 0;
           }
         });
         $menu_item_link = array_shift($menu_items);
         $path = $menu_item_link->link_path;
       }
-      cache_set($cache_key, $path, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_fetch_active_menu', 3600));
+      cache_set($cache_key, $path, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_fetch_active_menu', 3600));
     }
 
     return $path;
@@ -356,7 +355,7 @@ class NewsroomHelper {
    *   Universe URL.
    */
   public static function getUniverseUrl() {
-    return variable_get('newsroom_base_url', NEXTEUROPA_NEWSROOM_BASE_URL) . self::getUniverseId() . '/';
+    return variable_get('nexteuropa_newsroom_base_url', NEXTEUROPA_NEWSROOM_BASE_URL) . self::getUniverseId() . '/';
   }
 
   /**
@@ -425,7 +424,7 @@ class NewsroomHelper {
           }
         }
       }
-      cache_set($cache_key, $taxonomy_term, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_term_from_request', 864000));
+      cache_set($cache_key, $taxonomy_term, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_term_from_request', 864000));
     }
 
     return $taxonomy_term;
@@ -443,7 +442,7 @@ class NewsroomHelper {
    *   It is a new item or not.
    */
   public static function isNewItem($created, $nid) {
-    return user_is_logged_in() && $created > time() - variable_get('newsroom_days_number_for_new_user', 14) * 86400 && !node_last_viewed($nid);
+    return user_is_logged_in() && $created > time() - variable_get('nexteuropa_newsroom_days_number_for_new_user', 14) * 86400 && !node_last_viewed($nid);
   }
 
   /**
@@ -528,7 +527,7 @@ class NewsroomHelper {
       $query->having('count(ttopic.entity_id) = :cnt', [':cnt' => count($topic_ids)]);
 
       $data = $query->execute()->fetchAllKeyed(0, 0);
-      cache_set($cache_key, $data, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_node_related_to_topic', 3600));
+      cache_set($cache_key, $data, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_node_related_to_topic', 3600));
     }
     return $data;
   }
@@ -562,7 +561,7 @@ class NewsroomHelper {
    *   Universe Id.
    */
   public static function getUniverseId() {
-    return variable_get('newsroom_universe_id', FALSE);
+    return variable_get('nexteuropa_newsroom_universe_id', FALSE);
   }
 
   /**
@@ -856,7 +855,7 @@ class NewsroomHelper {
       $query->join('field_data_field_newsroom_topics', 'topic_field', 'topic_field.entity_id = n.nid');
       $query->condition('n.status', 1);
       $tids = $query->execute()->fetchAllKeyed(0, 0);
-      cache_set($cache_key, $tids, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_page_result_topics', 86400));
+      cache_set($cache_key, $tids, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_page_result_topics', 86400));
     }
     return $tids;
   }
@@ -871,7 +870,7 @@ class NewsroomHelper {
    *   Hash.
    */
   public static function getEmailHash($email) {
-    return md5($email . variable_get('newsroom_app_key'));
+    return hash('sha256', $email . variable_get('nexteuropa_newsroom_app_key'));
   }
 
   /**
@@ -893,7 +892,7 @@ class NewsroomHelper {
       if (empty($node_title)) {
         $node_title = db_query('SELECT title FROM {node} WHERE nid = :nid', [':nid' => $nid])->fetchField();
       }
-      cache_set($cache_key, $node_title, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_node_title', 3600));
+      cache_set($cache_key, $node_title, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_node_title', 3600));
     }
     return $node_title;
   }
@@ -1003,15 +1002,14 @@ class NewsroomHelper {
    *
    * @param string $value
    *   Date string.
-   * @param string $regex
-   *   Regular expression.
    *
    * @return \DateTime|null
    *   Datetime or NULL.
    */
-  public static function checkDateFormat($value, $regex = '/^\d{2}-\d{2}-\d{4}$/') {
+  public static function checkDateFormat($value) {
     $date = NULL;
-    if (preg_match($regex, $value)) {
+    // Format date 2017-01-01 or 01-01-2017.
+    if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $value) || preg_match('/^\d{2}-\d{2}-\d{4}$/', $value)) {
       $date = new DateTime();
       $date->setTimestamp(strtotime($value));
     }

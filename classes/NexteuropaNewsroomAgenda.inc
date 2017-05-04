@@ -2,13 +2,13 @@
 
 /**
  * @file
- * Code for the NewsroomAgenda class.
+ * Code for the NexteuropaNewsroomAgenda class.
  */
 
 /**
- * NewsroomAgenda class base class.
+ * NexteuropaNewsroomAgenda class base class.
  */
-abstract class NewsroomAgenda {
+abstract class NexteuropaNewsroomAgenda {
 
   const AGENDA_VIEW_SCHEDULE = 'schedule';
   const AGENDA_VIEW_MONTH = 'month';
@@ -17,7 +17,7 @@ abstract class NewsroomAgenda {
   const AGENDA_VIEW_SCHEDULE_BLOCK = 'schedule-block';
   const DATE_FORMAT = 'Y-m-d';
 
-  protected $view = NewsroomAgenda::AGENDA_VIEW_SCHEDULE;
+  protected $view = NexteuropaNewsroomAgenda::AGENDA_VIEW_SCHEDULE;
   protected $topicUrl = NEXTEUROPA_NEWSROOM_ALL;
   protected $topics = [];
   protected $typeUrl = NEXTEUROPA_NEWSROOM_ALL;
@@ -35,7 +35,7 @@ abstract class NewsroomAgenda {
   protected $isBlock = FALSE;
 
   /**
-   * NewsroomAgenda constructor.
+   * NexteuropaNewsroomAgenda constructor.
    *
    * @param object $type
    *   Newsroom type.
@@ -73,7 +73,7 @@ abstract class NewsroomAgenda {
    *   Number of items.
    */
   public function getItemsNumber() {
-    return variable_get('newsroom_agenda_page_items_number', 10);
+    return variable_get('nexteuropa_newsroom_agenda_page_items_number', 10);
   }
 
   /**
@@ -328,7 +328,7 @@ abstract class NewsroomAgenda {
     else {
       $this->getBaseQuery();
       $data = $this->prepareResult($this->loadResult());
-      cache_set($cache_key, $data, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_agenda_result', 3600));
+      cache_set($cache_key, $data, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_agenda_result', 3600));
     }
 
     $this->result = $data;
@@ -436,7 +436,7 @@ abstract class NewsroomAgenda {
     $topic_id = count($topics) == 1 ? $topics[0]->tid : NULL;
     $result_topics = $form_id == 'nexteuropa_newsroom_agenda_filter_form' ? $this->getResultTopicsId() : NULL;
     return drupal_get_form($form_id, $this->getView(), $this->getTypeId(), $topic_id, $this->getCurrentDate()
-      ->format(NewsroomAgenda::DATE_FORMAT), $result_topics);
+      ->format(NexteuropaNewsroomAgenda::DATE_FORMAT), $result_topics);
   }
 
   /**
@@ -521,7 +521,7 @@ abstract class NewsroomAgenda {
           'navigation' => [],
         ]);
       }
-      cache_set($cache_key, $content, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_agenda_block', 180));
+      cache_set($cache_key, $content, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_agenda_block', 180));
     }
     return $content;
   }
@@ -534,7 +534,7 @@ abstract class NewsroomAgenda {
    */
   protected function getUniqueCachePart() {
     return md5($this->getCurrentDate()
-        ->format(NewsroomAgenda::DATE_FORMAT) . $this->getTypeId() . implode('', $this->getTopicsId()));
+        ->format(NexteuropaNewsroomAgenda::DATE_FORMAT) . $this->getTypeId() . implode('', $this->getTopicsId()));
   }
 
   /**
@@ -562,12 +562,12 @@ abstract class NewsroomAgenda {
 
     $query->condition($db_or);
     $query->condition('n.type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
-    $query->condition('tf.field_newsroom_item_type_tid', NewsroomHelper::getEventsTermsIds());
+    $query->condition('tf.field_newsroom_item_type_tid', NexteuropaNewsroomHelper::getEventsTermsIds());
     $query->orderBy('start_date');
     $query->orderBy('end_date');
 
     if ($this->getTypeId()) {
-      $query->condition('tt.tid', NewsroomHelper::getTypeChildren($this->getTypeId()));
+      $query->condition('tt.tid', NexteuropaNewsroomHelper::getTypeChildren($this->getTypeId()));
     }
 
     $query->addTag('node_access');
@@ -624,7 +624,7 @@ abstract class NewsroomAgenda {
 
         $start_date->modify('+1 day');
       }
-      cache_set($cache_key, $output, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_agenda_build', 3600));
+      cache_set($cache_key, $output, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_agenda_build', 3600));
     }
 
     // Calculate total number of events in agenda, so we display exact number.
@@ -642,7 +642,7 @@ abstract class NewsroomAgenda {
    *   Agenda item.
    */
   protected function createAgendaItem($current_date) {
-    $agenda_item = new NewsroomAgendaItem();
+    $agenda_item = new NexteuropaNewsroomAgendaItem();
     $agenda_item->setDate(clone $current_date);
     // Search for items in result which are start date is less than current and
     // the end date is bigger than current.
@@ -679,7 +679,7 @@ abstract class NewsroomAgenda {
   protected function prepareResult($items) {
     if (!empty($items)) {
       foreach ($items as $key => $item) {
-        $items[$key]->new = NewsroomHelper::isNewItem($item->created, $item->nid);
+        $items[$key]->new = NexteuropaNewsroomHelper::isNewItem($item->created, $item->nid);
         if (empty($item->start_date_obj)) {
           $dt_object = new DateTime();
           if (!empty($item->start_date)) {
@@ -743,7 +743,7 @@ abstract class NewsroomAgenda {
     }
     else {
       $current_items = $this->buildAgenda($this->getCurrentDate(), $this->getUpcomingDate());
-      cache_set($cache_key, $current_items, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_current_items', 3600));
+      cache_set($cache_key, $current_items, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_current_items', 3600));
     }
     $this->setCurrentItems($current_items);
   }
@@ -757,15 +757,15 @@ abstract class NewsroomAgenda {
   protected function loadResult() {
     $end_date_condition = db_and()
       ->condition('d.field_newsroom_item_date_value2', $this->getCurrentDate()
-        ->format(NewsroomAgenda::DATE_FORMAT), '>=')
+        ->format(NexteuropaNewsroomAgenda::DATE_FORMAT), '>=')
       ->condition('d.field_newsroom_item_date_value', $this->getUpcomingDate()
-        ->format(NewsroomAgenda::DATE_FORMAT), '<=');
+        ->format(NexteuropaNewsroomAgenda::DATE_FORMAT), '<=');
 
     $start_date_condition = db_and()
       ->condition('d.field_newsroom_item_date_value', $this->getCurrentDate()
-        ->format(NewsroomAgenda::DATE_FORMAT), '>=')
+        ->format(NexteuropaNewsroomAgenda::DATE_FORMAT), '>=')
       ->condition('d.field_newsroom_item_date_value', $this->getUpcomingDate()
-        ->format(NewsroomAgenda::DATE_FORMAT), '<=')
+        ->format(NexteuropaNewsroomAgenda::DATE_FORMAT), '<=')
       ->isNull('d.field_newsroom_item_date_value2');
 
     $date_condition = db_or();
@@ -857,9 +857,9 @@ abstract class NewsroomAgenda {
       $db_or->isNull('newsletter_item.field_newsroom_newsletter_only_value');
 
       $query->condition($db_or);
-      $query->condition('tf.field_newsroom_item_type_tid', NewsroomHelper::getEventsTermsIds());
+      $query->condition('tf.field_newsroom_item_type_tid', NexteuropaNewsroomHelper::getEventsTermsIds());
       $tids = $query->execute()->fetchAllKeyed(0, 0);
-      cache_set($cache_key, $tids, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('newsroom_ct_result_topics', 86400));
+      cache_set($cache_key, $tids, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_result_topics', 86400));
     }
     return $tids;
   }

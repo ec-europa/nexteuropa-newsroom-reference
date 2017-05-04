@@ -7,7 +7,7 @@
 ?>
 <div class="newsroomPage-container">
   <div class="newsroomPage-filterForm">
-    <h3><?php echo t('filter by');?></h3>
+    <h2><?php echo t('Filter by');?></h2>
     <?php echo $filter_form; ?>
   </div>
   <div class="newsroom-page view-content">

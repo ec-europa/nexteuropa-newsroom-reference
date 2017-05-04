@@ -2,16 +2,16 @@
 
 /**
  * @file
- * Code for the NewsroomBlockAgenda class.
+ * Code for the NexteuropaNewsroomBlockAgenda class.
  */
 
 /**
- * NewsroomBlockAgenda class base class.
+ * NexteuropaNewsroomBlockAgenda class base class.
  */
-class NewsroomBlockAgenda extends NewsroomBlockBase {
+class NexteuropaNewsroomBlockAgenda extends NexteuropaNewsroomBlockBase {
 
   /**
-   * NewsroomBlockAgenda constructor.
+   * NexteuropaNewsroomBlockAgenda constructor.
    */
   public function __construct($type, $topics, $operator) {
     $this->setIsAgenda(TRUE);
@@ -35,13 +35,13 @@ class NewsroomBlockAgenda extends NewsroomBlockBase {
    *   Agenda block content.
    */
   public function generateContent() {
-    $agenda = NewsroomBuilder::buildAgenda(NewsroomAgenda::AGENDA_VIEW_SCHEDULE_BLOCK, $this->getType(), $this->getTopics(), new DateTime(), $this->getOperator());
+    $agenda = NexteuropaNewsroomBuilder::buildAgenda(NexteuropaNewsroomAgenda::AGENDA_VIEW_SCHEDULE_BLOCK, $this->getType(), $this->getTopics(), new DateTime(), $this->getOperator());
     $content = theme('newsroom_summary_block_wrapper', [
       'content' => $agenda->getBlockAgenda(),
       'css_classes' => $this->getCssClasses(),
       'title' => $this->getTitle(),
       'type_url' => 'agenda',
-      'url' => 'newsroom-agenda/' . NewsroomAgenda::AGENDA_VIEW_SCHEDULE . '/' . $this->getTypeUrl() . '/' . $this->getTopicUrl(),
+      'url' => 'newsroom-agenda/' . NexteuropaNewsroomAgenda::AGENDA_VIEW_SCHEDULE . '/' . $this->getTypeUrl() . '/' . $this->getTopicUrl(),
     ]);
     return $content;
   }
