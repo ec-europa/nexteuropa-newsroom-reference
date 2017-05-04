@@ -33,7 +33,7 @@
                                                 <?php $title_text = $prefix . check_plain($item->title); ?>
                                                 <?php echo l($title_text, $item->url, [
                                                   'html' => TRUE,
-                                                  'absolute' => TRUE
+                                                  'absolute' => TRUE,
                                                 ]); ?>
                                               </h3>
                                           </div>
