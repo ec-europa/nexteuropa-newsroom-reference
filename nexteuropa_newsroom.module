@@ -373,8 +373,8 @@ function nexteuropa_newsroom_node_presave($node) {
  */
 function nexteuropa_newsroom_date_format_types() {
   return [
-    'newsroom_date_only' => t('Date only'),
-    'newsroom_long_type_without_time' => t('Long date without time'),
+    'newsroom_date_only' => t('NR : Date only'),
+    'newsroom_long_type_without_time' => t('NR : Long date without time'),
   ];
 }
 

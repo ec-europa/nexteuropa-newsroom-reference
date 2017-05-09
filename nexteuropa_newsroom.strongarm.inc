@@ -172,7 +172,7 @@ function nexteuropa_newsroom_strongarm() {
           ),
           'newsroom_consultations' => array(
             'weight' => '40',
-            'visible' => TRUE,
+            'visible' => FALSE,
           ),
           'newsroom_events' => array(
             'weight' => '44',
@@ -180,7 +180,7 @@ function nexteuropa_newsroom_strongarm() {
           ),
           'newsroom_fundings' => array(
             'weight' => '40',
-            'visible' => TRUE,
+            'visible' => FALSE,
           ),
           'full' => array(
             'weight' => '9',
