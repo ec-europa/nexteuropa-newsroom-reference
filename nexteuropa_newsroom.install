@@ -94,8 +94,6 @@ function nexteuropa_newsroom_install() {
   variable_set('nexteuropa_newsroom_agenda_page_items_number', 10);
   variable_set('nexteuropa_newsroom_page_items_number', 10);
 
-  $bundles = ['newsroom_item', 'newsroom_selection'];
-
   // Set node options for newsroom_item.
   variable_set('node_preview_newsroom_item', 0);
   variable_set('node_submitted_newsroom_item', 0);
