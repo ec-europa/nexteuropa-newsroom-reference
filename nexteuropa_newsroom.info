@@ -9,6 +9,7 @@ dependencies[] = feeds_xpathparser
 dependencies[] = field_group
 dependencies[] = pathauto
 dependencies[] = title
+dependencies[] = nexteuropa_formatter
 configure = admin/config/content/newsroom
 features[context][] = newsroom_item
 features[ctools][] = context:context:3

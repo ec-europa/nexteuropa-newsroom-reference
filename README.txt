@@ -22,3 +22,6 @@ https://www.drupal.org/project/feeds_et
 
 patched with this to support linkfields.
 https://www.drupal.org/files/issues/feeds_et_link_support-2078069-3.patch
+
+You can find nexteuropa europa theme tools (for example nexteuropa_formatter) here:
+https://github.com/ec-europa/ec-europa-theme-tools
