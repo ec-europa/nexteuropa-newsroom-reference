@@ -89,17 +89,14 @@ function nexteuropa_newsroom_strongarm() {
       'teaser' => array(
         'custom_settings' => FALSE,
       ),
-      'newsroom_event' => array(
-        'custom_settings' => TRUE,
-      ),
       'embedded' => array(
-        'custom_settings' => TRUE,
+        'custom_settings' => FALSE,
       ),
       'mini_teaser' => array(
-        'custom_settings' => TRUE,
+        'custom_settings' => FALSE,
       ),
       'popup' => array(
-        'custom_settings' => TRUE,
+        'custom_settings' => FALSE,
       ),
       'full' => array(
         'custom_settings' => FALSE,
@@ -161,6 +158,9 @@ function nexteuropa_newsroom_strongarm() {
       'newsroom_teaser' => array(
         'custom_settings' => TRUE,
       ),
+      'dsm_biography_teaser' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
     'extra_fields' => array(
       'form' => array(),
@@ -168,11 +168,11 @@ function nexteuropa_newsroom_strongarm() {
         'share_buttons' => array(
           'default' => array(
             'weight' => '0',
-            'visible' => TRUE,
+            'visible' => FALSE,
           ),
           'newsroom_consultations' => array(
             'weight' => '40',
-            'visible' => FALSE,
+            'visible' => TRUE,
           ),
           'newsroom_events' => array(
             'weight' => '44',
@@ -180,7 +180,7 @@ function nexteuropa_newsroom_strongarm() {
           ),
           'newsroom_fundings' => array(
             'weight' => '40',
-            'visible' => FALSE,
+            'visible' => TRUE,
           ),
           'full' => array(
             'weight' => '9',
@@ -190,16 +190,12 @@ function nexteuropa_newsroom_strongarm() {
             'weight' => '39',
             'visible' => FALSE,
           ),
-          'newsroom_event' => array(
-            'weight' => '10',
-            'visible' => TRUE,
-          ),
           'teaser' => array(
             'weight' => '2',
             'visible' => TRUE,
           ),
           'newsroom_teaser' => array(
-            'weight' => '32',
+            'weight' => '37',
             'visible' => FALSE,
           ),
         ),
