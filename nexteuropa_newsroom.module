@@ -373,8 +373,8 @@ function nexteuropa_newsroom_node_presave($node) {
  */
 function nexteuropa_newsroom_date_format_types() {
   return [
-    'newsroom_date_only' => t('Date only'),
-    'newsroom_long_type_without_time' => t('Long date without time'),
+    'newsroom_date_only' => t('NR : Date only'),
+    'newsroom_long_type_without_time' => t('NR : Long date without time'),
   ];
 }
 
@@ -424,7 +424,7 @@ function nexteuropa_newsroom_views_data_alter(&$data) {
  */
 function nexteuropa_newsroom_node_view($node, $view_mode, $langcode) {
   if ($node->type == NEXTEUROPA_NEWSROOM_CONTENT_TYPE &&
-    in_array($view_mode, ['full', 'newsroom_event'])) {
+    in_array($view_mode, ['full', 'newsroom_events'])) {
 
     $type = NexteuropaNewsroomHelper::getNewsroomType(NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid'));
     $main_link_url = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_item_main_link', 'url');
@@ -1060,19 +1060,6 @@ function nexteuropa_newsroom_block_view_alter(&$data, $block) {
       $data['content']['easy_breadcrumb']['#segments_quantity'] = 1;
     }
   }
-}
-
-/**
- * Implements hook_entity_info_alter().
- */
-function nexteuropa_newsroom_entity_info_alter(&$entity_info) {
-  // Adds custom display mode 'Newsroom event'.
-  $entity_info['node']['view modes']['newsroom_event'] = [
-    'label' => t('Newsroom event'),
-    'custom settings' => FALSE,
-  ];
-
-  return $entity_info;
 }
 
 /**
