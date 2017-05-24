@@ -89,14 +89,17 @@ function nexteuropa_newsroom_strongarm() {
       'teaser' => array(
         'custom_settings' => FALSE,
       ),
+      'newsroom_event' => array(
+        'custom_settings' => TRUE,
+      ),
       'embedded' => array(
-        'custom_settings' => FALSE,
+        'custom_settings' => TRUE,
       ),
       'mini_teaser' => array(
-        'custom_settings' => FALSE,
+        'custom_settings' => TRUE,
       ),
       'popup' => array(
-        'custom_settings' => FALSE,
+        'custom_settings' => TRUE,
       ),
       'full' => array(
         'custom_settings' => FALSE,
@@ -158,9 +161,6 @@ function nexteuropa_newsroom_strongarm() {
       'newsroom_teaser' => array(
         'custom_settings' => TRUE,
       ),
-      'dsm_biography_teaser' => array(
-        'custom_settings' => FALSE,
-      ),
     ),
     'extra_fields' => array(
       'form' => array(),
@@ -168,7 +168,7 @@ function nexteuropa_newsroom_strongarm() {
         'share_buttons' => array(
           'default' => array(
             'weight' => '0',
-            'visible' => FALSE,
+            'visible' => TRUE,
           ),
           'newsroom_consultations' => array(
             'weight' => '40',
@@ -190,12 +190,16 @@ function nexteuropa_newsroom_strongarm() {
             'weight' => '39',
             'visible' => FALSE,
           ),
+          'newsroom_event' => array(
+            'weight' => '10',
+            'visible' => TRUE,
+          ),
           'teaser' => array(
             'weight' => '2',
             'visible' => TRUE,
           ),
           'newsroom_teaser' => array(
-            'weight' => '37',
+            'weight' => '32',
             'visible' => FALSE,
           ),
         ),
