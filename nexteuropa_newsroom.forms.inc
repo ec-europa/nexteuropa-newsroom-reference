@@ -499,7 +499,7 @@ function _nexteuropa_newsroom_newsletter_subscription_page_form_ajax($form, &$fo
   drupal_set_message($message, $type);
   $replacement = theme('status_messages', ['display' => NULL]);
   $commands[] = ajax_command_replace('#' . $form['#id'] . ' .submit-response', '<div class="submit-response">' . $replacement . '</div>');
-  $commands[] = ajax_command_replace('#' . $form['#id'] . ' input', '');
+  $commands[] = ajax_command_replace('#' . $form['#id'] . ' button', '');
 
   return ['#type' => 'ajax', '#commands' => $commands];
 }
@@ -530,7 +530,7 @@ function _nexteuropa_newsroom_newsletter_unsubscription_form_ajax($form, &$form_
   drupal_set_message($text, $type);
   $replacement = theme('status_messages', ['display' => NULL]);
   $commands[] = ajax_command_replace('#' . $form['#id'] . ' .submit-response', '<div class="submit-response">' . $replacement . '</div>');
-  $commands[] = ajax_command_replace('#' . $form['#id'] . ' input', '');
+  $commands[] = ajax_command_replace('#' . $form['#id'] . ' button', '');
 
   return ['#type' => 'ajax', '#commands' => $commands];
 }

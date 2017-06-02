@@ -870,7 +870,7 @@ class NexteuropaNewsroomHelper {
    *   Hash.
    */
   public static function getEmailHash($email) {
-    return hash('sha256', $email . variable_get('nexteuropa_newsroom_app_key'));
+    return hash('sha256', strtolower($email) . variable_get('nexteuropa_newsroom_app_key'));
   }
 
   /**
