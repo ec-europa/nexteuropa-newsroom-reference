@@ -89,6 +89,19 @@ function nexteuropa_newsroom_views_default_views() {
 
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block');
+  $translatables['newsletter_subscription'] = array(
+    t('Master'),
+    t('Newsletter subscription'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Name'),
+    t('All'),
+    t('Block'),
+  );
   $export['newsletter_subscription'] = $view;
 
   $view = new view();
@@ -181,6 +194,24 @@ function nexteuropa_newsroom_views_default_views() {
 
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block');
+  $translatables['newsroom_related_documents'] = array(
+    t('Master'),
+    t('<none>'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('<div>
+  <span class="icon icon--file file__icon"></span>
+  <div class="file__metadata">
+     <a href="[field_newsroom_documents]">[field_newsroom_documents_1]</a>
+  </div>
+</div>'),
+    t('All'),
+    t('Block'),
+  );
   $export['newsroom_related_documents'] = $view;
 
   $view = new view();
@@ -328,6 +359,20 @@ function nexteuropa_newsroom_views_default_views() {
   $handler->display->display_options['filters']['field_newsroom_mailing_exists_value']['field'] = 'field_newsroom_mailing_exists_value';
   $handler->display->display_options['filters']['field_newsroom_mailing_exists_value']['value'] = array(
     1 => '1',
+  );
+  $translatables['newsroom_services'] = array(
+    t('Master'),
+    t('Central Newsletters'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Sample'),
+    t('Central newsletters'),
+    t('Basic newsletters'),
+    t('Other newsletters'),
   );
   $export['newsroom_services'] = $view;
 

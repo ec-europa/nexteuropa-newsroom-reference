@@ -8,8 +8,6 @@
 /**
  * Agenda menu callback.
  *
- * @param string $view
- *   View: schedule, month, week, day.
  * @param string $type
  *   Type name.
  * @param string $topic
@@ -24,8 +22,8 @@
  * @return string
  *   Agenda content,
  */
-function _nexteuropa_newsroom_agenda($view = NexteuropaNewsroomAgenda::AGENDA_VIEW_SCHEDULE, $type = NULL, $topic = NULL, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
-  return NexteuropaNewsroomBuilder::buildPageAgenda($view, $type, $topic, $arg1, $arg2, $arg3)->getAgenda();
+function _nexteuropa_newsroom_agenda($type = NULL, $topic = NULL, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
+  return NexteuropaNewsroomBuilder::buildPageAgenda($type, $topic, $arg1, $arg2, $arg3)->getAgenda();
 }
 
 /**
@@ -46,12 +44,7 @@ function _nexteuropa_newsroom_agenda($view = NexteuropaNewsroomAgenda::AGENDA_VI
  *   Newsroom page content,
  */
 function _nexteuropa_newsroom_page($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL, $ec_content = NEXTEUROPA_NEWSROOM_EC) {
-  $newsroom_page = NexteuropaNewsroomBuilder::buildNewsroomPage($type_url, $topic_url, $start_date, $end_date, $ec_content);
-
-  $output = $newsroom_page->getContent();
-  $output .= theme('pager');
-  $build['#markup'] = $output;
-  return $build;
+  return NexteuropaNewsroomBuilder::buildNewsroomPage($type_url, $topic_url, $start_date, $end_date, $ec_content)->getContent();
 }
 
 /**

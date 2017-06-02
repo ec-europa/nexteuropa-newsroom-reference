@@ -41,7 +41,7 @@ class NexteuropaNewsroomBlockAgenda extends NexteuropaNewsroomBlockBase {
       'css_classes' => $this->getCssClasses(),
       'title' => $this->getTitle(),
       'type_url' => 'agenda',
-      'url' => 'newsroom-agenda/' . NexteuropaNewsroomAgenda::AGENDA_VIEW_SCHEDULE . '/' . $this->getTypeUrl() . '/' . $this->getTopicUrl(),
+      'url' => 'newsroom-agenda/' . $this->getTypeUrl() . '/' . $this->getTopicUrl(),
     ]);
     return $content;
   }

@@ -8,7 +8,6 @@
  * /CITnet/confluence/display/nexteuropa/Custom+features
  */
 
-include_once 'nexteuropa_newsroom.forms.inc';
 include_once 'nexteuropa_newsroom.install.inc';
 
 /**

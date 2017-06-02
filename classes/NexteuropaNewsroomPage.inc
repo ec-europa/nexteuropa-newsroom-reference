@@ -257,12 +257,11 @@ class NexteuropaNewsroomPage {
    */
   public function getContent() {
     drupal_set_title($this->generateTitle());
-    $filter_form = drupal_get_form('nexteuropa_newsroom_page_filter_form', $this->getType(), $this->getTopic(), $this->getStartDate(), $this->getEndDate(), $this->getEcContent());
     $content = theme('newsroom_page', [
-      'filter_form' => drupal_render($filter_form),
       'featured_item' => $this->getTypeFeaturedItem(),
       'items' => $this->generateItems('newsroom_page_item'),
     ]);
+    $content .= theme('pager');
     return $content;
   }
 
@@ -362,7 +361,13 @@ class NexteuropaNewsroomPage {
     $query->condition('n.type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
 
     $db_or = db_or();
-    $db_or->condition('ec.field_newsroom_ec_content_value', $this->getEcContent() == NEXTEUROPA_NEWSROOM_EC ? 1 : 0);
+    if ($this->getEcContent() == NEXTEUROPA_NEWSROOM_EC) {
+      $db_or->condition('ec.field_newsroom_ec_content_value', 1);
+    }
+    else if ($this->getEcContent() == NEXTEUROPA_NEWSROOM_NONEC) {
+      $db_or->condition('ec.field_newsroom_ec_content_value', 0);
+    }
+
     $db_or->isNull('ec.field_newsroom_ec_content_value');
 
     $query->condition($db_or);

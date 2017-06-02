@@ -1061,4 +1061,36 @@ class NexteuropaNewsroomHelper {
     drupal_exit();
   }
 
+  /**
+   * Gets IDs array from topics array.
+   *
+   * @return array
+   *   Array of IDs.
+   */
+  public static function getResultTopicsId() {
+    $cache_key = 'agenda_result_topics';
+    if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
+      $tids = $cache->data;
+    }
+    else {
+      $query = db_select('node', 'n');
+      $query->distinct();
+      $query->fields('topic_field', ['tid' => 'field_newsroom_topics_tid']);
+      $query->join('field_data_field_newsroom_item_type', 'tf', 'tf.entity_id = n.nid');
+      $query->join('field_data_field_newsroom_topics', 'topic_field', 'topic_field.entity_id = n.nid');
+      $query->leftJoin('field_data_field_newsroom_newsletter_only', 'newsletter_item', 'newsletter_item.entity_id = n.nid');
+      $query->condition('n.status', 1);
+
+      $db_or = db_or();
+      $db_or->condition('newsletter_item.field_newsroom_newsletter_only_value', 1, '<>');
+      $db_or->isNull('newsletter_item.field_newsroom_newsletter_only_value');
+
+      $query->condition($db_or);
+      $query->condition('tf.field_newsroom_item_type_tid', NexteuropaNewsroomHelper::getEventsTermsIds());
+      $tids = $query->execute()->fetchAllKeyed(0, 0);
+      cache_set($cache_key, $tids, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_result_topics', 86400));
+    }
+    return $tids;
+  }
+
 }

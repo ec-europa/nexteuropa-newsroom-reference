@@ -4,7 +4,10 @@
  * Code for the Nexteuropa Newsroom feature.
  */
 
-include_once 'nexteuropa_newsroom.features.inc';
+/**
+ * @file
+ * Code for the Nexteuropa Newsroom feature.
+ */
 
 /**
  * @file
@@ -12,9 +15,9 @@ include_once 'nexteuropa_newsroom.features.inc';
  */
 
 module_load_include('inc', 'pathauto', 'pathauto');
+module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.features');
 module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.formatters');
 module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.forms');
-module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.features');
 module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.blocks');
 module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.theme');
 module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.menu');
