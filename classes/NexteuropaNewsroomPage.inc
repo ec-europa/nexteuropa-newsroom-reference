@@ -364,7 +364,7 @@ class NexteuropaNewsroomPage {
     if ($this->getEcContent() == NEXTEUROPA_NEWSROOM_EC) {
       $db_or->condition('ec.field_newsroom_ec_content_value', 1);
     }
-    else if ($this->getEcContent() == NEXTEUROPA_NEWSROOM_NONEC) {
+    elseif ($this->getEcContent() == NEXTEUROPA_NEWSROOM_NONEC) {
       $db_or->condition('ec.field_newsroom_ec_content_value', 0);
     }
 

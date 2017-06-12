@@ -371,9 +371,6 @@ function nexteuropa_newsroom_agenda_filter_form($form, &$form_state, $type_id, $
  *   Form array.
  * @param array $form_state
  *   Form state array.
- *
- * @return array
- *   Ajax callback array.
  */
 function _nexteuropa_newsroom_agenda_form_submit(&$form, &$form_state) {
 

@@ -106,7 +106,7 @@ function nexteuropa_newsroom_block_view($delta = '') {
  * Gets agenda search block.
  *
  * @return string
- *  Form content.
+ *   Form content.
  */
 function _nexteuropa_newsroom_agenda_search_block() {
   $type = NexteuropaNewsroomBuilder::getType(arg(1, drupal_get_path_alias()));
@@ -130,7 +130,7 @@ function _nexteuropa_newsroom_agenda_search_block() {
  * Gets page search block.
  *
  * @return string
- *  Form content.
+ *   Form content.
  */
 function _nexteuropa_newsroom_page_search_block() {
   $type = NexteuropaNewsroomBuilder::getType(arg(1, drupal_get_path_alias()));
