@@ -89,19 +89,6 @@ function nexteuropa_newsroom_views_default_views() {
 
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block');
-  $translatables['newsletter_subscription'] = array(
-    t('Master'),
-    t('Newsletter subscription'),
-    t('more'),
-    t('Apply'),
-    t('Reset'),
-    t('Sort by'),
-    t('Asc'),
-    t('Desc'),
-    t('Name'),
-    t('All'),
-    t('Block'),
-  );
   $export['newsletter_subscription'] = $view;
 
   $view = new view();

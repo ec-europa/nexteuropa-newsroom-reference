@@ -29,7 +29,6 @@ class NexteuropaNewsroomBuilder {
    */
   public static function buildPageAgenda($type_name = NEXTEUROPA_NEWSROOM_ALL, $topic_name = NEXTEUROPA_NEWSROOM_ALL, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
 
-    $agenda = NULL;
     $current_date = new DateTime();
     $type = self::getType($type_name);
     $topic = self::getTopic($topic_name);
