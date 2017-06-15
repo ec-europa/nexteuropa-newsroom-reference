@@ -11,13 +11,9 @@
 abstract class NexteuropaNewsroomAgenda {
 
   const AGENDA_VIEW_SCHEDULE = 'schedule';
-  const AGENDA_VIEW_MONTH = 'month';
-  const AGENDA_VIEW_WEEK = 'week';
-  const AGENDA_VIEW_DAY = 'day';
   const AGENDA_VIEW_SCHEDULE_BLOCK = 'schedule-block';
   const DATE_FORMAT = 'Y-m-d';
 
-  protected $view = NexteuropaNewsroomAgenda::AGENDA_VIEW_SCHEDULE;
   protected $topicUrl = NEXTEUROPA_NEWSROOM_ALL;
   protected $topics = [];
   protected $typeUrl = NEXTEUROPA_NEWSROOM_ALL;
@@ -31,7 +27,6 @@ abstract class NexteuropaNewsroomAgenda {
   protected $query = NULL;
   protected $itemsCount = 0;
   protected $urlParts = [];
-  protected $displayCalendar = TRUE;
   protected $isBlock = FALSE;
 
   /**
@@ -57,16 +52,6 @@ abstract class NexteuropaNewsroomAgenda {
   }
 
   /**
-   * Gets display calendar value.
-   *
-   * @return bool
-   *   Display or not the calendar.
-   */
-  public function getDisplayCalendar() {
-    return $this->displayCalendar;
-  }
-
-  /**
    * Gets minimal items number per agenda page.
    *
    * @return int
@@ -74,16 +59,6 @@ abstract class NexteuropaNewsroomAgenda {
    */
   public function getItemsNumber() {
     return variable_get('nexteuropa_newsroom_agenda_page_items_number', 10);
-  }
-
-  /**
-   * Sets display calendar value.
-   *
-   * @param bool $value
-   *   Display or not the calendar.
-   */
-  public function setDisplayCalendar($value) {
-    $this->displayCalendar = $value;
   }
 
   /**
@@ -104,26 +79,6 @@ abstract class NexteuropaNewsroomAgenda {
    */
   public function setIsBlock($value) {
     $this->isBlock = $value;
-  }
-
-  /**
-   * Gets view.
-   *
-   * @return string
-   *   Type of view.
-   */
-  public function getView() {
-    return $this->view;
-  }
-
-  /**
-   * Sets view.
-   *
-   * @param string $value
-   *   Type of view.
-   */
-  public function setView($value) {
-    $this->view = $value;
   }
 
   /**
@@ -435,7 +390,7 @@ abstract class NexteuropaNewsroomAgenda {
     $topics = $this->getTopics();
     $topic_id = count($topics) == 1 ? $topics[0]->tid : NULL;
     $result_topics = $form_id == 'nexteuropa_newsroom_agenda_filter_form' ? $this->getResultTopicsId() : NULL;
-    return drupal_get_form($form_id, $this->getView(), $this->getTypeId(), $topic_id, $this->getCurrentDate()
+    return drupal_get_form($form_id, $this->getTypeId(), $topic_id, $this->getCurrentDate()
       ->format(NexteuropaNewsroomAgenda::DATE_FORMAT), $result_topics);
   }
 
@@ -447,12 +402,7 @@ abstract class NexteuropaNewsroomAgenda {
    */
   public function getAgenda() {
     $this->prepareAgenda();
-    $filter_form = $this->getForm('nexteuropa_newsroom_agenda_filter_form');
-    $date_form = $this->getForm('nexteuropa_newsroom_agenda_datepicker_form');
-    $date_form_output = $this->getDisplayCalendar() ? drupal_render($date_form) : NULL;
     $content = theme('newsroom_agenda_page', [
-      'filter_form' => drupal_render($filter_form),
-      'date_form' => $date_form_output,
       'items' => $this->prepareItemsOutput($this->getCurrentItems()),
       'next_event_items' => $this->prepareItemsOutput($this->getUpcomingItems()),
       'is_block' => $this->getIsBlock(),
@@ -726,7 +676,7 @@ abstract class NexteuropaNewsroomAgenda {
    *   URL string.
    */
   public function getNavigationUrl($date) {
-    $this->addUrlPart($this->getView());
+    $this->urlParts = [];
     $this->addUrlPart($this->getTypeUrl());
     $this->addUrlPart($this->getTopicUrl());
     $this->setUrlItems($date);

@@ -38,6 +38,14 @@ function nexteuropa_newsroom_block_info() {
     'info' => t('Newsroom share block'),
     'cache' => DRUPAL_CACHE_PER_PAGE,
   ];
+  $blocks['newsroom_page_search_block'] = [
+    'info' => t('Newsroom page search block'),
+    'cache' => DRUPAL_CACHE_PER_PAGE,
+  ];
+  $blocks['newsroom_agenda_search_block'] = [
+    'info' => t('Newsroom agenda search block'),
+    'cache' => DRUPAL_CACHE_PER_PAGE,
+  ];
   return $blocks;
 }
 
@@ -80,8 +88,58 @@ function nexteuropa_newsroom_block_view($delta = '') {
       $block['subject'] = NULL;
       $block['content'] = _nexteuropa_newsroom_share_block();
       break;
+
+    case 'newsroom_page_search_block':
+      $block['subject'] = NULL;
+      $block['content'] = _nexteuropa_newsroom_page_search_block();
+      break;
+
+    case 'newsroom_agenda_search_block':
+      $block['subject'] = NULL;
+      $block['content'] = _nexteuropa_newsroom_agenda_search_block();
+      break;
   }
   return $block;
+}
+
+/**
+ * Gets agenda search block.
+ *
+ * @return string
+ *   Form content.
+ */
+function _nexteuropa_newsroom_agenda_search_block() {
+  $type = NexteuropaNewsroomBuilder::getType(arg(1, drupal_get_path_alias()));
+  $topic = NexteuropaNewsroomBuilder::getTopic(arg(2, drupal_get_path_alias()));
+  $day = NexteuropaNewsroomBuilder::getDay(arg(3, drupal_get_path_alias()));
+  $month = NexteuropaNewsroomBuilder::getMonth(arg(4, drupal_get_path_alias()));
+  $year = NexteuropaNewsroomBuilder::getYear(arg(5, drupal_get_path_alias()));
+  $current_date = new DateTime();
+  $current_date->setDate($year, $month, $day);
+
+  return drupal_get_form(
+    'nexteuropa_newsroom_agenda_filter_form',
+    $type ? $type->tid : NULL,
+    $topic ? $topic->tid : NULL,
+    $current_date->format(NexteuropaNewsroomAgenda::DATE_FORMAT),
+    NexteuropaNewsroomHelper::getResultTopicsId()
+  );
+}
+
+/**
+ * Gets page search block.
+ *
+ * @return string
+ *   Form content.
+ */
+function _nexteuropa_newsroom_page_search_block() {
+  $type = NexteuropaNewsroomBuilder::getType(arg(1, drupal_get_path_alias()));
+  $topic = NexteuropaNewsroomBuilder::getTopic(arg(2, drupal_get_path_alias()));
+  $start_date = NexteuropaNewsroomBuilder::getDate(arg(3, drupal_get_path_alias()));
+  $end_date = NexteuropaNewsroomBuilder::getDate(arg(4, drupal_get_path_alias()));
+  $ec_content = arg(5, drupal_get_path_alias());
+  $filter_form = drupal_get_form('nexteuropa_newsroom_page_filter_form', $type, $topic, $start_date, $end_date, $ec_content);
+  return drupal_render($filter_form);
 }
 
 /**

@@ -6,12 +6,6 @@
  */
 ?>
 <div class="<?php echo !$is_block ? 'newsroomAgenda-container' : NULL; ?>">
-  <?php if (!empty($filter_form)): ?>
-    <div class="newsroomAgenda-filterForm">
-      <h2><?php echo t('Filter by'); ?></h2>
-      <?php echo $filter_form; ?>
-    </div>
-  <?php endif; ?>
   <?php if (!empty($items) || !empty($next_event_items)): ?>
     <?php if (!empty($items)) : ?>
       <div class="currentDate">
@@ -29,17 +23,12 @@
         <?php if (!empty($navigation['previous'])): ?>
           <div class="agenda-previous"><?php echo $navigation['previous']; ?></div>
         <?php endif; ?>
-
-        <div class="date-form">
-          <?php echo $date_form; ?>
-        </div>
-
         <?php if (!empty($navigation['next'])): ?>
           <div class="agenda-next"><?php echo $navigation['next']; ?></div>
         <?php endif; ?>
       </div>
     <?php endif; ?>
   <?php elseif(!$is_block): ?>
-    <div class="no-result"><?php echo t("No results"); ?></div>
+    <div class="no-result"><?php echo t('No results'); ?></div>
   <?php endif; ?>
 </div>

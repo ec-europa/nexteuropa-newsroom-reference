@@ -13,8 +13,6 @@ class NexteuropaNewsroomBuilder {
   /**
    * Builds agenda base on url params.
    *
-   * @param string $view
-   *   View (presentation type): schedule, month, week, day.
    * @param string $type_name
    *   Type url name.
    * @param string $topic_name
@@ -29,49 +27,18 @@ class NexteuropaNewsroomBuilder {
    * @return object
    *   Agenda item.
    */
-  public static function buildPageAgenda($view = NexteuropaNewsroomAgenda::AGENDA_VIEW_SCHEDULE, $type_name = NEXTEUROPA_NEWSROOM_ALL, $topic_name = NEXTEUROPA_NEWSROOM_ALL, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
+  public static function buildPageAgenda($type_name = NEXTEUROPA_NEWSROOM_ALL, $topic_name = NEXTEUROPA_NEWSROOM_ALL, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
 
-    $agenda = NULL;
     $current_date = new DateTime();
     $type = self::getType($type_name);
     $topic = self::getTopic($topic_name);
-    switch ($view) {
-      case NexteuropaNewsroomAgenda::AGENDA_VIEW_MONTH:
-        $month = self::getMonth($arg1);
-        $year = self::getYear($arg2);
-        $current_date->setDate($year, $month, 1);
 
-        $agenda = new NexteuropaNewsroomAgendaMonth($type, $topic, $current_date);
-        break;
+    $day = self::getDay($arg1);
+    $month = self::getMonth($arg2);
+    $year = self::getYear($arg3);
+    $current_date->setDate($year, $month, $day);
 
-      case NexteuropaNewsroomAgenda::AGENDA_VIEW_WEEK:
-        $week = self::getWeek($arg1);
-        $year = self::getYear($arg2);
-        $current_date->setISODate($year, $week);
-
-        $agenda = new NexteuropaNewsroomAgendaWeek($type, $topic, $current_date);
-        break;
-
-      case NexteuropaNewsroomAgenda::AGENDA_VIEW_DAY:
-        $day = self::getDay($arg1);
-        $month = self::getMonth($arg2);
-        $year = self::getYear($arg3);
-        $current_date->setDate($year, $month, $day);
-
-        $agenda = new NexteuropaNewsroomAgendaDay($type, $topic, $current_date);
-        break;
-
-      default:
-        $day = self::getDay($arg1);
-        $month = self::getMonth($arg2);
-        $year = self::getYear($arg3);
-
-        $current_date->setDate($year, $month, $day);
-        $agenda = new NexteuropaNewsroomAgendaSchedule($type, $topic, $current_date);
-
-    }
-
-    return $agenda;
+    return new NexteuropaNewsroomAgendaSchedule($type, $topic, $current_date);
   }
 
   /**
@@ -92,18 +59,6 @@ class NexteuropaNewsroomBuilder {
   public static function buildAgenda($view, $type, $topics, $date, $operator = NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR) {
     $agenda = NULL;
     switch ($view) {
-      case NexteuropaNewsroomAgenda::AGENDA_VIEW_MONTH:
-        $agenda = new NexteuropaNewsroomAgendaMonth($type, $topics, $date);
-        break;
-
-      case NexteuropaNewsroomAgenda::AGENDA_VIEW_WEEK:
-        $agenda = new NexteuropaNewsroomAgendaWeek($type, $topics, $date);
-        break;
-
-      case NexteuropaNewsroomAgenda::AGENDA_VIEW_DAY:
-        $agenda = new NexteuropaNewsroomAgendaDay($type, $topics, $date);
-        break;
-
       case NexteuropaNewsroomAgenda::AGENDA_VIEW_SCHEDULE_BLOCK:
         $agenda = new NexteuropaNewsroomAgendaBlockSchedule($type, $topics, $date, $operator);
         break;
@@ -740,21 +695,8 @@ class NexteuropaNewsroomBuilder {
    * @return int
    *   Day number.
    */
-  private static function getDay($value) {
+  public static function getDay($value) {
     return preg_match('/^\d{1,2}$/', $value) ? (int) $value : NexteuropaNewsroomHelper::getFormatedDate('d');
-  }
-
-  /**
-   * Validates and returns week number.
-   *
-   * @param string $value
-   *   Day number.
-   *
-   * @return int
-   *   Week number.
-   */
-  private static function getWeek($value) {
-    return preg_match('/^\d{1,2}$/', $value) ? (int) $value : NexteuropaNewsroomHelper::getFormatedDate('W');
   }
 
   /**
@@ -766,7 +708,7 @@ class NexteuropaNewsroomBuilder {
    * @return int
    *   Month number.
    */
-  private static function getMonth($value) {
+  public static function getMonth($value) {
     return preg_match('/^\d{1,2}$/', $value) ? (int) $value : NexteuropaNewsroomHelper::getFormatedDate('n');
   }
 
@@ -779,7 +721,7 @@ class NexteuropaNewsroomBuilder {
    * @return int
    *   Year number.
    */
-  private static function getYear($value) {
+  public static function getYear($value) {
     return preg_match('/^\d{4}$/', $value) ? (int) $value : NexteuropaNewsroomHelper::getFormatedDate('Y');
   }
 
@@ -792,7 +734,7 @@ class NexteuropaNewsroomBuilder {
    * @return object
    *   Taxonomy term object.
    */
-  private static function getTopic($topic_url) {
+  public static function getTopic($topic_url) {
     $topic = self::getTaxonomyTerm($topic_url, NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY);
     if ($topic) {
       // Try to find active menu.
@@ -812,7 +754,7 @@ class NexteuropaNewsroomBuilder {
    * @return string|null
    *   Date string.
    */
-  private static function getDate($value) {
+  public static function getDate($value) {
     return NexteuropaNewsroomHelper::checkDateFormat($value);
   }
 
@@ -825,7 +767,7 @@ class NexteuropaNewsroomBuilder {
    * @return object
    *   Taxonomy term object.
    */
-  private static function getType($type_url) {
+  public static function getType($type_url) {
     return self::getTaxonomyTerm($type_url, NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY);
   }
 
