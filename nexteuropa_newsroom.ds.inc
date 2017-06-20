@@ -545,7 +545,7 @@ function nexteuropa_newsroom_ds_field_settings_info() {
   $ds_fieldsetting->view_mode = 'newsroom_teaser';
   $ds_fieldsetting->settings = array(
     'title' => array(
-      'weight' => '0',
+      'weight' => '1',
       'label' => 'hidden',
       'format' => 'default',
       'formatter_settings' => array(
@@ -556,9 +556,25 @@ function nexteuropa_newsroom_ds_field_settings_info() {
       ),
     ),
     'node_link' => array(
-      'weight' => '4',
+      'weight' => '3',
       'label' => 'hidden',
       'format' => 'default',
+    ),
+    'field_newsroom_item_date' => array(
+      'formatter_settings' => array(
+        'ft' => array(
+          'func' => 'theme_ds_field_nexteuropa_formatters_meta_item',
+          'meta_modifier' => 'meta__item--type',
+        ),
+      ),
+    ),
+    'field_newsroom_item_type' => array(
+      'formatter_settings' => array(
+        'ft' => array(
+          'func' => 'theme_ds_field_nexteuropa_formatters_meta_item',
+          'meta_modifier' => 'meta__item--type',
+        ),
+      ),
     ),
   );
   $export['node|newsroom_item|newsroom_teaser'] = $ds_fieldsetting;
@@ -1054,22 +1070,24 @@ function nexteuropa_newsroom_ds_layout_settings_info() {
   $ds_layout->settings = array(
     'regions' => array(
       'main' => array(
-        0 => 'title',
-        1 => 'field_newsroom_item_type',
-        2 => 'field_newsroom_item_date',
-        3 => 'field_newsroom_teaser',
-        4 => 'node_link',
+        0 => 'group_newsroom_meta',
+        1 => 'title',
+        2 => 'field_newsroom_teaser',
+        3 => 'field_newsroom_item_type',
+        4 => 'field_newsroom_item_date',
+        5 => 'node_link',
       ),
       'second' => array(
-        5 => 'field_newsroom_illustrative_img',
-        6 => 'field_newsroom_private_img',
+        6 => 'field_newsroom_illustrative_img',
+        7 => 'field_newsroom_private_img',
       ),
     ),
     'fields' => array(
+      'group_newsroom_meta' => 'main',
       'title' => 'main',
+      'field_newsroom_teaser' => 'main',
       'field_newsroom_item_type' => 'main',
       'field_newsroom_item_date' => 'main',
-      'field_newsroom_teaser' => 'main',
       'node_link' => 'main',
       'field_newsroom_illustrative_img' => 'second',
       'field_newsroom_private_img' => 'second',

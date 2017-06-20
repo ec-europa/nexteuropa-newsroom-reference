@@ -4,6 +4,12 @@
  * Code for the Nexteuropa Newsroom feature.
  */
 
+include_once 'nexteuropa_newsroom.features.inc';
+/**
+ * @file
+ * Code for the Nexteuropa Newsroom feature.
+ */
+
 /**
  * @file
  * Code for the Nexteuropa Newsroom feature.

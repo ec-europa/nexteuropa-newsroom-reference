@@ -13,6 +13,7 @@ function nexteuropa_newsroom_field_group_info() {
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
   $field_group->api_version = 1;
+<<<<<<< HEAD
   $field_group->identifier = 'group_meta1|node|newsroom_item|default';
   $field_group->group_name = 'group_meta';
   $field_group->entity_type = 'node';
@@ -68,6 +69,8 @@ function nexteuropa_newsroom_field_group_info() {
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
   $field_group->api_version = 1;
+=======
+>>>>>>> master
   $field_group->identifier = 'group_newsroom_additional_info|node|newsroom_item|form';
   $field_group->group_name = 'group_newsroom_additional_info';
   $field_group->entity_type = 'node';
@@ -581,6 +584,34 @@ function nexteuropa_newsroom_field_group_info() {
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
   $field_group->api_version = 1;
+  $field_group->identifier = 'group_newsroom_meta|node|newsroom_item|default';
+  $field_group->group_name = 'group_newsroom_meta';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'newsroom_item';
+  $field_group->mode = 'default';
+  $field_group->parent_name = '';
+  $field_group->data = array(
+    'label' => 'Meta',
+    'weight' => '0',
+    'children' => array(
+      0 => 'field_newsroom_item_type',
+      1 => 'post_date',
+    ),
+    'format_type' => 'meta_wrapper',
+    'format_settings' => array(
+      'formatter' => '',
+      'instance_settings' => array(
+        'modifier' => '',
+        'classes' => 'group-newsroom-meta field-group-meta_wrapper',
+        'required_fields' => 1,
+      ),
+    ),
+  );
+  $field_groups['group_newsroom_meta|node|newsroom_item|default'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
   $field_group->identifier = 'group_newsroom_meta|node|newsroom_item|newsroom_consultations';
   $field_group->group_name = 'group_newsroom_meta';
   $field_group->entity_type = 'node';
@@ -690,6 +721,34 @@ function nexteuropa_newsroom_field_group_info() {
     ),
   );
   $field_groups['group_newsroom_meta|node|newsroom_item|newsroom_fundings'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_newsroom_meta|node|newsroom_item|newsroom_teaser';
+  $field_group->group_name = 'group_newsroom_meta';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'newsroom_item';
+  $field_group->mode = 'newsroom_teaser';
+  $field_group->parent_name = '';
+  $field_group->data = array(
+    'label' => 'Meta',
+    'weight' => '0',
+    'children' => array(
+      0 => 'field_newsroom_item_date',
+      1 => 'field_newsroom_item_type',
+    ),
+    'format_type' => 'meta_wrapper',
+    'format_settings' => array(
+      'formatter' => '',
+      'instance_settings' => array(
+        'modifier' => '',
+        'classes' => 'group-newsroom-meta field-group-meta_wrapper',
+        'required_fields' => 1,
+      ),
+    ),
+  );
+  $field_groups['group_newsroom_meta|node|newsroom_item|newsroom_teaser'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
