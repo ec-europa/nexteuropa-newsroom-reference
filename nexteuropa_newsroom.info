@@ -1,7 +1,6 @@
 name = Nexteuropa Newsroom
 description = Integration with the Newsroom application
 core = 7.x
-php = 5.2.4
 package = NextEuropa
 dependencies[] = feeds_et
 dependencies[] = feeds_tamper_ui
@@ -286,6 +285,8 @@ features_exclude[dependencies][nexteuropa_formatters] = nexteuropa_formatters
 features_exclude[dependencies][nexteuropa_views] = nexteuropa_views
 features_exclude[dependencies][ds] = ds
 features_exclude[dependencies][smart_trim] = smart_trim
+features_exclude[dependencies][geofield] = geofield
+features_exclude[dependencies][number] = number
 features_exclude[field_base][field_tags] = field_tags
 features_exclude[field_base][body] = body
 features_exclude[field_base][name_field] = name_field
