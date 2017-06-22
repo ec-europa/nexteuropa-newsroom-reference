@@ -390,15 +390,25 @@ class NexteuropaNewsroomPage {
     }
 
     if ($this->getStartDate()) {
-      $query->condition('n.created', $this->getStartDate()->getTimestamp(), '>=');
+      $query->condition('d.field_newsroom_item_date_value', $this->getStartDate()->getTimestamp(), '>=');
     }
 
     if ($this->getEndDate()) {
-      $query->condition('n.created', $this->getEndDate()->getTimestamp(), '<=');
+      $db_or = db_or();
+
+      $db_and = db_and();
+      $db_and->isNotNull('d.field_newsroom_item_date_value2');
+      $db_and->condition('d.field_newsroom_item_date_value2', $this->getEndDate()->getTimestamp(), '<=');
+      $db_or->condition($db_and);
+
+      $db_and = db_and();
+      $db_and->isNull('d.field_newsroom_item_date_value2');
+      $db_and->condition('n.created', $this->getEndDate()->getTimestamp(), '<=');
+      $db_or->condition($db_and);
+      $query->condition($db_or);
     }
 
     $query->addTag('node_access');
-
     return $query;
   }
 
