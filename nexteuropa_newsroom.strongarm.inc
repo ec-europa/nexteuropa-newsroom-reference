@@ -195,7 +195,7 @@ function nexteuropa_newsroom_strongarm() {
             'visible' => TRUE,
           ),
           'newsroom_teaser' => array(
-            'weight' => '37',
+            'weight' => '36',
             'visible' => FALSE,
           ),
         ),

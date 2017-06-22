@@ -788,7 +788,7 @@ class NexteuropaNewsroomHelper {
   public static function validateUniverse($universe_id = NULL) {
     if ($universe_id) {
       // logout.cfm is used because it is always available if a universe exists.
-      $test = drupal_http_request(self::getUniverseUrl() . '/logout.cfm');
+      $test = drupal_http_request(self::getUniverseUrl() . 'logout.cfm');
       return $test->code == 200;
     }
 

@@ -39,7 +39,7 @@ function nexteuropa_newsroom_taxonomy_default_vocabularies() {
       'name' => 'Newsroom Service',
       'machine_name' => 'newsroom_service',
       'description' => 'Newsroom Service',
-      'hierarchy' => 1,
+      'hierarchy' => 0,
       'module' => 'taxonomy',
       'weight' => 0,
       'language' => 'und',

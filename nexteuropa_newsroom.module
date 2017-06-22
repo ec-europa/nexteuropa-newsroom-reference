@@ -4,6 +4,12 @@
  * Code for the Nexteuropa Newsroom feature.
  */
 
+include_once 'nexteuropa_newsroom.features.inc';
+/**
+ * @file
+ * Code for the Nexteuropa Newsroom feature.
+ */
+
 /**
  * @file
  * Code for the Nexteuropa Newsroom feature.
@@ -27,7 +33,7 @@ define('NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR', 'OR');
 define('NEXTEUROPA_NEWSROOM_PROPOSAL_SCRIPT', 'propose-item.cfm');
 define('NEXTEUROPA_NEWSROOM_CLICKTHROUGH_FORCE', 'force');
 define('NEXTEUROPA_NEWSROOM_CACHE_TABLE', 'cache_newsroom');
-define('NEXTEUROPA_NEWSROOM_BASE_URL', 'http://ec.europa.eu/information_society/newsroom/cf/');
+define('NEXTEUROPA_NEWSROOM_BASE_URL', 'http://ec.europa.eu/newsroom/');
 
 define('NEXTEUROPA_NEWSROOM_CONTENT_TYPE', 'newsroom_item');
 define('NEXTEUROPA_NEWSROOM_ISSUE_CONTENT_TYPE', 'newsroom_newsletter_issue');

@@ -46,7 +46,7 @@ function nexteuropa_newsroom_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'nexteuropa_newsroom.pages.inc',
   ];
-  $items['newsletters-list'] = [
+  $items['newsletters'] = [
     'title' => 'Newsletters',
     'description' => 'Newsletters service list',
     'page callback' => '_nexteuropa_newsroom_newsletters_page',

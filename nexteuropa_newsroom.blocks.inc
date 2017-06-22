@@ -151,7 +151,7 @@ function _nexteuropa_newsroom_page_search_block() {
 function _nexteuropa_newsroom_agenda_block() {
   $content = '';
   if ($type = _nexteuropa_newsroom_get_type_from_agenda_block_context()) {
-    $agenda_block = new NewsroomBlockAgenda($type, [], NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR);
+    $agenda_block = new NexteuropaNewsroomBlockAgenda($type, [], NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR);
     $content = $agenda_block->generateContent();
   }
 
