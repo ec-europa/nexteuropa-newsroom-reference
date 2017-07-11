@@ -27,9 +27,9 @@
                 </div>
                 <div class="listing__column-main">
                     <h3><?php echo check_plain($item->title); ?></h3>
-                    <div class="description">
+                    <p class="description">
                       <?php echo $item->description; ?>
-                    </div>
+                    </p>
                   <?php if ($item->form): ?>
                       <div class="form">
                         <?php echo $item->form; ?>
