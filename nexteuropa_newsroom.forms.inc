@@ -547,13 +547,11 @@ function _nexteuropa_newsroom_newsletter_unsubscription_form_ajax($form, &$form_
  *   Start date.
  * @param string $end_date
  *   End date.
- * @param string $ec_content
- *   Is EC content.
  *
  * @return array
  *   Rendable form array.
  */
-function nexteuropa_newsroom_page_filter_form($form, &$form_state, $type = NULL, $topic = NULL, $start_date = NULL, $end_date = NULL, $ec_content = NEXTEUROPA_NEWSROOM_EC) {
+function nexteuropa_newsroom_page_filter_form($form, &$form_state, $type = NULL, $topic = NULL, $start_date = NULL, $end_date = NULL) {
   $topic_options = NexteuropaNewsroomHelper::getNewsroomTopicOptions(NexteuropaNewsroomHelper::getPageUsedTopicsIds());
 
   $form = [];
@@ -592,12 +590,6 @@ function nexteuropa_newsroom_page_filter_form($form, &$form_state, $type = NULL,
     '#element_validate' => NULL,
     '#validate' => ['_nexteuropa_newsroom_validate_date'],
   ];
-  $form['ec_content'] = [
-    '#type' => 'checkbox',
-    '#title' => t('EC content'),
-    '#default_value' => empty($ec_content) || $ec_content == NEXTEUROPA_NEWSROOM_EC ? 1 : 0,
-    '#weight' => 1,
-  ];
   $form['button'] = [
     '#type' => 'submit',
     '#submit' => ['_nexteuropa_newsroom_page_filter_form_submit'],
@@ -623,9 +615,8 @@ function _nexteuropa_newsroom_page_filter_form_submit(&$form, &$form_state) {
   $type_id = !empty($form_state['values']['type_id']) ? $form_state['values']['type_id'] : NULL;
   $start_date = !empty($form_state['values']['start_date']) ? $form_state['values']['start_date'] : NULL;
   $end_date = !empty($form_state['values']['end_date']) ? $form_state['values']['end_date'] : NULL;
-  $ec_content = !empty($form_state['values']['ec_content']);
 
-  $newsroom_page = NexteuropaNewsroomBuilder::buildNewsroomPage($type_id, $topic_id, $start_date, $end_date, $ec_content);
+  $newsroom_page = NexteuropaNewsroomBuilder::buildNewsroomPage($type_id, $topic_id, $start_date, $end_date);
   drupal_goto($newsroom_page->getNavigationUrl(), [], 301);
 }
 

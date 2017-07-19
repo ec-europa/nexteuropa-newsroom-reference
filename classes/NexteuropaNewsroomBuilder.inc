@@ -797,18 +797,16 @@ class NexteuropaNewsroomBuilder {
    *   Start date.
    * @param string|null $end_date
    *   End date.
-   * @param string $ec_content
-   *   EC content.
    *
    * @return NexteuropaNewsroomPage
    *   NexteuropaNewsroomPage object.
    */
-  public static function buildNewsroomPage($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL, $ec_content = NEXTEUROPA_NEWSROOM_EC) {
+  public static function buildNewsroomPage($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL) {
     $type = self::getType($type_url);
     $topic = self::getTopic($topic_url);
     $start_date = self::getDate($start_date);
     $end_date = self::getDate($end_date);
-    return new NexteuropaNewsroomPage($type, $topic, $start_date, $end_date, $ec_content);
+    return new NexteuropaNewsroomPage($type, $topic, $start_date, $end_date);
   }
 
 }

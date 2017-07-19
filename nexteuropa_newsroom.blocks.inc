@@ -137,8 +137,7 @@ function _nexteuropa_newsroom_page_search_block() {
   $topic = NexteuropaNewsroomBuilder::getTopic(arg(2, drupal_get_path_alias()));
   $start_date = NexteuropaNewsroomBuilder::getDate(arg(3, drupal_get_path_alias()));
   $end_date = NexteuropaNewsroomBuilder::getDate(arg(4, drupal_get_path_alias()));
-  $ec_content = arg(5, drupal_get_path_alias());
-  $filter_form = drupal_get_form('nexteuropa_newsroom_page_filter_form', $type, $topic, $start_date, $end_date, $ec_content);
+  $filter_form = drupal_get_form('nexteuropa_newsroom_page_filter_form', $type, $topic, $start_date, $end_date);
   return drupal_render($filter_form);
 }
 
