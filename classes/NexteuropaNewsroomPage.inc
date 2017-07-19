@@ -30,15 +30,12 @@ class NexteuropaNewsroomPage {
    *   Start date.
    * @param Datetime|null $end_date
    *   End date.
-   * @param string $ec_content
-   *   EC content.
    */
-  public function __construct($type = NULL, $topic = NULL, $start_date = NULL, $end_date = NULL, $ec_content = NEXTEUROPA_NEWSROOM_EC) {
+  public function __construct($type = NULL, $topic = NULL, $start_date = NULL, $end_date = NULL) {
     $this->setTopic($topic);
     $this->setType($type);
     $this->setStartDate($start_date);
     $this->setEndDate($end_date);
-    $this->setEcContent($ec_content);
   }
 
   /**
@@ -334,10 +331,9 @@ class NexteuropaNewsroomPage {
     $topic_id = $this->getTopic() ? $this->getTopic()->tid : NULL;
     $start_date = $this->getStartDate() ? $this->getStartDate()->getTimestamp() : NULL;
     $end_date = $this->getEndDate() ? $this->getEndDate()->getTimestamp() : NULL;
-    $ec_content = $this->getEcContent();
     $page = !empty($_GET['page']) ? $_GET['page'] : NULL;
 
-    return md5($type_id . $topic_id . $start_date . $end_date . $page . $ec_content);
+    return md5($type_id . $topic_id . $start_date . $end_date . $page);
   }
 
   /**
@@ -354,23 +350,10 @@ class NexteuropaNewsroomPage {
     $query->leftJoin('field_data_field_newsroom_item_type', 'type_field', 'type_field.entity_id = n.nid');
     $query->leftJoin('field_data_field_newsroom_topics', 'topic_field', 'topic_field.entity_id = n.nid');
     $query->leftJoin('field_data_field_newsroom_item_date', 'd', 'd.entity_id = n.nid');
-    $query->leftJoin('field_data_field_newsroom_ec_content', 'ec', 'ec.entity_id = n.nid');
     $query->leftJoin('field_data_field_newsroom_newsletter_only', 'newsletter_item', 'newsletter_item.entity_id = n.nid');
 
     $query->condition('n.status', 1);
     $query->condition('n.type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
-
-    $db_or = db_or();
-    if ($this->getEcContent() == NEXTEUROPA_NEWSROOM_EC) {
-      $db_or->condition('ec.field_newsroom_ec_content_value', 1);
-    }
-    elseif ($this->getEcContent() == NEXTEUROPA_NEWSROOM_NONEC) {
-      $db_or->condition('ec.field_newsroom_ec_content_value', 0);
-    }
-
-    $db_or->isNull('ec.field_newsroom_ec_content_value');
-
-    $query->condition($db_or);
 
     $db_or = db_or();
     $db_or->condition('newsletter_item.field_newsroom_newsletter_only_value', 1, '<>');

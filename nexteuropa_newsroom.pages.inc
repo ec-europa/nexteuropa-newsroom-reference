@@ -37,14 +37,12 @@ function _nexteuropa_newsroom_agenda($type = NULL, $topic = NULL, $arg1 = NULL, 
  *   Start date.
  * @param string $end_date
  *   End date.
- * @param string $ec_content
- *   EC content.
  *
  * @return string
  *   Newsroom page content,
  */
-function _nexteuropa_newsroom_page($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL, $ec_content = NEXTEUROPA_NEWSROOM_EC) {
-  return NexteuropaNewsroomBuilder::buildNewsroomPage($type_url, $topic_url, $start_date, $end_date, $ec_content)->getContent();
+function _nexteuropa_newsroom_page($type_url = NULL, $topic_url = NULL, $start_date = NULL, $end_date = NULL) {
+  return NexteuropaNewsroomBuilder::buildNewsroomPage($type_url, $topic_url, $start_date, $end_date)->getContent();
 }
 
 /**

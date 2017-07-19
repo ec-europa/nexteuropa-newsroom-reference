@@ -25,7 +25,6 @@
         <ul>
           <?php foreach ($children_items as $item): ?>
             <li>
-            </li>
                 <?php $title_text = check_plain($item->title); ?>
                 <?php echo l($title_text, 'node/' . $item->id); ?>
             </li>
