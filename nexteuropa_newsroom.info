@@ -8,7 +8,6 @@ dependencies[] = feeds_tamper_ui
 dependencies[] = feeds_xpathparser
 dependencies[] = field_group
 dependencies[] = pathauto
-dependencies[] = picture
 dependencies[] = title
 configure = admin/config/content/newsroom
 features[context][] = newsroom_agenda_search_block
