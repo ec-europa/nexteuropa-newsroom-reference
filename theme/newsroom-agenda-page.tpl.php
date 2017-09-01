@@ -6,7 +6,17 @@
  */
 ?>
 <div class="<?php echo !$is_block ? 'newsroomAgenda-container' : NULL; ?>">
-  <?php if (!empty($items) || !empty($next_event_items)): ?>
+  <?php if (!empty($items) || !empty($next_event_items) || !empty($past_event_items)): ?>
+    <?php if (!empty($navigation['previous']) || !empty($navigation['next'])): ?>
+      <div class="agendaPagination">
+        <?php if (!empty($navigation['previous'])): ?>
+            <div class="agenda-previous"><?php echo $navigation['previous']; ?></div>
+        <?php endif; ?>
+        <?php if (!empty($navigation['next'])): ?>
+            <div class="agenda-next"><?php echo $navigation['next']; ?></div>
+        <?php endif; ?>
+      </div>
+    <?php endif; ?>
     <?php if (!empty($items)) : ?>
       <div class="currentDate">
         <?php echo $items; ?>
@@ -18,14 +28,10 @@
         <?php echo $next_event_items; ?>
       </div>
     <?php endif; ?>
-    <?php if (!empty($navigation['previous']) || !empty($navigation['next'])): ?>
-      <div class="agendaPagination">
-        <?php if (!empty($navigation['previous'])): ?>
-          <div class="agenda-previous"><?php echo $navigation['previous']; ?></div>
-        <?php endif; ?>
-        <?php if (!empty($navigation['next'])): ?>
-          <div class="agenda-next"><?php echo $navigation['next']; ?></div>
-        <?php endif; ?>
+    <?php if (!empty($past_event_items)) : ?>
+      <div class="pastDates">
+          <h2 class="newsroom_title"><?php echo t('Past'); ?></h2>
+        <?php echo $past_event_items; ?>
       </div>
     <?php endif; ?>
   <?php elseif(!$is_block): ?>

@@ -1384,7 +1384,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
         'label' => 'inline',
         'module' => 'date',
         'settings' => array(
-          'format_type' => 'newsroom_date_only',
+          'format_type' => 'newsroom_long_type_without_time',
           'fromto' => 'both',
           'multiple_from' => '',
           'multiple_number' => '',
@@ -1404,7 +1404,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
         'label' => 'above',
         'module' => 'date',
         'settings' => array(
-          'format_type' => 'newsroom_date_only',
+          'format_type' => 'newsroom_long_type_without_time',
           'fromto' => 'both',
           'multiple_from' => '',
           'multiple_number' => '',
@@ -1418,7 +1418,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'date',
         'settings' => array(
-          'format_type' => 'newsroom_date_only',
+          'format_type' => 'newsroom_long_type_without_time',
           'fromto' => 'both',
           'multiple_from' => '',
           'multiple_number' => '',
@@ -1432,7 +1432,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'date',
         'settings' => array(
-          'format_type' => 'newsroom_date_only',
+          'format_type' => 'newsroom_long_type_without_time',
           'fromto' => 'both',
           'multiple_from' => '',
           'multiple_number' => '',
@@ -1446,7 +1446,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
         'label' => 'above',
         'module' => 'date',
         'settings' => array(
-          'format_type' => 'newsroom_date_only',
+          'format_type' => 'newsroom_long_type_without_time',
           'fromto' => 'both',
           'multiple_from' => '',
           'multiple_number' => '',
@@ -1460,7 +1460,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'date',
         'settings' => array(
-          'format_type' => 'newsroom_date_only',
+          'format_type' => 'newsroom_long_type_without_time',
           'fromto' => 'both',
           'multiple_from' => '',
           'multiple_number' => '',

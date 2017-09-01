@@ -23,9 +23,11 @@ abstract class NexteuropaNewsroomAgenda {
   protected $previousDate = NULL;
   protected $currentItems = [];
   protected $upcomingItems = [];
+  protected $upcomingNewsItems = [];
+  protected $pastItems = [];
+  protected $pastNewsItems = [];
   protected $result = [];
   protected $query = NULL;
-  protected $itemsCount = 0;
   protected $urlParts = [];
   protected $isBlock = FALSE;
 
@@ -79,16 +81,6 @@ abstract class NexteuropaNewsroomAgenda {
    */
   public function setIsBlock($value) {
     $this->isBlock = $value;
-  }
-
-  /**
-   * Gets items count.
-   *
-   * @return int
-   *   Items count.
-   */
-  public function getItemsCount() {
-    return $this->itemsCount;
   }
 
   /**
@@ -158,7 +150,7 @@ abstract class NexteuropaNewsroomAgenda {
    *   Current agenda items.
    */
   public function setCurrentItems($value) {
-    $this->currentItems = $this->sortItems($value);
+    $this->currentItems = $this->prepareItemsOutput($this->sortItems($value));
   }
 
   /**
@@ -178,7 +170,27 @@ abstract class NexteuropaNewsroomAgenda {
    *    Upcoming agenda items.
    */
   public function setUpcomingItems($value) {
-    $this->upcomingItems = $this->sortItems($value);
+    $this->upcomingItems = $this->prepareItemsOutput($this->sortItems($value));
+  }
+
+  /**
+   * Gets upcoming items.
+   *
+   * @return array
+   *   Past agenda items.
+   */
+  public function getPastItems() {
+    return $this->pastItems;
+  }
+
+  /**
+   * Sets past items.
+   *
+   * @param array $value
+   *    Past agenda items.
+   */
+  public function setPastItems($value) {
+    $this->pastItems = $this->prepareItemsOutput($this->sortItems($value));
   }
 
   /**
@@ -378,6 +390,62 @@ abstract class NexteuropaNewsroomAgenda {
   }
 
   /**
+   * Add upcomming news item.
+   *
+   * @param array $agenda_items
+   *   Array of agenda items.
+   */
+  public function addUpcommingNewsItem($agenda_items = []) {
+    if (!empty($agenda_items)) {
+      foreach ($agenda_items as $item) {
+        if (!empty($item->getItems())) {
+          foreach ($item->getItems() as $news_item) {
+            $this->upcomingNewsItems[$news_item->nid] = $news_item->nid;
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Get upcomming news item.
+   *
+   * @return int
+   *   Number of items in upcomming items.
+   */
+  public function getUpcommingNewsItemCount() {
+    return count($this->upcomingNewsItems);
+  }
+
+  /**
+   * Add past news item.
+   *
+   * @param array $agenda_items
+   *   Array of agenda items.
+   */
+  public function addPastNewsItem($agenda_items = []) {
+    if (!empty($agenda_items)) {
+      foreach ($agenda_items as $item) {
+        if (!empty($item->getItems())) {
+          foreach ($item->getItems() as $news_item) {
+            $this->pastNewsItems[$news_item->nid] = $news_item->nid;
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Get past news item.
+   *
+   * @return int
+   *   Number of items in past items.
+   */
+  public function getPastNewsItemCount() {
+    return count($this->pastNewsItems);
+  }
+
+  /**
    * Returns form rendable array by ID.
    *
    * @param string $form_id
@@ -403,8 +471,9 @@ abstract class NexteuropaNewsroomAgenda {
   public function getAgenda() {
     $this->prepareAgenda();
     $content = theme('newsroom_agenda_page', [
-      'items' => $this->prepareItemsOutput($this->getCurrentItems()),
-      'next_event_items' => $this->prepareItemsOutput($this->getUpcomingItems()),
+      'items' => $this->getCurrentItems(),
+      'next_event_items' => $this->getUpcomingItems(),
+      'past_event_items' => $this->getPastItems(),
       'is_block' => $this->getIsBlock(),
       'navigation' => [
         'previous' => $this->getPreviousDate() ? $this->getNavigationLink($this->getPreviousTitle(), $this->getPreviousDate()) : NULL,
@@ -424,21 +493,23 @@ abstract class NexteuropaNewsroomAgenda {
    * @return string
    *   Output string.
    */
-  protected function prepareItemsOutput($items) {
+  protected function prepareItemsOutput($items = []) {
     $output = '';
-    foreach ($items as $item) {
-      foreach ($item->getItems() as $agenda_item) {
-        $agenda_item->prepared_start_date = $agenda_item->start_date_obj->format('d/m/Y');
-        $agenda_item->prepared_end_date = $agenda_item->end_date_obj->format('d/m/Y');
+    if (!empty($items)) {
+      foreach ($items as $item) {
+        foreach ($item->getItems() as $agenda_item) {
+          $agenda_item->prepared_start_date = $agenda_item->start_date_obj->format('d/m/Y');
+          $agenda_item->prepared_end_date = $agenda_item->end_date_obj->format('d/m/Y');
+        }
+        $output .= theme('newsroom_agenda_items', [
+          'date' => theme('newsroom_agenda_date', [
+            'day' => $item->getDate()->format('d'),
+            'month' => drupal_strtoupper($item->getDate()->format('M')),
+            'year' => $item->getDate()->format('Y'),
+          ]),
+          'items' => $item->getItems(),
+        ]);
       }
-      $output .= theme('newsroom_agenda_items', [
-        'date' => theme('newsroom_agenda_date', [
-          'day' => $item->getDate()->format('d'),
-          'month' => drupal_strtoupper($item->getDate()->format('M')),
-          'year' => $item->getDate()->format('Y'),
-        ]),
-        'items' => $item->getItems(),
-      ]);
     }
     return $output;
   }
@@ -465,8 +536,8 @@ abstract class NexteuropaNewsroomAgenda {
         $content = theme('newsroom_agenda_page', [
           'filter_form' => NULL,
           'date_form' => NULL,
-          'items' => $this->prepareItemsOutput($items),
-          'next_event_items' => $this->prepareItemsOutput($next_items),
+          'items' => $items,
+          'next_event_items' => $next_items,
           'is_block' => $this->getIsBlock(),
           'navigation' => [],
         ]);
@@ -576,9 +647,6 @@ abstract class NexteuropaNewsroomAgenda {
       }
       cache_set($cache_key, $output, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_agenda_build', 3600));
     }
-
-    // Calculate total number of events in agenda, so we display exact number.
-    $this->getBuildItemsCount($output);
     return $output;
   }
 
@@ -610,11 +678,16 @@ abstract class NexteuropaNewsroomAgenda {
    *
    * @param array $output
    *   Array of Agenda items.
+   *
+   * @return int
+   *   Total number of items in the build.
    */
   protected function getBuildItemsCount($output) {
+    $count = 0;
     foreach ($output as $item) {
-      $this->addItemsCount(count($item->getItems()));
+      $count += count($item->getItems());
     }
+    return $count;
   }
 
   /**
@@ -750,13 +823,11 @@ abstract class NexteuropaNewsroomAgenda {
         elseif ($a_end_date_obj > $b_end_date_obj) {
           return 1;
         }
+        elseif ($a_end_date_obj == $b_end_date_obj) {
+          return 0;
+        }
         else {
-          if ($a_end_date_obj == $b_end_date_obj) {
-            return 0;
-          }
-          else {
-            return $a_start_date_obj > $b_start_date_obj ? -1 : 1;
-          }
+          return $a_start_date_obj > $b_start_date_obj ? -1 : 1;
         }
       });
       $item->setItems($events);

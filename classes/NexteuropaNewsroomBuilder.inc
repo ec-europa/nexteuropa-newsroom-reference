@@ -89,6 +89,7 @@ class NexteuropaNewsroomBuilder {
         $description = 'Imports Newsroom Items from the Newsroom service.';
         $entity_type = 'node';
         $bundle = NEXTEUROPA_NEWSROOM_CONTENT_TYPE;
+        $import_period = 3600;
         $field_mapping = self::getItemImporterMappings();
         break;
 
