@@ -379,7 +379,7 @@ function _nexteuropa_newsroom_agenda_form_submit(&$form, &$form_state) {
   $date = !empty($form_state['values']['current_date']) ? $form_state['values']['current_date'] : NexteuropaNewsroomHelper::getFormatedDate();
   $topic = NexteuropaNewsroomHelper::getNewsroomTopic($topic_id);
   $type = NexteuropaNewsroomHelper::getNewsroomType($type_id);
-  $agenda = NexteuropaNewsroomBuilder::buildAgenda(NexteuropaNewsroomAgenda::AGENDA_VIEW_SCHEDULE, $type, $topic, new DateTime($date));
+  $agenda = new NexteuropaNewsroomAgenda($type, $topic, new DateTime($date));
 
   drupal_goto($agenda->getNavigationUrl(NexteuropaNewsroomHelper::checkDateFormat($date)), [], 301);
 }

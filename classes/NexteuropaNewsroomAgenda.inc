@@ -6,13 +6,11 @@
  */
 
 /**
- * NexteuropaNewsroomAgenda class base class.
+ * NexteuropaNewsroomAgenda base class.
  */
-abstract class NexteuropaNewsroomAgenda {
-
-  const AGENDA_VIEW_SCHEDULE = 'schedule';
-  const AGENDA_VIEW_SCHEDULE_BLOCK = 'schedule-block';
+class NexteuropaNewsroomAgenda {
   const DATE_FORMAT = 'Y-m-d';
+  const OUTPUT_DATE_FORMAT = 'j F Y';
 
   protected $topicUrl = NEXTEUROPA_NEWSROOM_ALL;
   protected $topics = [];
@@ -30,6 +28,8 @@ abstract class NexteuropaNewsroomAgenda {
   protected $query = NULL;
   protected $urlParts = [];
   protected $isBlock = FALSE;
+  protected $lastAgendaDate = NULL;
+  protected $firstAgendaDate = NULL;
 
   /**
    * NexteuropaNewsroomAgenda constructor.
@@ -37,9 +37,12 @@ abstract class NexteuropaNewsroomAgenda {
    * @param object $type
    *   Newsroom type.
    * @param array $topics
-   *   Newsroom topics.
+   *   Newsroom topic.
+   * @param object $current_day
+   *   Current date.
    */
-  public function __construct($type, $topics = []) {
+  public function __construct($type, $topics, $current_day) {
+    $this->setCurrentDate($current_day);
     if ($type) {
       $this->setTypeId($type->tid);
       $this->setTypeUrl($type->name);
@@ -51,6 +54,46 @@ abstract class NexteuropaNewsroomAgenda {
     }
 
     $this->setTopics($topics);
+  }
+
+  /**
+   * Gets the first date in the agenda.
+   *
+   * @return Datetime
+   *   First date in the agenda.
+   */
+  public function getFirstAgendaDate() {
+    return $this->firstAgendaDate;
+  }
+
+  /**
+   * Sets the first date in the agenda.
+   *
+   * @param object $value
+   *   First date in the agenda.
+   */
+  public function setFirstAgendaDate($value) {
+    $this->firstAgendaDate = $value;
+  }
+
+  /**
+   * Gets the latest date in the agenda.
+   *
+   * @return Datetime
+   *   Latest date in the agenda.
+   */
+  public function getLastAgendaDate() {
+    return $this->lastAgendaDate;
+  }
+
+  /**
+   * Sets the latest date in the agenda.
+   *
+   * @param object $value
+   *   Latest date in the agenda.
+   */
+  public function setLastAgendaDate($value) {
+    $this->lastAgendaDate = $value;
   }
 
   /**
@@ -150,7 +193,7 @@ abstract class NexteuropaNewsroomAgenda {
    *   Current agenda items.
    */
   public function setCurrentItems($value) {
-    $this->currentItems = $this->prepareItemsOutput($this->sortItems($value));
+    $this->currentItems = $this->prepareItemsOutput($value);
   }
 
   /**
@@ -170,7 +213,7 @@ abstract class NexteuropaNewsroomAgenda {
    *    Upcoming agenda items.
    */
   public function setUpcomingItems($value) {
-    $this->upcomingItems = $this->prepareItemsOutput($this->sortItems($value));
+    $this->upcomingItems = $this->prepareItemsOutput($value);
   }
 
   /**
@@ -190,7 +233,7 @@ abstract class NexteuropaNewsroomAgenda {
    *    Past agenda items.
    */
   public function setPastItems($value) {
-    $this->pastItems = $this->prepareItemsOutput($this->sortItems($value));
+    $this->pastItems = $this->prepareItemsOutput($value);
   }
 
   /**
@@ -342,16 +385,6 @@ abstract class NexteuropaNewsroomAgenda {
   }
 
   /**
-   * Adds item count.
-   *
-   * @param int $value
-   *   Number of agenda items.
-   */
-  public function addItemsCount($value) {
-    $this->itemsCount += $value;
-  }
-
-  /**
    * Adds URL part.
    *
    * @param string $value
@@ -475,10 +508,8 @@ abstract class NexteuropaNewsroomAgenda {
       'next_event_items' => $this->getUpcomingItems(),
       'past_event_items' => $this->getPastItems(),
       'is_block' => $this->getIsBlock(),
-      'navigation' => [
-        'previous' => $this->getPreviousDate() ? $this->getNavigationLink($this->getPreviousTitle(), $this->getPreviousDate()) : NULL,
-        'next' => $this->getUpcomingDate() ? $this->getNavigationLink($this->getNextTitle(), $this->getUpcomingDate()) : NULL,
-      ],
+      'previous_link' => $this->getPreviousDate() ? $this->getNavigationLink($this->getPreviousTitle(), $this->getPreviousDate()) : NULL,
+      'next_link' => $this->getUpcomingDate() ? $this->getNavigationLink($this->getNextTitle(), $this->getUpcomingDate()) : NULL,
     ]);
 
     return $content;
@@ -498,8 +529,8 @@ abstract class NexteuropaNewsroomAgenda {
     if (!empty($items)) {
       foreach ($items as $item) {
         foreach ($item->getItems() as $agenda_item) {
-          $agenda_item->prepared_start_date = $agenda_item->start_date_obj->format('d/m/Y');
-          $agenda_item->prepared_end_date = $agenda_item->end_date_obj->format('d/m/Y');
+          $agenda_item->prepared_start_date = $agenda_item->start_date_obj->format(NexteuropaNewsroomAgenda::OUTPUT_DATE_FORMAT);
+          $agenda_item->prepared_end_date = $agenda_item->end_date_obj->format(NexteuropaNewsroomAgenda::OUTPUT_DATE_FORMAT);
         }
         $output .= theme('newsroom_agenda_items', [
           'date' => theme('newsroom_agenda_date', [
@@ -507,6 +538,7 @@ abstract class NexteuropaNewsroomAgenda {
             'month' => drupal_strtoupper($item->getDate()->format('M')),
             'year' => $item->getDate()->format('Y'),
           ]),
+          'type_id' => $this->getTypeId(),
           'items' => $item->getItems(),
         ]);
       }
@@ -565,13 +597,15 @@ abstract class NexteuropaNewsroomAgenda {
     $query = db_select('node', 'n');
     $query->distinct();
     $query->fields('n', ['nid', 'title', 'created']);
-    $query->fields('tt', ['name']);
+    $query->fields('tt', ['name', 'weight']);
     $query->addField('tt', 'tid', 'type_id');
+    $query->addField('type_order', 'field_newsroom_order_value', 'type_order');
     $query->addField('d', 'field_newsroom_item_date_value', 'start_date');
     $query->addField('d', 'field_newsroom_item_date_value2', 'end_date');
     $query->join('field_data_field_newsroom_item_date', 'd', 'd.entity_id = n.nid');
     $query->join('field_data_field_newsroom_item_type', 'tf', 'tf.entity_id = n.nid');
     $query->join('taxonomy_term_data', 'tt', 'tt.tid = tf.field_newsroom_item_type_tid');
+    $query->leftJoin('field_data_field_newsroom_order', 'type_order', 'type_order.entity_id = tt.tid');
     $query->leftJoin('field_data_field_newsroom_newsletter_only', 'newsletter_item', 'newsletter_item.entity_id = n.nid');
     $query->leftJoin('field_data_field_newsroom_topics', 'topic_field', 'topic_field.entity_id = n.nid');
     $query->leftJoin('taxonomy_term_data', 'topic_data', 'topic_data.tid = topic_field.field_newsroom_topics_tid');
@@ -584,12 +618,14 @@ abstract class NexteuropaNewsroomAgenda {
     $query->condition($db_or);
     $query->condition('n.type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
     $query->condition('tf.field_newsroom_item_type_tid', NexteuropaNewsroomHelper::getEventsTermsIds());
-    $query->orderBy('start_date');
-    $query->orderBy('end_date');
 
     if ($this->getTypeId()) {
       $query->condition('tt.tid', NexteuropaNewsroomHelper::getTypeChildren($this->getTypeId()));
     }
+
+    $query->orderBy('type_order');
+    $query->orderBy('start_date', 'DESC');
+    $query->orderBy('end_date', 'DESC');
 
     $query->addTag('node_access');
 
@@ -757,87 +793,6 @@ abstract class NexteuropaNewsroomAgenda {
   }
 
   /**
-   * Setups agenda conditions.
-   */
-  protected function setupAgenda() {
-    $cache_key = 'get_agenda:current_items:' . $this->getUniqueCachePart();
-    if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
-      $current_items = $cache->data;
-    }
-    else {
-      $current_items = $this->buildAgenda($this->getCurrentDate(), $this->getUpcomingDate());
-      cache_set($cache_key, $current_items, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_current_items', 3600));
-    }
-    $this->setCurrentItems($current_items);
-  }
-
-  /**
-   * Loads result from the current query.
-   *
-   * @return array
-   *   Result.
-   */
-  protected function loadResult() {
-    $end_date_condition = db_and()
-      ->condition('d.field_newsroom_item_date_value2', $this->getCurrentDate()
-        ->format(NexteuropaNewsroomAgenda::DATE_FORMAT), '>=')
-      ->condition('d.field_newsroom_item_date_value', $this->getUpcomingDate()
-        ->format(NexteuropaNewsroomAgenda::DATE_FORMAT), '<=');
-
-    $start_date_condition = db_and()
-      ->condition('d.field_newsroom_item_date_value', $this->getCurrentDate()
-        ->format(NexteuropaNewsroomAgenda::DATE_FORMAT), '>=')
-      ->condition('d.field_newsroom_item_date_value', $this->getUpcomingDate()
-        ->format(NexteuropaNewsroomAgenda::DATE_FORMAT), '<=')
-      ->isNull('d.field_newsroom_item_date_value2');
-
-    $date_condition = db_or();
-    $date_condition->condition($end_date_condition);
-    $date_condition->condition($start_date_condition);
-
-    $this->getQuery()->condition($date_condition);
-    return $this->getQuery()->execute()->fetchAll();
-  }
-
-  /**
-   * Sorts agenda items.
-   *
-   * @param array $items
-   *   Agenda items array.
-   *
-   * @return array
-   *   Sorted agenda items array.
-   */
-  protected function sortItems($items) {
-    foreach ($items as $key => $item) {
-      $events = $item->getItems();
-      usort($events, function ($a, $b) {
-        $a_start_date_obj = $a->start_date_obj;
-        $b_start_date_obj = $b->start_date_obj;
-        $a_end_date_obj = $a->end_date_obj;
-        $b_end_date_obj = $b->end_date_obj;
-
-        if ($a_end_date_obj < $b_end_date_obj) {
-          return -1;
-        }
-        elseif ($a_end_date_obj > $b_end_date_obj) {
-          return 1;
-        }
-        elseif ($a_end_date_obj == $b_end_date_obj) {
-          return 0;
-        }
-        else {
-          return $a_start_date_obj > $b_start_date_obj ? -1 : 1;
-        }
-      });
-      $item->setItems($events);
-      $items[$key] = $item;
-    }
-
-    return $items;
-  }
-
-  /**
    * Gets IDs array from topics array.
    *
    * @return array
@@ -886,11 +841,147 @@ abstract class NexteuropaNewsroomAgenda {
   }
 
   /**
+   * Setups agenda conditions.
+   */
+  protected function setupAgenda() {
+    $next_day = clone $this->getCurrentDate();
+    // Build agenda for the current date.
+    $next_day->modify('+1 day');
+    $this->setCurrentItems($this->buildAgenda($this->getCurrentDate(), $next_day));
+    $this->setLastAgendaDate($next_day);
+    $this->findUpcomingItems();
+    // We don't need navigation for the blocks.
+    if (!$this->getIsBlock()) {
+      $this->findPastItems();
+    }
+  }
+
+  /**
    * Adds date url parts.
    *
    * @param object $date
    *   The current date.
    */
-  abstract protected function setUrlItems($date);
+  protected function setUrlItems($date) {
+    if ($date) {
+      $this->addUrlPart($date->format('j'));
+      $this->addUrlPart($date->format('n'));
+      $this->addUrlPart($date->format('Y'));
+    }
+  }
+
+  /**
+   * Finds and sets upcoming items.
+   */
+  protected function findUpcomingItems() {
+    $start_date = clone $this->getCurrentDate();
+    // We start from the next day after the current.
+    $start_date->modify('+1 day');
+    $this->setLastAgendaDate($start_date);
+    $upcoming_items = [];
+    // We add one day to include the last day also.
+    $last_event_date = $this->getUtmostDate(FALSE);
+    if ($last_event_date) {
+      $last_event_date->modify('+1 day');
+      $number_to_display = $this->getItemsNumber();
+      while ($this->getUpcommingNewsItemCount() < $number_to_display && $start_date <= $last_event_date) {
+        $next_day = clone $start_date;
+        $next_day->modify('+1 day');
+        $current_items = $this->buildAgenda($start_date, $next_day, FALSE);
+        $this->addUpcommingNewsItem($current_items);
+        $upcoming_items = array_merge($upcoming_items, $current_items);
+        $this->setLastAgendaDate($start_date);
+        $start_date->modify('+1 day');
+      }
+    }
+    if (!empty($upcoming_items)) {
+      $this->setUpcomingDate($start_date);
+    }
+    $this->setUpcomingItems($upcoming_items);
+  }
+
+  /**
+   * Finds and sets past items.
+   */
+  protected function findPastItems() {
+    $start_date = clone $this->getCurrentDate();
+    $this->setFirstAgendaDate($start_date);
+    $past_items = [];
+    // We add one day to include the last day also.
+    $first_event_date = $this->getUtmostDate(TRUE);
+    if ($first_event_date) {
+      $number_to_display = $this->getItemsNumber();
+      while ($this->getPastNewsItemCount() < $number_to_display && $start_date >= $first_event_date) {
+        $next_day = clone $start_date;
+        $next_day->modify('-1 day');
+        $current_items = $this->buildAgenda($next_day, $start_date, FALSE);
+        $this->addPastNewsItem($current_items);
+        $past_items = array_merge($past_items, $current_items);
+        $this->setFirstAgendaDate($start_date);
+        $start_date->modify('-1 day');
+      }
+    }
+    // We set the previous date for the "Previous link".
+    if (!empty($past_items)) {
+      $this->setPreviousDate($start_date->modify('-1 day'));
+    }
+    $this->setPastItems($past_items);
+  }
+
+  /**
+   * Checks agenda items for existence of events.
+   *
+   * @param array $items
+   *   Agenda items.
+   *
+   * @return bool
+   *   Has events.
+   */
+  protected function hasItems($items) {
+    $has_current_items = FALSE;
+    if ($items) {
+      foreach ($items as $item) {
+        if (!empty($item->getItems())) {
+          $has_current_items = TRUE;
+          break;
+        }
+      }
+    }
+    return $has_current_items;
+  }
+
+  /**
+   * Loads result from the current query.
+   *
+   * @return array
+   *   Result.
+   */
+  protected function loadResult() {
+    return $this->getQuery()->execute()->fetchAll();
+  }
+
+  /**
+   * Gets utmost date.
+   *
+   * @param bool $first
+   *   Return the first or last utmost date in the result.
+   *
+   * @return object
+   *   Utmost date.
+   */
+  protected function getUtmostDate($first = TRUE) {
+    $utmost_date = NULL;
+    if ($result = $this->getResult()) {
+      if ($first) {
+        $utmost_item = array_pop($result);
+        $utmost_date = clone $utmost_item->start_date_obj;
+      }
+      else {
+        $utmost_item = reset($result);
+        $utmost_date = clone $utmost_item->end_date_obj;
+      }
+    }
+    return $utmost_date;
+  }
 
 }

@@ -38,37 +38,7 @@ class NexteuropaNewsroomBuilder {
     $year = self::getYear($arg3);
     $current_date->setDate($year, $month, $day);
 
-    return new NexteuropaNewsroomAgendaSchedule($type, $topic, $current_date);
-  }
-
-  /**
-   * Builds Agenda item based on the current date.
-   *
-   * @param string $view
-   *   View (presentation type): schedule, month, week, day.
-   * @param string $type
-   *   Newsroom type.
-   * @param array $topics
-   *   Newsroom topic.
-   * @param object $date
-   *   Current date.
-   *
-   * @return NexteuropaNewsroomAgenda|null
-   *   Agenda item.
-   */
-  public static function buildAgenda($view, $type, $topics, $date, $operator = NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR) {
-    $agenda = NULL;
-    switch ($view) {
-      case NexteuropaNewsroomAgenda::AGENDA_VIEW_SCHEDULE_BLOCK:
-        $agenda = new NexteuropaNewsroomAgendaBlockSchedule($type, $topics, $date, $operator);
-        break;
-
-      default:
-        $agenda = new NexteuropaNewsroomAgendaSchedule($type, $topics, $date);
-
-    }
-
-    return $agenda;
+    return new NexteuropaNewsroomAgenda($type, $topic, $current_date);
   }
 
   /**
