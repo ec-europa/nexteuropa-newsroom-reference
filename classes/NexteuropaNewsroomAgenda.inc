@@ -597,8 +597,9 @@ class NexteuropaNewsroomAgenda {
         $count = 0;
       }
 
+      $types_array[$item->type_id]['title'] = $item->name;
+
       if ($agenda_type == NexteuropaNewsroomAgenda::AGENDA_TYPE_CURRENT) {
-        $types_array[$item->type_id]['title'] = $item->name;
         if ($count < $number_of_items) {
           $types_array[$item->type_id]['visible_items'][] = $item;
         }
