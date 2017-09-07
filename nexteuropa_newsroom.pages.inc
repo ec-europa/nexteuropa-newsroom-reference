@@ -23,7 +23,12 @@
  *   Agenda content,
  */
 function _nexteuropa_newsroom_agenda($type = NULL, $topic = NULL, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
-  return NexteuropaNewsroomBuilder::buildPageAgenda($type, $topic, $arg1, $arg2, $arg3)->getAgenda();
+  $build['#markup'] = NexteuropaNewsroomBuilder::buildPageAgenda($type, $topic, $arg1, $arg2, $arg3)->getAgenda();
+  $build['#attached']['js'][] = [
+    'type' => 'file',
+    'data' => drupal_get_path('module', 'nexteuropa_newsroom') . '/js/agenda.js',
+  ];
+  return $build;
 }
 
 /**

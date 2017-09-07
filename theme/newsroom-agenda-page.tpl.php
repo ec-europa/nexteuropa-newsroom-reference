@@ -6,7 +6,7 @@
  */
 ?>
 <div class="<?php echo !$is_block ? 'newsroomAgenda-container' : NULL; ?>">
-  <?php if (!empty($items) || !empty($next_event_items) || !empty($past_event_items)): ?>
+  <?php if (!empty($items['visible_items']) || !empty($next_event_items['visible_items']) || !empty($past_event_items['visible_items'])): ?>
 
     <?php if (!empty($previous_link) || !empty($next_link)): ?>
       <div class="agendaPagination">
@@ -19,25 +19,38 @@
       </div>
     <?php endif; ?>
 
-    <?php if (!empty($items)) : ?>
+    <?php if (!empty($items['visible_items'])) : ?>
       <div class="currentDate">
-        <?php echo $items; ?>
+        <?php echo $items['visible_items']; ?>
       </div>
     <?php else: ?>
         <div class="newsroom-message"><?php echo t('No events for current date'); ?></div>
     <?php endif; ?>
 
-    <?php if (!empty($next_event_items)) : ?>
+    <?php if (!empty($next_event_items['visible_items'])) : ?>
       <div class="furtherDates">
         <h2 class="newsroom_title"><?php echo t('Upcoming'); ?></h2>
-        <?php echo $next_event_items; ?>
+        <?php echo $next_event_items['visible_items']; ?>
+
+        <?php if (!empty($next_event_items['invisible_items'])) : ?>
+        <div id="display-more-link-<?php echo NexteuropaNewsroomAgenda::AGENDA_TYPE_UPCOMING; ?>" class="newsroom-display-more btn btn-ctn"><?php echo t('Display more upcoming items'); ?></div>
+        <div id="display-more-container-<?php echo NexteuropaNewsroomAgenda::AGENDA_TYPE_UPCOMING; ?>" class="newsroom-display-more-container" style="display: none;">
+            <?php echo $next_event_items['invisible_items']; ?>
+        </div>
+        <?php endif; ?>
       </div>
     <?php endif; ?>
 
-    <?php if (!empty($past_event_items)) : ?>
+    <?php if (!empty($past_event_items['visible_items'])) : ?>
       <div class="pastDates">
-          <h2 class="newsroom_title"><?php echo t('Past'); ?></h2>
-        <?php echo $past_event_items; ?>
+        <h2 class="newsroom_title"><?php echo t('Past'); ?></h2>
+        <?php echo $past_event_items['visible_items']; ?>
+        <?php if (!empty($past_event_items['invisible_items'])) : ?>
+            <div id="display-more-link-<?php echo NexteuropaNewsroomAgenda::AGENDA_TYPE_PAST; ?>" class="newsroom-display-more btn btn-ctn"><?php echo t('Display more past items'); ?></div>
+            <div id="display-more-container-<?php echo NexteuropaNewsroomAgenda::AGENDA_TYPE_PAST; ?>" class="newsroom-display-more-container" style="display: none;">
+              <?php echo $past_event_items['invisible_items']; ?>
+            </div>
+        <?php endif; ?>
       </div>
     <?php endif; ?>
 

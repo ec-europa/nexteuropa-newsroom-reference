@@ -99,9 +99,17 @@ function nexteuropa_newsroom_theme($existing, $type, $theme, $path) {
       'variables' => [
         'date' => NULL,
         'items' => [],
-        'type_id' => NULL,
       ],
       'template' => 'newsroom-agenda-items',
+      'path' => $theme_path,
+    ],
+    'newsroom_agenda_content_items' => [
+      'variables' => [
+        'items' => [],
+        'type_id' => NULL,
+        'agenda_type' => NULL,
+      ],
+      'template' => 'newsroom-agenda-content-items',
       'path' => $theme_path,
     ],
     'newsroom_agenda_date' => [
