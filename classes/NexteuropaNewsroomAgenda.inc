@@ -532,7 +532,7 @@ class NexteuropaNewsroomAgenda {
   protected function prepareItemsOutput($items, $agenda_type) {
     $output = [];
     if (!empty($items)) {
-      $number_of_items = variable_get('nexteuropa_newsroom_agenda_list_items', 2);
+      $number_of_items = variable_get('nexteuropa_newsroom_agenda_list_items', 10);
       $count = 0;
       foreach ($items as $item) {
         foreach ($item->getItems() as $agenda_item) {
@@ -588,7 +588,7 @@ class NexteuropaNewsroomAgenda {
   protected function groupItems($items, $agenda_type) {
     $count = 0;
     $type_id = 0;
-    $number_of_items = variable_get('nexteuropa_newsroom_agenda_list_items', 2);
+    $number_of_items = variable_get('nexteuropa_newsroom_agenda_list_items', 10);
     $types_array = [];
 
     foreach ($items as $item) {
