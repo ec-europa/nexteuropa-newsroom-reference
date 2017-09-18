@@ -364,14 +364,13 @@ function nexteuropa_newsroom_url_inbound_alter(&$path, $original_path, $path_lan
 function nexteuropa_newsroom_node_presave($node) {
   if ($node->type == NEXTEUROPA_NEWSROOM_CONTENT_TYPE && variable_get('nexteuropa_newsroom_patterns', FALSE)) {
     // Get all the types.
-    if ($type_tid = NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid')) {
-      if ($type = NexteuropaNewsroomHelper::getNewsroomType($type_tid)) {
-        $type_name = pathauto_cleanstring($type->name);
-        if ($conf = variable_get('nexteuropa_newsroom_' . $type_name . '_root', FALSE)) {
-          $node->path['pathauto'] = FALSE;
-          $node->path['alias'] = $conf . '/' . pathauto_cleanstring($node->title);
-          pathauto_alias_uniquify($node->path['alias'], !empty($node->nid) ? 'node/' . $node->nid : NULL, NexteuropaNewsroomHelper::getDefaultLanguage());
-        }
+    $type_tid = NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid');
+    if (!empty($type_tid) && $type = NexteuropaNewsroomHelper::getNewsroomType($type_tid)) {
+      $type_name = pathauto_cleanstring($type->name);
+      if ($conf = variable_get('nexteuropa_newsroom_' . $type_name . '_root', FALSE)) {
+        $node->path['pathauto'] = FALSE;
+        $node->path['alias'] = $conf . '/' . pathauto_cleanstring($node->title);
+        pathauto_alias_uniquify($node->path['alias'], !empty($node->nid) ? 'node/' . $node->nid : NULL, NexteuropaNewsroomHelper::getDefaultLanguage());
       }
     }
   }
