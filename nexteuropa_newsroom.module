@@ -364,14 +364,13 @@ function nexteuropa_newsroom_url_inbound_alter(&$path, $original_path, $path_lan
 function nexteuropa_newsroom_node_presave($node) {
   if ($node->type == NEXTEUROPA_NEWSROOM_CONTENT_TYPE && variable_get('nexteuropa_newsroom_patterns', FALSE)) {
     // Get all the types.
-    if ($type_tid = NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid')) {
-      if ($type = NexteuropaNewsroomHelper::getNewsroomType($type_tid)) {
-        $type_name = pathauto_cleanstring($type->name);
-        if ($conf = variable_get('nexteuropa_newsroom_' . $type_name . '_root', FALSE)) {
-          $node->path['pathauto'] = FALSE;
-          $node->path['alias'] = $conf . '/' . pathauto_cleanstring($node->title);
-          pathauto_alias_uniquify($node->path['alias'], !empty($node->nid) ? 'node/' . $node->nid : NULL, NexteuropaNewsroomHelper::getDefaultLanguage());
-        }
+    $type_tid = NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid');
+    if (!empty($type_tid) && $type = NexteuropaNewsroomHelper::getNewsroomType($type_tid)) {
+      $type_name = pathauto_cleanstring($type->name);
+      if ($conf = variable_get('nexteuropa_newsroom_' . $type_name . '_root', FALSE)) {
+        $node->path['pathauto'] = FALSE;
+        $node->path['alias'] = $conf . '/' . pathauto_cleanstring($node->title);
+        pathauto_alias_uniquify($node->path['alias'], !empty($node->nid) ? 'node/' . $node->nid : NULL, NexteuropaNewsroomHelper::getDefaultLanguage());
       }
     }
   }
@@ -399,7 +398,7 @@ function nexteuropa_newsroom_date_formats() {
     ],
     [
       'type' => 'newsroom_long_type_without_time',
-      'format' => 'l, j F, Y',
+      'format' => 'j F Y',
       'locales' => [],
     ],
   ];
@@ -433,10 +432,15 @@ function nexteuropa_newsroom_views_data_alter(&$data) {
  */
 function nexteuropa_newsroom_node_view($node, $view_mode, $langcode) {
   if ($node->type == NEXTEUROPA_NEWSROOM_CONTENT_TYPE &&
-    in_array($view_mode, ['full', 'newsroom_events'])) {
+    in_array($view_mode, ['full', 'newsroom_events', 'newsroom_default'])) {
 
     $type = NexteuropaNewsroomHelper::getNewsroomType(NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid'));
     $main_link_url = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_item_main_link', 'url');
+    $short_item = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_short_item', 'value');
+
+    if (!empty($short_item) && !empty($main_link_url)) {
+      drupal_goto($main_link_url, [], 301);
+    }
 
     // Redirect item if redirection is forced for this type.
     // Except for editors who can import items.
@@ -663,7 +667,6 @@ function _newsroom_nexteuropa_get_term_redirect_path($field_name, $newsroom_enti
  * Implements hook_views_pre_view().
  */
 function nexteuropa_newsroom_views_pre_view(&$view, &$display_id, array &$args) {
-
   if ($view->name == 'newsletter_subscription') {
     // The proper context filter cannot be found for taxonomy term pages
     // so we set it manually.
@@ -1062,12 +1065,49 @@ function nexteuropa_newsroom_context_registry() {
  * Implements hook_block_view_alter().
  */
 function nexteuropa_newsroom_block_view_alter(&$data, $block) {
-  // Alter agenda breadcrumbs. We leave only first item.
   if ($block->module == 'easy_breadcrumb') {
-    if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url']) &&
-      in_array($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url'], ['newsroom-agenda', 'newsroom'])) {
-      $data['content']['easy_breadcrumb']['#segments_quantity'] = 1;
+    // Get type.
+    $type = NULL;
+    $type_url = 'all';
+    if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][1]['url'])) {
+      $url_items = explode('/', $data['content']['easy_breadcrumb']['#breadcrumb'][1]['url']);
+      if (!empty($url_items) && count($url_items) == 2) {
+        $type_url = array_pop($url_items);
+        $type = NexteuropaNewsroomHelper::getTermFromRequest($type_url, NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY);
+      }
     }
+
+    // Get topic.
+    $topic = NULL;
+    $topic_url = 'all';
+    if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][2]['url'])) {
+      $url_items = explode('/', $data['content']['easy_breadcrumb']['#breadcrumb'][2]['url']);
+
+      if (!empty($url_items) && count($url_items) == 3) {
+        $topic_url = array_pop($url_items);
+        $topic = NexteuropaNewsroomHelper::getTermFromRequest($topic_url, NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY);
+      }
+    }
+
+    // Remove all items from breadcrumb, we readd it again later.
+    $data['content']['easy_breadcrumb']['#breadcrumb'] = [];
+    if (!empty($type)) {
+      $data['content']['easy_breadcrumb']['#breadcrumb'][] = [
+        'content' => $type->name,
+        'class' => [],
+        'url' => 'newsroom/' . $type_url,
+      ];
+    }
+
+    if (!empty($topic)) {
+      $data['content']['easy_breadcrumb']['#breadcrumb'][] = [
+        'content' => $topic->name,
+        'class' => [],
+        'url' => 'newsroom/' . $type_url . '/' . $topic_url,
+      ];
+    }
+
+    $data['content']['easy_breadcrumb']['#segments_quantity'] = count($data['content']['easy_breadcrumb']['#breadcrumb']);
   }
 }
 
@@ -1088,6 +1128,7 @@ function nexteuropa_newsroom_preprocess_node(&$variables) {
         'html' => TRUE,
       ]);
     }
+
     // Fix custom date visibility and label by type.
     $nr_type_field = field_get_items('node', $node, 'field_newsroom_item_type');
     $display_date = FALSE;

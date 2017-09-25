@@ -86,8 +86,10 @@ function nexteuropa_newsroom_theme($existing, $type, $theme, $path) {
         'filter_form' => NULL,
         'date_form' => NULL,
         'next_event_items' => [],
+        'past_event_items' => [],
         'items' => [],
-        'navigation' => NULL,
+        'previous_link' => NULL,
+        'next_link' => NULL,
         'is_block' => FALSE,
       ],
       'template' => 'newsroom-agenda-page',
@@ -95,9 +97,19 @@ function nexteuropa_newsroom_theme($existing, $type, $theme, $path) {
     ],
     'newsroom_agenda_items' => [
       'variables' => [
+        'date' => NULL,
         'items' => [],
       ],
       'template' => 'newsroom-agenda-items',
+      'path' => $theme_path,
+    ],
+    'newsroom_agenda_content_items' => [
+      'variables' => [
+        'items' => [],
+        'type_id' => NULL,
+        'agenda_type' => NULL,
+      ],
+      'template' => 'newsroom-agenda-content-items',
       'path' => $theme_path,
     ],
     'newsroom_agenda_date' => [

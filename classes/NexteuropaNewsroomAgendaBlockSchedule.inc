@@ -8,7 +8,7 @@
 /**
  * NexteuropaNewsroomAgendaBlockSchedule class.
  */
-class NexteuropaNewsroomAgendaBlockSchedule extends NexteuropaNewsroomAgendaSchedule {
+class NexteuropaNewsroomAgendaBlockSchedule extends NexteuropaNewsroomAgenda {
   private $operator = NEXTEUROPA_NEWSROOM_TOPIC_OPERATOR_OR;
 
   /**

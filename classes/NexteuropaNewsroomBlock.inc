@@ -146,7 +146,7 @@ class NexteuropaNewsroomBlock extends NexteuropaNewsroomBlockBase {
 
     foreach ($result as $key => $item) {
       $result[$key]->new = NexteuropaNewsroomHelper::isNewItem($item->created, $item->nid);
-      $result[$key]->created = NexteuropaNewsroomHelper::getFormatedDate('d/m/Y', $item->created);
+      $result[$key]->created = NexteuropaNewsroomHelper::getFormatedDate(NexteuropaNewsroomAgenda::OUTPUT_DATE_FORMAT, $item->created);
     }
 
     $this->setItems($result);

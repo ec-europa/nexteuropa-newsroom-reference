@@ -119,12 +119,13 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
         $parent = pathauto_cleanstring($parent->name) . '/';
       }
 
-      $form['newsroom_paths']['nexteuropa_' . $type_name . '_rootpath'] = [
+      $path_var_name = 'nexteuropa_newsroom_' . $type_name . '_root';
+      $form['newsroom_paths'][$path_var_name] = [
         '#type' => 'textfield',
         '#title' => t('Pattern for %type', ['%type' => $type_name]),
         '#required' => FALSE,
         '#description' => t('Aliases pattern for the %type_name topic.', ['%type_name' => $type_name]),
-        '#default_value' => variable_get('nexteuropa_newsroom_' . $type_name . '_root', $parent . $type_name),
+        '#default_value' => variable_get($path_var_name, $parent . $type_name),
         '#element_validate' => ['_nexteuropa_newsroom_admin_type_root_validate'],
       ];
     }

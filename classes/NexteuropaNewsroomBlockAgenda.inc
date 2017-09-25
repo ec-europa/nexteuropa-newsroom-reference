@@ -35,7 +35,7 @@ class NexteuropaNewsroomBlockAgenda extends NexteuropaNewsroomBlockBase {
    *   Agenda block content.
    */
   public function generateContent() {
-    $agenda = NexteuropaNewsroomBuilder::buildAgenda(NexteuropaNewsroomAgenda::AGENDA_VIEW_SCHEDULE_BLOCK, $this->getType(), $this->getTopics(), new DateTime(), $this->getOperator());
+    $agenda = new NexteuropaNewsroomAgendaBlockSchedule($this->getType(), $this->getTopics(), new DateTime(), $this->getOperator());
     $content = theme('newsroom_summary_block_wrapper', [
       'content' => $agenda->getBlockAgenda(),
       'css_classes' => $this->getCssClasses(),

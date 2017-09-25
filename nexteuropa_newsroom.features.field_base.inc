@@ -1064,6 +1064,23 @@ function nexteuropa_newsroom_field_default_field_bases() {
     'type' => 'datestamp',
   );
 
+  // Exported field_base: 'field_newsroom_order'.
+  $field_bases['field_newsroom_order'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_newsroom_order',
+    'indexes' => array(),
+    'locked' => 1,
+    'module' => 'number',
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+    ),
+    'translatable' => 0,
+    'type' => 'number_integer',
+  );
+
   // Exported field_base: 'field_newsroom_organiser'.
   $field_bases['field_newsroom_organiser'] = array(
     'active' => 1,
