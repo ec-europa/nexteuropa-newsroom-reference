@@ -553,6 +553,7 @@ class NexteuropaNewsroomAgenda {
           $output['visible_items'] .= theme('newsroom_agenda_items', [
             'date' => $date_presentation,
             'items' => $grouped_items,
+            'type_id' => $this->getTypeId(),
           ]);
         }
         else {
@@ -560,12 +561,14 @@ class NexteuropaNewsroomAgenda {
             $output['visible_items'] .= theme('newsroom_agenda_items', [
               'date' => $date_presentation,
               'items' => $grouped_items,
+              'type_id' => $this->getTypeId(),
             ]);
           }
           else {
             $output['invisible_items'] .= theme('newsroom_agenda_items', [
               'date' => $date_presentation,
               'items' => $grouped_items,
+              'type_id' => $this->getTypeId(),
             ]);
           }
         }
