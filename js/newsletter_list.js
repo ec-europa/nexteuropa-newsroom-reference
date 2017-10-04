@@ -6,7 +6,7 @@
 (function ($) {
   Drupal.behaviors.nexteuropa_newsroom = {
     attach: function (context, settings) {
-      $('.newsroom-service-page input[type="submit"]').each(function () {
+      $('.newsroom-service-page button[type="submit"]').each(function () {
         $(this).prop('disabled', !Drupal.settings.nexteuropa_newsroom.user_is_logged_in);
       });
 
@@ -18,7 +18,7 @@
             $(this).val(email);
           });
 
-          $('.newsroom-service-page input[type="submit"]').each(function () {
+          $('.newsroom-service-page button[type="submit"]').each(function () {
             $(this).prop('disabled', false);
           });
         }

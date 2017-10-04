@@ -531,6 +531,8 @@ class NexteuropaNewsroomAgenda {
    */
   protected function prepareItemsOutput($items, $agenda_type) {
     $output = [];
+    $output['visible_items'] = NULL;
+    $output['invisible_items'] = NULL;
     if (!empty($items)) {
       $number_of_items = variable_get('nexteuropa_newsroom_agenda_list_items', 10);
       $count = 0;

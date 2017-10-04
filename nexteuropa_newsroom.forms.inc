@@ -272,7 +272,6 @@ function _nexteuropa_newsroom_send_subscription_request($url, $service_id, $emai
   if (!empty($request->data)) {
     $data = drupal_json_decode($request->data);
   }
-
   return !empty($data['subscription']) ? $data['subscription'] : NULL;
 }
 
