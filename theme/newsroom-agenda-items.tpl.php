@@ -15,7 +15,10 @@
                 </div>
                 <div class="listing__column-main">
                   <?php foreach ($items as $item): ?>
+
+                    <?php if (empty($type_id)): ?>
                     <h2><?php echo $item['title']; ?></h2>
+                    <?php endif; ?>
 
                     <?php if (!empty($item['visible_output'])): ?>
                     <?php echo $item['visible_output']; ?>

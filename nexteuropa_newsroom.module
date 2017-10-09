@@ -10,16 +10,6 @@ include_once 'nexteuropa_newsroom.features.inc';
  * Code for the Nexteuropa Newsroom feature.
  */
 
-/**
- * @file
- * Code for the Nexteuropa Newsroom feature.
- */
-
-/**
- * @file
- * Code for the nexteuropa newsroom feature - 2.1.
- */
-
 module_load_include('inc', 'pathauto', 'pathauto');
 module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.features');
 module_load_include('inc', 'nexteuropa_newsroom', 'nexteuropa_newsroom.formatters');

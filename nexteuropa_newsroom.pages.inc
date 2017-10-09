@@ -27,6 +27,7 @@ function _nexteuropa_newsroom_agenda($type = NULL, $topic = NULL, $arg1 = NULL, 
   $build['#attached']['js'][] = [
     'type' => 'file',
     'data' => drupal_get_path('module', 'nexteuropa_newsroom') . '/js/agenda.js',
+    'weight' => -1000,
   ];
   return $build;
 }

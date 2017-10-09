@@ -1,6 +1,6 @@
 /**
  * @file
- * Newsroom newsletter list.
+ * Agenda page switcher.
  */
 
 (function ($) {
