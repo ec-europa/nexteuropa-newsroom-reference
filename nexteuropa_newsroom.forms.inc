@@ -183,7 +183,7 @@ function nexteuropa_newsroom_newsletter_subscription_form($form, &$form_state) {
   $form['#token'] = FALSE;
   $form['#action'] = NexteuropaNewsroomHelper::getNewsroomUrl('subscription-quick-generic.cfm');
   $form['intro'] = [
-    '#markup' => '<p>' . t('Subscribe to :name', [':name' => $args['name']])  . ' - <a href="' . NexteuropaNewsroomHelper::getNewsroomUrl('newsletter-specific-archive.cfm?serviceId=' . $args['tid']) . '">' . t('See previous issues') . '</a></div>',
+    '#markup' => '<p>' . t('Subscribe to :name', [':name' => $args['name']]) . ' - <a href="' . NexteuropaNewsroomHelper::getNewsroomUrl('newsletter-specific-archive.cfm?serviceId=' . $args['tid']) . '">' . t('See previous issues') . '</a></div>',
   ];
   $form['label'] = [
     '#markup' => '<label for="email">' . t('Subscribe email') . '</label><div class="form-group newsroom-subscription-form-group">',
