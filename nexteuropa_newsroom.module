@@ -426,9 +426,9 @@ function nexteuropa_newsroom_node_view($node, $view_mode, $langcode) {
 
     $type = NexteuropaNewsroomHelper::getNewsroomType(NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid'));
     $main_link_url = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_item_main_link', 'url');
-    $short_item = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_short_item', 'value');
+    $teaser_only = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_teaser_only', 'value');
 
-    if (!empty($short_item) && !empty($main_link_url)) {
+    if (!empty($teaser_only) && !empty($main_link_url)) {
       drupal_goto($main_link_url, [], 301);
     }
 
@@ -1188,4 +1188,11 @@ function nexteuropa_newsroom_post_features_revert($component) {
   if ($component == 'ds_field_settings') {
     cache_clear_all('ds_field_settings', 'cache');
   }
+}
+
+/**
+ * Implements hook_bootstrap_colorize_text_alter().
+ */
+function nexteuropa_newsroom_bootstrap_colorize_text_alter(&$texts) {
+  $texts['contains'][t('Subscribe')] = 'primary';
 }
