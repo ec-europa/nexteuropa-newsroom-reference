@@ -178,51 +178,46 @@ function nexteuropa_newsroom_newsletter_subscription_form($form, &$form_state) {
 
   $args = $form_state['build_info']['args'][0];
   $form = [];
-  $form['#prefix'] = '<div class="CTAnewsletter">';
+  $form['#prefix'] = '<div class="newsroom-newsletter-subscription">';
   $form['#suffix'] = '</div>';
   $form['#token'] = FALSE;
   $form['#action'] = NexteuropaNewsroomHelper::getNewsroomUrl('subscription-quick-generic.cfm');
   $form['intro'] = [
-    '#markup' => '<div class="title">' . $args['name'] . '</div>',
+    '#markup' => '<p>' . t('Subscribe to :name', [':name' => $args['name']]) . ' - <a href="' . NexteuropaNewsroomHelper::getNewsroomUrl('newsletter-specific-archive.cfm?serviceId=' . $args['tid']) . '">' . t('See previous issues') . '</a></div>',
   ];
-
-  $form['feedback'] = [
-    '#markup' => '<div class="feedback"></div>',
+  $form['label'] = [
+    '#markup' => '<label for="email">' . t('Subscribe email') . '</label><div class="form-group newsroom-subscription-form-group">',
   ];
-
   $form['email'] = [
-    '#prefix' => '<div class="inputMail">',
+    '#theme_wrappers' => [],
+    '#prefix' => '<div class="form-control__wrapper">',
     '#suffix' => '</div>',
     '#type' => 'textfield',
     '#attributes' => [
       'placeholder' => t('Your e-mail'),
-      'class' => [],
+      'class' => ['form-control'],
     ],
   ];
 
-  $form['submit_email_prefix'] = [
-    '#markup' => '<div class="inputSubscribe">',
-  ];
-
   $form['submit_email'] = [
-    '#type' => 'button',
+    '#prefix' => '<span class="input-group">',
+    '#suffix' => '</span>',
+    '#type' => 'submit',
     '#value' => t('Subscribe'),
     '#ajax' => [
       'callback' => '_nexteuropa_newsroom_newsletter_subscription_block_form_ajax',
     ],
+    '#attributes' => [
+      'class' => ['btn btn-primary'],
+    ],
   ];
-
-  $form['submit_email_submit'] = [
+  $form['form_end'] = [
     '#markup' => '</div>',
   ];
 
   $form['service_id'] = [
     '#type' => 'hidden',
     '#value' => $args['tid'],
-  ];
-
-  $form['previous'] = [
-    '#markup' => '<div class="linkPreviousIssues"><a href="' . NexteuropaNewsroomHelper::getNewsroomUrl('newsletter-specific-archive.cfm?serviceId=' . $args['tid']) . '">' . t('Previous issues') . '</a></div>',
   ];
 
   return $form;
@@ -303,7 +298,7 @@ function _nexteuropa_newsroom_newsletter_subscription_block_form_ajax($form, &$f
   }
 
   $replacement = theme('status_messages', ['display' => NULL]);
-  $commands[] = ajax_command_replace($selector . ' .feedback', '<div class="feedback">' . $replacement . '</div>');
+  $commands[] = ajax_command_replace($selector . ' .form-group', '<div class="form-group">' . $replacement . '</div>');
 
   return ['#type' => 'ajax', '#commands' => $commands];
 }
