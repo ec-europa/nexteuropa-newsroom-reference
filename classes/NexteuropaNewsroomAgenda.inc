@@ -19,6 +19,8 @@ class NexteuropaNewsroomAgenda {
   protected $topics = [];
   protected $typeUrl = NEXTEUROPA_NEWSROOM_ALL;
   protected $typeId = NULL;
+  protected $typeName = NULL;
+  protected $topicName = NULL;
   protected $currentDate = NULL;
   protected $upcomingDate = NULL;
   protected $previousDate = NULL;
@@ -49,9 +51,11 @@ class NexteuropaNewsroomAgenda {
     if ($type) {
       $this->setTypeId($type->tid);
       $this->setTypeUrl($type->name);
+      $this->typeName = $type->name;
     }
 
     if (is_object($topics)) {
+      $this->topicName = $topics->name;
       $this->setTopicUrl($topics->name);
       $topics = [$topics];
     }
@@ -97,6 +101,26 @@ class NexteuropaNewsroomAgenda {
    */
   public function setLastAgendaDate($value) {
     $this->lastAgendaDate = $value;
+  }
+
+  /**
+   * Gets the type name.
+   *
+   * @return string
+   *   Type name.
+   */
+  public function getTypeName() {
+    return $this->typeName;
+  }
+
+  /**
+   * Gets the topic name.
+   *
+   * @return string
+   *   Topic name.
+   */
+  public function getTopicName() {
+    return $this->topicName;
   }
 
   /**
@@ -505,6 +529,7 @@ class NexteuropaNewsroomAgenda {
    *   HTML.
    */
   public function getAgenda() {
+    drupal_set_title($this->generateTitle());
     $this->prepareAgenda();
     $content = theme('newsroom_agenda_page', [
       'items' => $this->getCurrentItems(),
@@ -1072,6 +1097,24 @@ class NexteuropaNewsroomAgenda {
       }
     }
     return $utmost_date;
+  }
+
+  /**
+   * Generates title based on incoming parameters.
+   *
+   * @return null|string
+   *   Page title.
+   */
+  protected function generateTitle() {
+    $page_title = t('Agenda');
+    if ($this->getTypeName()) {
+      $page_title = $this->getTypeName();
+    }
+    if ($this->getTopicName()) {
+      $page_title .= ' ' . t('about !topic_title', ['!topic_title' => $this->getTopicName()]);
+    }
+
+    return $page_title;
   }
 
 }
