@@ -16,9 +16,11 @@
                 <?php foreach ($items as $item): ?>
                     <div class="meta">
                         <span class="meta__item">
-                            <?php echo t('From @start_date', ['@start_date' => $item->prepared_start_date]); ?>
                             <?php if (!empty($item->end_date) && $item->end_date != $item->start_date): ?>
-                              <?php echo t('to @end_date', ['@end_date' => $item->prepared_end_date]); ?>
+                                <?php echo t('From @start_date', ['@start_date' => $item->prepared_start_date]); ?>
+                                <?php echo t('to @end_date', ['@end_date' => $item->prepared_end_date]); ?>
+                            <?php else: ?>
+                                <?php echo $item->prepared_start_date; ?>
                             <?php endif; ?>
                         </span>
                     </div>

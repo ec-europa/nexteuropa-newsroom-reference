@@ -1059,45 +1059,50 @@ function nexteuropa_newsroom_block_view_alter(&$data, $block) {
     // Get type.
     $type = NULL;
     $type_url = 'all';
-    if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][1]['url'])) {
-      $url_items = explode('/', $data['content']['easy_breadcrumb']['#breadcrumb'][1]['url']);
-      if (!empty($url_items) && count($url_items) == 2) {
-        $type_url = array_pop($url_items);
-        $type = NexteuropaNewsroomHelper::getTermFromRequest($type_url, NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY);
+    if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url']) &&
+      in_array($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url'], ['newsroom', 'newsroom-agenda'])
+    ) {
+      $first_url_part = $data['content']['easy_breadcrumb']['#breadcrumb'][0]['url'];
+      if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][1]['url'])) {
+        $url_items = explode('/', $data['content']['easy_breadcrumb']['#breadcrumb'][1]['url']);
+        if (!empty($url_items) && count($url_items) == 2) {
+          $type_url = array_pop($url_items);
+          $type = NexteuropaNewsroomHelper::getTermFromRequest($type_url, NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY);
+        }
       }
-    }
 
-    // Get topic.
-    $topic = NULL;
-    $topic_url = 'all';
-    if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][2]['url'])) {
-      $url_items = explode('/', $data['content']['easy_breadcrumb']['#breadcrumb'][2]['url']);
+      // Get topic.
+      $topic = NULL;
+      $topic_url = 'all';
+      if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][2]['url'])) {
+        $url_items = explode('/', $data['content']['easy_breadcrumb']['#breadcrumb'][2]['url']);
 
-      if (!empty($url_items) && count($url_items) == 3) {
-        $topic_url = array_pop($url_items);
-        $topic = NexteuropaNewsroomHelper::getTermFromRequest($topic_url, NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY);
+        if (!empty($url_items) && count($url_items) == 3) {
+          $topic_url = array_pop($url_items);
+          $topic = NexteuropaNewsroomHelper::getTermFromRequest($topic_url, NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY);
+        }
       }
-    }
 
-    // Remove all items from breadcrumb, we readd it again later.
-    $data['content']['easy_breadcrumb']['#breadcrumb'] = [];
-    if (!empty($type)) {
-      $data['content']['easy_breadcrumb']['#breadcrumb'][] = [
-        'content' => $type->name,
-        'class' => [],
-        'url' => 'newsroom/' . $type_url,
-      ];
-    }
+      // Remove all items from breadcrumb, we readd it again later.
+      $data['content']['easy_breadcrumb']['#breadcrumb'] = [];
+      if (!empty($type)) {
+        $data['content']['easy_breadcrumb']['#breadcrumb'][] = [
+          'content' => $type->name,
+          'class' => [],
+          'url' => $first_url_part . '/' . $type_url,
+        ];
+      }
 
-    if (!empty($topic)) {
-      $data['content']['easy_breadcrumb']['#breadcrumb'][] = [
-        'content' => $topic->name,
-        'class' => [],
-        'url' => 'newsroom/' . $type_url . '/' . $topic_url,
-      ];
-    }
+      if (!empty($topic)) {
+        $data['content']['easy_breadcrumb']['#breadcrumb'][] = [
+          'content' => $topic->name,
+          'class' => [],
+          'url' => $first_url_part . '/' . $type_url . '/' . $topic_url,
+        ];
+      }
 
-    $data['content']['easy_breadcrumb']['#segments_quantity'] = count($data['content']['easy_breadcrumb']['#breadcrumb']);
+      $data['content']['easy_breadcrumb']['#segments_quantity'] = count($data['content']['easy_breadcrumb']['#breadcrumb']);
+    }
   }
 }
 
@@ -1195,4 +1200,44 @@ function nexteuropa_newsroom_post_features_revert($component) {
  */
 function nexteuropa_newsroom_bootstrap_colorize_text_alter(&$texts) {
   $texts['contains'][t('Subscribe')] = 'primary';
+}
+
+/**
+ * Implements hook_ds_fields_info().
+ */
+function nexteuropa_newsroom_ds_fields_info($entity_type) {
+  $fields = [];
+  $fields['newsroom_content_type_label'] = [
+    'title' => t('Newsroom content type label'),
+    'field_type' => DS_FIELD_TYPE_FUNCTION,
+    'function' => '_nexteuropa_newsroom_ds_content_info',
+    'properties' => [
+      'formatters' => [],
+    ],
+  ];
+  return ['node' => $fields];
+}
+
+/**
+ * Gets content label.
+ */
+function _nexteuropa_newsroom_ds_content_info() {
+  $node = menu_get_object();
+  if (empty($node)) {
+    $field = func_get_args(0);
+    if (!empty($field[0]['entity'])) {
+      $node = $field[0]['entity'];
+    }
+  }
+
+  $label = node_type_get_name($node);
+  if (!empty($node->field_newsroom_item_type[LANGUAGE_NONE][0]['tid'])) {
+    if ($type = NexteuropaNewsroomHelper::getNewsroomType($node->field_newsroom_item_type[LANGUAGE_NONE][0]['tid'])) {
+      $label = $type->name;
+      if (!empty($type->field_newsroom_content_label[LANGUAGE_NONE][0]['value'])) {
+        $label = $type->field_newsroom_content_label[LANGUAGE_NONE][0]['value'];
+      }
+    }
+  }
+  return $label;
 }
