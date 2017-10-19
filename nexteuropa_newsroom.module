@@ -1056,12 +1056,12 @@ function nexteuropa_newsroom_context_registry() {
  */
 function nexteuropa_newsroom_block_view_alter(&$data, $block) {
   if ($block->module == 'easy_breadcrumb') {
-    // Get type.
-    $type = NULL;
-    $type_url = 'all';
     if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url']) &&
       in_array($data['content']['easy_breadcrumb']['#breadcrumb'][0]['url'], ['newsroom', 'newsroom-agenda'])
     ) {
+      // Get type.
+      $type = NULL;
+      $type_url = 'all';
       $first_url_part = $data['content']['easy_breadcrumb']['#breadcrumb'][0]['url'];
       if (!empty($data['content']['easy_breadcrumb']['#breadcrumb'][1]['url'])) {
         $url_items = explode('/', $data['content']['easy_breadcrumb']['#breadcrumb'][1]['url']);
@@ -1089,7 +1089,7 @@ function nexteuropa_newsroom_block_view_alter(&$data, $block) {
         $data['content']['easy_breadcrumb']['#breadcrumb'][] = [
           'content' => $type->name,
           'class' => [],
-          'url' => $first_url_part . '/' . $type_url,
+          'url' => $first_url_part . '/' . $type_url . '/all',
         ];
       }
 
@@ -1097,7 +1097,7 @@ function nexteuropa_newsroom_block_view_alter(&$data, $block) {
         $data['content']['easy_breadcrumb']['#breadcrumb'][] = [
           'content' => $topic->name,
           'class' => [],
-          'url' => $first_url_part . '/' . $type_url . '/' . $topic_url,
+          'url' => $first_url_part . '/' . $type_url . '/' . $topic_url . '/all/all/all',
         ];
       }
 
