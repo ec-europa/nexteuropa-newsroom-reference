@@ -768,13 +768,11 @@ class NexteuropaNewsroomAgenda {
    *   Start date.
    * @param object $end_input_date
    *   End date.
-   * @param bool $build_empty_days
-   *   Add empty days or not.
    *
    * @return array
    *   Agenda items events.
    */
-  public function buildAgenda($start_input_date, $end_input_date, $build_empty_days = TRUE) {
+  public function buildAgenda($start_input_date, $end_input_date) {
     $start_date = clone $start_input_date;
     $end_date = clone $end_input_date;
     $output = [];
@@ -788,7 +786,7 @@ class NexteuropaNewsroomAgenda {
       while ($start_date < $end_date) {
         $agenda_item = $this->createAgendaItem($start_date);
         // We don't count empty days if we need to calculate the previous date.
-        if ($build_empty_days || (!$build_empty_days && !empty($agenda_item->getItems()))) {
+        if (!empty($agenda_item->getItems())) {
           $output[] = $agenda_item;
         }
 
@@ -960,13 +958,21 @@ class NexteuropaNewsroomAgenda {
    */
   protected function setupAgenda() {
     $next_day = clone $this->getCurrentDate();
-    // Build agenda for the current date.
     $next_day->modify('+1 day');
+    // Build agenda for the current date.
     $this->setCurrentItems($this->buildAgenda($this->getCurrentDate(), $next_day));
     $this->setLastAgendaDate($next_day);
-    $this->findUpcomingItems();
-    // We don't need navigation for the blocks.
-    if (!$this->getIsBlock()) {
+
+    $real_date = new DateTime();
+    $real_date->setTime(0, 0, 0);
+
+    // If we are in the past we don't display Upcoming block (DAE-2631).
+    if ($this->getCurrentDate() >= $real_date) {
+      $this->findUpcomingItems();
+    }
+    // We don't need navigation for the blocks
+    // if we are in the future we don't display Past block (DAE-2631).
+    if ($this->getCurrentDate() <= $real_date && !$this->getIsBlock()) {
       $this->findPastItems();
     }
   }
@@ -1002,16 +1008,28 @@ class NexteuropaNewsroomAgenda {
       while ($this->getUpcommingNewsItemCount() < $number_to_display && $start_date <= $last_event_date) {
         $next_day = clone $start_date;
         $next_day->modify('+1 day');
-        $current_items = $this->buildAgenda($start_date, $next_day, FALSE);
+        $current_items = $this->buildAgenda($start_date, $next_day);
         $this->addUpcommingNewsItem($current_items);
         $upcoming_items = array_merge($upcoming_items, $current_items);
         $this->setLastAgendaDate($start_date);
         $start_date->modify('+1 day');
       }
     }
+
+    // Try to find the next upcoming event.
     if (!empty($upcoming_items)) {
-      $this->setUpcomingDate($start_date);
+      while ($start_date <= $last_event_date) {
+        $next_day = clone $start_date;
+        $next_day->modify('+1 day');
+        $current_items = $this->buildAgenda($start_date, $next_day);
+        if (!empty($current_items)) {
+          $this->setUpcomingDate($start_date);
+          break;
+        }
+        $start_date->modify('+1 day');
+      }
     }
+
     $this->setUpcomingItems($upcoming_items);
   }
 
@@ -1029,7 +1047,7 @@ class NexteuropaNewsroomAgenda {
       while ($this->getPastNewsItemCount() < $number_to_display && $start_date >= $first_event_date) {
         $next_day = clone $start_date;
         $next_day->modify('-1 day');
-        $current_items = $this->buildAgenda($next_day, $start_date, FALSE);
+        $current_items = $this->buildAgenda($next_day, $start_date);
         $this->addPastNewsItem($current_items);
         $past_items = array_merge($past_items, $current_items);
         $this->setFirstAgendaDate($start_date);
@@ -1038,7 +1056,16 @@ class NexteuropaNewsroomAgenda {
     }
     // We set the previous date for the "Previous link".
     if (!empty($past_items)) {
-      $this->setPreviousDate($start_date->modify('-1 day'));
+      while ($start_date >= $first_event_date) {
+        $next_day = clone $start_date;
+        $next_day->modify('-1 day');
+        $current_items = $this->buildAgenda($next_day, $start_date);
+        if (!empty($current_items)) {
+          $this->setPreviousDate($start_date);
+          break;
+        }
+        $start_date->modify('-1 day');
+      }
     }
     $this->setPastItems($past_items);
   }
