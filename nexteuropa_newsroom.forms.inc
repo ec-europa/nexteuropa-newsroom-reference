@@ -472,6 +472,7 @@ function nexteuropa_newsroom_unsubscription_newsletter_form($form, $form_state, 
  *   Ajax callback array.
  */
 function _nexteuropa_newsroom_newsletter_subscription_page_form_ajax($form, &$form_state) {
+  // @codingStandardsIgnoreLine
   $subscription = _nexteuropa_newsroom_send_subscription_request($form['#action'], $form_state['values']['service_id'], $form_state['input']['email']);
   $message = $subscription['feedbackMessage'];
   if ($subscription['status'] == 'Failed') {

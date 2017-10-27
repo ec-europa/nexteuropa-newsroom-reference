@@ -8,17 +8,6 @@
 <div class="<?php echo !$is_block ? 'newsroomAgenda-container' : NULL; ?>">
   <?php if (!empty($items['visible_items']) || !empty($next_event_items['visible_items']) || !empty($past_event_items['visible_items'])): ?>
 
-    <?php if (!empty($previous_link) || !empty($next_link)): ?>
-      <div class="agendaPagination">
-        <?php if (!empty($previous_link)): ?>
-            <div class="agenda-previous"><?php echo $previous_link; ?></div>
-        <?php endif; ?>
-        <?php if (!empty($next_link)): ?>
-            <div class="agenda-next"><?php echo $next_link; ?></div>
-        <?php endif; ?>
-      </div>
-    <?php endif; ?>
-
     <?php if (!empty($items['visible_items'])) : ?>
       <div class="currentDate">
         <?php echo $items['visible_items']; ?>
@@ -38,6 +27,13 @@
             <?php echo $next_event_items['invisible_items']; ?>
         </div>
         <?php endif; ?>
+        <?php if (!empty($next_link)): ?>
+            <div class="agendaPagination">
+              <?php if (!empty($next_link)): ?>
+                  <div class="agenda-next"><?php echo $next_link; ?></div>
+              <?php endif; ?>
+            </div>
+        <?php endif; ?>
       </div>
     <?php endif; ?>
 
@@ -49,6 +45,13 @@
             <div id="display-more-link-<?php echo NexteuropaNewsroomAgenda::AGENDA_TYPE_PAST; ?>" class="newsroom-display-more btn btn-ctn"><?php echo t('Display more past items'); ?></div>
             <div id="display-more-container-<?php echo NexteuropaNewsroomAgenda::AGENDA_TYPE_PAST; ?>" class="newsroom-display-more-container" style="display: none;">
               <?php echo $past_event_items['invisible_items']; ?>
+            </div>
+        <?php endif; ?>
+        <?php if (!empty($previous_link)): ?>
+            <div class="agendaPagination">
+              <?php if (!empty($previous_link)): ?>
+                  <div class="agenda-previous"><?php echo $previous_link; ?></div>
+              <?php endif; ?>
             </div>
         <?php endif; ?>
       </div>

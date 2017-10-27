@@ -586,7 +586,7 @@ class NexteuropaNewsroomImporterGenerator {
       'update' => 0,
       'import_period' => $this->getImportPeriod(),
       'expire_period' => 1800,
-      'import_on_create' => 1,
+      'import_on_create' => 0,
       'process_in_background' => 0,
     ];
 
@@ -600,7 +600,7 @@ class NexteuropaNewsroomImporterGenerator {
           'mappings' => $this->getMappers(),
           'update_existing' => '2',
           'input_format' => 'full_html',
-          'skip_hash_check' => 0,
+          'skip_hash_check' => 1,
           'bundle' => $this->getBundle(),
         ],
       ];
