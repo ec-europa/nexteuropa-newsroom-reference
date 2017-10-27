@@ -1097,7 +1097,7 @@ function nexteuropa_newsroom_block_view_alter(&$data, $block) {
         $data['content']['easy_breadcrumb']['#breadcrumb'][] = [
           'content' => $topic->name,
           'class' => [],
-          'url' => $first_url_part . '/' . $type_url . '/' . $topic_url . '/all/all/all',
+          'url' => $first_url_part . '/' . $type_url . '/' . $topic_url . '/all',
         ];
       }
 
