@@ -30,11 +30,7 @@
         </div>
         <?php endif; ?>
         <?php if (!empty($next_link)): ?>
-            <div class="agendaPagination">
-              <?php if (!empty($next_link)): ?>
-                  <div class="agenda-next"><?php echo $next_link; ?></div>
-              <?php endif; ?>
-            </div>
+            <div class="agendaPagination"><div class="agenda-next"><?php echo $next_link; ?></div></div>
         <?php endif; ?>
       </div>
     <?php endif; ?>
@@ -50,11 +46,7 @@
             </div>
         <?php endif; ?>
         <?php if (!empty($previous_link)): ?>
-            <div class="agendaPagination">
-              <?php if (!empty($previous_link)): ?>
-                  <div class="agenda-previous"><?php echo $previous_link; ?></div>
-              <?php endif; ?>
-            </div>
+            <div class="agendaPagination"><div class="agenda-previous"><?php echo $previous_link; ?></div></div>
         <?php endif; ?>
       </div>
     <?php endif; ?>
