@@ -89,7 +89,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
       'entity_translation_sync' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
-      'wysiwyg_override' => 0,
+      'wysiwyg_override' => 1,
     ),
     'widget' => array(
       'active' => 1,
@@ -1204,7 +1204,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 58,
+        'weight' => 18,
       ),
       'newsroom_events' => array(
         'label' => 'inline',

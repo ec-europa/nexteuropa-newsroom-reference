@@ -531,7 +531,12 @@ class NexteuropaNewsroomAgenda {
   public function getAgenda() {
     drupal_set_title($this->generateTitle());
     $this->prepareAgenda();
+
+    $real_date = new DateTime();
+    $real_date->setTime(0, 0, 0);
+
     $content = theme('newsroom_agenda_page', [
+      'is_today' => $this->getCurrentDate() == $real_date,
       'items' => $this->getCurrentItems(),
       'next_event_items' => $this->getUpcomingItems(),
       'past_event_items' => $this->getPastItems(),
@@ -959,12 +964,15 @@ class NexteuropaNewsroomAgenda {
   protected function setupAgenda() {
     $next_day = clone $this->getCurrentDate();
     $next_day->modify('+1 day');
-    // Build agenda for the current date.
-    $this->setCurrentItems($this->buildAgenda($this->getCurrentDate(), $next_day));
-    $this->setLastAgendaDate($next_day);
 
     $real_date = new DateTime();
     $real_date->setTime(0, 0, 0);
+
+    // Build agenda for the current date, when we the current date is today.
+    if (!($this->getCurrentDate() > $real_date || $this->getCurrentDate() < $real_date)) {
+      $this->setCurrentItems($this->buildAgenda($this->getCurrentDate(), $next_day));
+    }
+    $this->setLastAgendaDate($next_day);
 
     // If we are in the past we don't display Upcoming block (DAE-2631).
     if ($this->getCurrentDate() >= $real_date) {

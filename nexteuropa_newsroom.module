@@ -61,9 +61,6 @@ define('NEXTEUROPA_NEWSROOM_TOPIC', 'topic');
 define('NEXTEUROPA_NEWSROOM_SERVICE', 'service');
 define('NEXTEUROPA_NEWSROOM_TYPE', 'type');
 
-define('NEXTEUROPA_NEWSROOM_EC', 'ec');
-define('NEXTEUROPA_NEWSROOM_NONEC', 'nonec');
-
 /**
  * Implements hook_page_build().
  */

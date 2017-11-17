@@ -83,6 +83,7 @@ function nexteuropa_newsroom_theme($existing, $type, $theme, $path) {
     ],
     'newsroom_agenda_page' => [
       'variables' => [
+        'is_today' => TRUE,
         'filter_form' => NULL,
         'date_form' => NULL,
         'next_event_items' => [],

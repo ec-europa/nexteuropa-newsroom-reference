@@ -17,7 +17,6 @@ class NexteuropaNewsroomPage {
   protected $topic = NULL;
   protected $startDate = NULL;
   protected $endDate = NULL;
-  protected $ecContent = NEXTEUROPA_NEWSROOM_EC;
 
   /**
    * NexteuropaNewsroomPage constructor.
@@ -139,26 +138,6 @@ class NexteuropaNewsroomPage {
    */
   public function getTopic() {
     return $this->topic;
-  }
-
-  /**
-   * Sets EC content.
-   *
-   * @param string $value
-   *   EC content.
-   */
-  public function setEcContent($value) {
-    $this->ecContent = $value;
-  }
-
-  /**
-   * Gets EC content.
-   *
-   * @return string
-   *   EC content.
-   */
-  public function getEcContent() {
-    return $this->ecContent;
   }
 
   /**
@@ -410,7 +389,6 @@ class NexteuropaNewsroomPage {
     $url_parts[] = $this->getTermUrl($this->getTopic() ? $this->getTopic()->name : NULL);
     $url_parts[] = $this->getStartDate() ? $this->getStartDate()->format(NexteuropaNewsroomPage::MYSQL_DATE_FORMAT) : NEXTEUROPA_NEWSROOM_ALL;
     $url_parts[] = $this->getEndDate() ? $this->getEndDate()->format(NexteuropaNewsroomPage::MYSQL_DATE_FORMAT) : NEXTEUROPA_NEWSROOM_ALL;
-    $url_parts[] = $this->getEcContent() == NEXTEUROPA_NEWSROOM_EC ? NEXTEUROPA_NEWSROOM_EC : NEXTEUROPA_NEWSROOM_NONEC;
 
     return $is_rss ? NexteuropaNewsroomHelper::getRssUrl($url_parts) : NexteuropaNewsroomHelper::getPageUrl($url_parts);
   }
