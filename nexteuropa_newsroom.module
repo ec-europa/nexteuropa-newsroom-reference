@@ -1034,7 +1034,8 @@ function nexteuropa_newsroom_preprocess_node(&$variables) {
   if ($variables['type'] == NEXTEUROPA_NEWSROOM_CONTENT_TYPE) {
     $node = $variables['node'];
 
-    if (in_array($variables['view_mode'], ['full', 'newsroom_events', 'newsroom_default'])) {
+    if (in_array($variables['view_mode'],
+      ['full', 'newsroom_events', 'newsroom_default'])) {
       $type = NexteuropaNewsroomVocabularyHelper::getNewsroomType(NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid'));
       $main_link_url = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_item_main_link', 'url');
       $teaser_only = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_teaser_only', 'value');
@@ -1047,8 +1048,8 @@ function nexteuropa_newsroom_preprocess_node(&$variables) {
       // Except for editors who can import items.
       if (!user_access(NEXTEUROPA_NEWSROOM_IMPORT_ACCESS)) {
 
-        // Only if we have a main link and if type is click through then redirect
-        // item to main link URL.
+        // Only if we have a main link and if type is click through then
+        // redirect item to main link URL.
         if ($type && $main_link_url) {
           $click_through = NexteuropaNewsroomHelper::getFieldValue($type, 'field_newsroom_direct_link', 'taxonomy_term');
           if ($click_through == NEXTEUROPA_NEWSROOM_CLICKTHROUGH_FORCE) {

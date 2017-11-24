@@ -40,11 +40,13 @@ class NexteuropaNewsroomRelatedItemHelper {
    *
    * @param int $nid
    *   Node id.
+   * @param int $exclude_id
+   *   Node id to be excluded.
    *
    * @return array
    *   Array of related items.
    */
-  public static function getEventsRelatedItems($nid) {
+  public static function getEventsRelatedItems($nid, $exclude_id = NULL) {
     $related_items = [];
     $query = db_select('field_data_field_newsroom_related_content', 'n');
     $query->fields('n', ['entity_id']);
@@ -55,6 +57,9 @@ class NexteuropaNewsroomRelatedItemHelper {
     $query->join('field_data_field_newsroom_item_type', 'item_type1', 'n.field_newsroom_related_content_target_id = item_type1.entity_id');
     $query->leftJoin('field_data_field_newsroom_content_label', 'cl', 'cl.entity_id = tt.tid');
     $query->condition('n.field_newsroom_related_content_target_id', $nid);
+    if (!empty($exclude_id)) {
+      $query->condition('n.entity_id', $exclude_id, '<>');
+    }
     $query->condition('n.bundle', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
     $query->condition('item_type1.field_newsroom_item_type_tid', NexteuropaNewsroomVocabularyHelper::getEventsTermsIds());
 
@@ -99,26 +104,13 @@ class NexteuropaNewsroomRelatedItemHelper {
     $node = node_load($nid);
     $type_id = NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid');
     if (in_array($type_id, NexteuropaNewsroomVocabularyHelper::getResultsTermsIds())) {
-      $related_nodes = [];
       $related_items = !empty($node->field_newsroom_related_content[LANGUAGE_NONE]) ? $node->field_newsroom_related_content[LANGUAGE_NONE] : [];
       foreach ($related_items as $related_item) {
         if ($related_node = node_load($related_item['target_id'])) {
-          $related_nodes[$related_node->nid] = $related_node;
-
-          $related_content_items = !empty($related_node->field_newsroom_related_content[LANGUAGE_NONE]) ? $related_node->field_newsroom_related_content[LANGUAGE_NONE] : [];
-          foreach ($related_content_items as $related_content_item) {
-            if ($related_content_node = node_load($related_content_item['target_id'])) {
-              $related_nodes[$related_content_node->nid] = $related_content_node;
-            }
-          }
-        }
-      }
-
-      if (!empty($related_nodes)) {
-        foreach ($related_nodes as $related_node) {
           $type = NexteuropaNewsroomVocabularyHelper::getNewsroomType(NexteuropaNewsroomHelper::getFieldValue($related_node, 'field_newsroom_item_type', 'tid'));
           $content_label = NexteuropaNewsroomHelper::getFieldValue($type, 'field_newsroom_content_label');
           $items[] = self::buildRelatedItem($related_node->nid, !empty($content_label) ? $content_label : $type->name);
+          $items = array_merge($items, self::getEventsRelatedItems($related_node->nid, $nid));
         }
       }
     }
