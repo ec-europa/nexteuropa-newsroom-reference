@@ -425,24 +425,6 @@ function nexteuropa_newsroom_node_view($node, $view_mode, $langcode) {
     $main_link_url = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_item_main_link', 'url');
     $teaser_only = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_teaser_only', 'value');
 
-    if (!empty($teaser_only) && !empty($main_link_url)) {
-      drupal_goto($main_link_url, [], 301);
-    }
-
-    // Redirect item if redirection is forced for this type.
-    // Except for editors who can import items.
-    if (!user_access(NEXTEUROPA_NEWSROOM_IMPORT_ACCESS)) {
-
-      // Only if we have a main link and if type is click through then redirect
-      // item to main link URL.
-      if ($type && $main_link_url) {
-        $click_through = NexteuropaNewsroomHelper::getFieldValue($type, 'field_newsroom_direct_link', 'taxonomy_term');
-        if ($click_through == NEXTEUROPA_NEWSROOM_CLICKTHROUGH_FORCE) {
-          drupal_goto($main_link_url, [], 301);
-        }
-      }
-    }
-
     // Custom main link title per type.
     if ($type && $main_link_url) {
       // Case there is a custom read more text set, change it.
@@ -1051,6 +1033,31 @@ function nexteuropa_newsroom_block_view_alter(&$data, $block) {
 function nexteuropa_newsroom_preprocess_node(&$variables) {
   if ($variables['type'] == NEXTEUROPA_NEWSROOM_CONTENT_TYPE) {
     $node = $variables['node'];
+
+    if (in_array($variables['view_mode'], ['full', 'newsroom_events', 'newsroom_default'])) {
+      $type = NexteuropaNewsroomHelper::getNewsroomType(NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid'));
+      $main_link_url = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_item_main_link', 'url');
+      $teaser_only = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_teaser_only', 'value');
+
+      if (!empty($teaser_only) && !empty($main_link_url)) {
+        drupal_goto($main_link_url, [], 301);
+      }
+
+      // Redirect item if redirection is forced for this type.
+      // Except for editors who can import items.
+      if (!user_access(NEXTEUROPA_NEWSROOM_IMPORT_ACCESS)) {
+
+        // Only if we have a main link and if type is click through then redirect
+        // item to main link URL.
+        if ($type && $main_link_url) {
+          $click_through = NexteuropaNewsroomHelper::getFieldValue($type, 'field_newsroom_direct_link', 'taxonomy_term');
+          if ($click_through == NEXTEUROPA_NEWSROOM_CLICKTHROUGH_FORCE) {
+            drupal_goto($main_link_url, [], 301);
+          }
+        }
+      }
+    }
+
     // Fix contact link.
     $nr_contact_field = field_get_items('node', $node, 'field_newsroom_item_contact_text');
     $nr_contact_email_field = field_get_items('node', $node, 'field_newsroom_item_contact_mail');
