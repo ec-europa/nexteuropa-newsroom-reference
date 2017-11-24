@@ -178,5 +178,12 @@ function nexteuropa_newsroom_theme($existing, $type, $theme, $path) {
       'template' => 'newsroom-docsroom',
       'path' => $theme_path,
     ],
+    'newsroom_events_related_items' => [
+      'variables' => [
+        'related_items' => NULL,
+      ],
+      'template' => 'newsroom-events-related-items',
+      'path' => $theme_path,
+    ],
   ];
 }

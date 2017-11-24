@@ -107,6 +107,10 @@ class NexteuropaNewsroomPage {
    *   End date.
    */
   public function setEndDate($value) {
+    if (!empty($value)) {
+      // Include the whole day.
+      $value->setTime(59, 59, 59);
+    }
     $this->endDate = $value;
   }
 
@@ -215,7 +219,9 @@ class NexteuropaNewsroomPage {
       $data = [];
       if ($items) {
         foreach ($items as $item) {
-          $data[] = node_load($item->nid);
+          $node = node_load($item->nid);
+          $node->related_items = NexteuropaNewsroomRelatedItemHelper::getRelatedItems($item->nid);
+          $data[$item->nid] = $node;
         }
       }
 
@@ -344,7 +350,7 @@ class NexteuropaNewsroomPage {
     $query->orderBy('end_date', 'DESC');
 
     if ($this->getType()) {
-      $query->condition('type_field.field_newsroom_item_type_tid', NexteuropaNewsroomHelper::getTypeChildren($this->getType()->tid));
+      $query->condition('type_field.field_newsroom_item_type_tid', NexteuropaNewsroomVocabularyHelper::getTypeChildren($this->getType()->tid));
     }
 
     if ($this->getTopic()) {
@@ -365,7 +371,7 @@ class NexteuropaNewsroomPage {
 
       $db_and = db_and();
       $db_and->isNull('d.field_newsroom_item_date_value2');
-      $db_and->condition('n.created', $this->getEndDate()->getTimestamp(), '<=');
+      $db_and->condition('d.field_newsroom_item_date_value', $this->getEndDate()->getTimestamp(), '<=');
       $db_or->condition($db_and);
       $query->condition($db_or);
     }
@@ -404,7 +410,7 @@ class NexteuropaNewsroomPage {
     $featured_item_id = NexteuropaNewsroomHelper::getFieldValue($this->getType(), 'field_newsroom_featured_item', 'target_id');
     if (empty($featured_item_id)) {
       // If featured item is not set we try to take from feature newsroom type.
-      if ($featured_type = NexteuropaNewsroomHelper::getNewsroomType(variable_get('nexteuropa_newsroom_featured_type'))) {
+      if ($featured_type = NexteuropaNewsroomVocabularyHelper::getNewsroomType(variable_get('nexteuropa_newsroom_featured_type'))) {
         $featured_item_id = NexteuropaNewsroomHelper::getFieldValue($featured_type, 'field_newsroom_featured_item', 'target_id');
       }
     }
@@ -419,7 +425,7 @@ class NexteuropaNewsroomPage {
 
         if ($featured_node = node_load($featured_item_id)) {
 
-          $type = NexteuropaNewsroomHelper::getNewsroomType(NexteuropaNewsroomHelper::getFieldValue($featured_node, 'field_newsroom_item_type', 'tid'));
+          $type = NexteuropaNewsroomVocabularyHelper::getNewsroomType(NexteuropaNewsroomHelper::getFieldValue($featured_node, 'field_newsroom_item_type', 'tid'));
 
           $image_style = 'large';
           $image = $this->getNodeImage($featured_node, 'field_newsroom_illustrative_img', $image_style);
