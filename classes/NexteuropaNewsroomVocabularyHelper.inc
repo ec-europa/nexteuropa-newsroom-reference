@@ -176,6 +176,20 @@ class NexteuropaNewsroomVocabularyHelper {
   }
 
   /**
+   * Gets newsroom service vocabulary.
+   *
+   * @return object
+   *   Newsroom service vocabulary.
+   */
+  public static function getNewsroomServiceVocabulary() {
+    $data = &drupal_static(__FUNCTION__);
+    if (empty($data)) {
+      $data = taxonomy_vocabulary_machine_name_load(NEXTEUROPA_NEWSROOM_SERVICE_VOCABULARY);
+    }
+    return $data;
+  }
+
+  /**
    * Gets newsroom topics.
    *
    * @return array
@@ -185,6 +199,21 @@ class NexteuropaNewsroomVocabularyHelper {
     $data = &drupal_static(__FUNCTION__);
     if (empty($data)) {
       $vocabulary = self::getNewsroomTopicVocabulary();
+      $data = self::getNewsroomTaxonomyTerms($vocabulary->vid);
+    }
+    return $data;
+  }
+
+  /**
+   * Gets newsroom services.
+   *
+   * @return array
+   *   Newsroom services.
+   */
+  public static function getNewsroomServices() {
+    $data = &drupal_static(__FUNCTION__);
+    if (empty($data)) {
+      $vocabulary = self::getNewsroomServiceVocabulary();
       $data = self::getNewsroomTaxonomyTerms($vocabulary->vid);
     }
     return $data;

@@ -91,15 +91,15 @@ function _nexteuropa_newsroom_attach_css() {
 function _nexteuropa_newsroom_delete_item($type, $newsroom_id) {
   switch ($type) {
     case NEXTEUROPA_NEWSROOM_TYPE:
-      _nexteuropa_newsroom_taxonomy_term_delete('field_newsroom_type_id', $newsroom_id);
+      _nexteuropa_newsroom_taxonomy_term_delete('field_newsroom_type_id', $newsroom_id, NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY);
       break;
 
     case NEXTEUROPA_NEWSROOM_TOPIC:
-      _nexteuropa_newsroom_taxonomy_term_delete('field_newsroom_topic_id', $newsroom_id);
+      _nexteuropa_newsroom_taxonomy_term_delete('field_newsroom_topic_id', $newsroom_id, NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY);
       break;
 
     case NEXTEUROPA_NEWSROOM_SERVICE:
-      _nexteuropa_newsroom_taxonomy_term_delete('field_newsroom_service_id', $newsroom_id);
+      _nexteuropa_newsroom_taxonomy_term_delete('field_newsroom_service_id', $newsroom_id, NEXTEUROPA_NEWSROOM_SERVICE_VOCABULARY);
       break;
 
     case NEXTEUROPA_NEWSROOM_ITEM:
@@ -462,10 +462,12 @@ function _nexteuropa_newsroom_item_import_access() {
  *   Field name to store original newsroom ID.
  * @param int $original_newsroom_id
  *   Original newsroom id.
+ * @param string $bundle
+ *   Bundle.
  */
-function _nexteuropa_newsroom_taxonomy_term_delete($field_name, $original_newsroom_id = 0) {
-  if ($original_newsroom_id && $terms = NexteuropaNewsroomHelper::getTaxonomyTermFromField($field_name, $original_newsroom_id)) {
-    taxonomy_term_delete($terms[0]);
+function _nexteuropa_newsroom_taxonomy_term_delete($field_name, $original_newsroom_id, $bundle) {
+  if ($term = NexteuropaNewsroomHelper::getTaxonomyTermFromField($field_name, $original_newsroom_id, $bundle)) {
+    taxonomy_term_delete($term->tid);
     drupal_set_message(t('Item has been deleted.'));
   }
   else {
@@ -531,17 +533,17 @@ function _nexteuropa_newsroom_redirect($redirect_type = NEXTEUROPA_NEWSROOM_ITEM
 
     // Newsroom Item Type based on original import name.
     case NEXTEUROPA_NEWSROOM_TYPE:
-      $path = _newsroom_nexteuropa_get_term_redirect_path('field_newsroom_type_id', $newsroom_entity_id);
+      $path = _newsroom_nexteuropa_get_term_redirect_path('field_newsroom_type_id', $newsroom_entity_id, NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY);
       break;
 
     // Newsroom Topic based on original newsroom topic ID.
     case NEXTEUROPA_NEWSROOM_TOPIC:
-      $path = _newsroom_nexteuropa_get_term_redirect_path('field_newsroom_topic_id', $newsroom_entity_id);
+      $path = _newsroom_nexteuropa_get_term_redirect_path('field_newsroom_topic_id', $newsroom_entity_id, NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY);
       break;
 
     // Newsroom service.
     case NEXTEUROPA_NEWSROOM_SERVICE:
-      $path = _newsroom_nexteuropa_get_term_redirect_path('field_newsroom_service_id', $newsroom_entity_id);
+      $path = _newsroom_nexteuropa_get_term_redirect_path('field_newsroom_service_id', $newsroom_entity_id, NEXTEUROPA_NEWSROOM_SERVICE_VOCABULARY);
       break;
   }
 
@@ -560,16 +562,16 @@ function _nexteuropa_newsroom_redirect($redirect_type = NEXTEUROPA_NEWSROOM_ITEM
  *   Field name with original newsroom id.
  * @param int $newsroom_entity_id
  *   Original newsroom id.
+ * @param string $bundle
+ *   Bundle.
  *
  * @return string
  *   Taxonomy term url.
  */
-function _newsroom_nexteuropa_get_term_redirect_path($field_name, $newsroom_entity_id) {
+function _newsroom_nexteuropa_get_term_redirect_path($field_name, $newsroom_entity_id, $bundle) {
   $path = FALSE;
-  if ($taxonomy_term_ids = NexteuropaNewsroomHelper::getTaxonomyTermFromField($field_name, $newsroom_entity_id)) {
-    if ($taxonomy_term = taxonomy_term_load($taxonomy_term_ids[0])) {
-      $path = 'taxonomy/term/' . $taxonomy_term->tid;
-    }
+  if ($taxonomy_term = NexteuropaNewsroomHelper::getTaxonomyTermFromField($field_name, $newsroom_entity_id, $bundle)) {
+    $path = 'taxonomy/term/' . $taxonomy_term->tid;
   }
   return $path;
 }

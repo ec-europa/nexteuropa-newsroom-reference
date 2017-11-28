@@ -99,20 +99,29 @@ class NexteuropaNewsroomHelper {
    *   Taxonomy ids.
    */
   public static function getTaxonomyTermFromField($field_name, $field_value, $bundle = NULL) {
-    $term_ids = [];
-    $field_value = is_array($field_value) ? $field_value : [$field_value];
-    $query = new EntityFieldQuery();
-    $query->entityCondition('entity_type', 'taxonomy_term')
-      ->fieldCondition($field_name, 'value', $field_value);
-    if ($bundle) {
-      $query->entityCondition('bundle', $bundle);
-    }
-    $result = $query->execute();
-    if (!empty($result['taxonomy_term'])) {
-      $term_ids = array_keys($result['taxonomy_term']);
+    $taxonomy_items = [];
+
+    switch ($bundle) {
+      case NEXTEUROPA_NEWSROOM_TYPE_VOCABULARY:
+        $taxonomy_items = NexteuropaNewsroomVocabularyHelper::getNewsroomTypes();
+        break;
+
+      case NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY:
+        $taxonomy_items = NexteuropaNewsroomVocabularyHelper::getNewsroomTopics();
+        break;
+
+      case NEXTEUROPA_NEWSROOM_SERVICE_VOCABULARY:
+        $taxonomy_items = NexteuropaNewsroomVocabularyHelper::getNewsroomServices();
+        break;
     }
 
-    return $term_ids;
+    foreach ($taxonomy_items as $taxonomy_term_item) {
+      if (NexteuropaNewsroomHelper::getFieldValue($taxonomy_term_item, $field_name) == $field_value) {
+        return $taxonomy_term_item;
+      }
+    }
+
+    return NULL;
   }
 
   /**
