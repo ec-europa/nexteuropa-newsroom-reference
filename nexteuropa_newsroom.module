@@ -423,7 +423,6 @@ function nexteuropa_newsroom_node_view($node, $view_mode, $langcode) {
 
     $type = NexteuropaNewsroomVocabularyHelper::getNewsroomType(NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid'));
     $main_link_url = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_item_main_link', 'url');
-    $teaser_only = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_teaser_only', 'value');
 
     // Custom main link title per type.
     if ($type && $main_link_url) {
