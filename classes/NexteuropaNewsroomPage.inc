@@ -109,7 +109,7 @@ class NexteuropaNewsroomPage {
   public function setEndDate($value) {
     if (!empty($value)) {
       // Include the whole day.
-      $value->setTime(59, 59, 59);
+      $value->setTime(23, 59, 59);
     }
     $this->endDate = $value;
   }
