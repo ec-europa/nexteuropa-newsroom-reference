@@ -198,7 +198,7 @@ function nexteuropa_newsroom_ds_field_settings_info() {
       ),
     ),
     'newsroom_share_block' => array(
-      'weight' => '18',
+      'weight' => '19',
       'label' => 'hidden',
       'format' => 'default',
     ),

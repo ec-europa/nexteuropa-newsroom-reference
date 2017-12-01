@@ -11,6 +11,7 @@
     <li class="listing__item">
       <div class="listing__item__wrapper">
         <?php echo drupal_render(node_view($item, 'newsroom_teaser')); ?>
+        <?php echo $item->related_items; ?>
       </div>
     </li>
     <?php endforeach; ?>
