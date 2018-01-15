@@ -359,14 +359,6 @@ class NexteuropaNewsroomImporterHelper {
         ],
       ],
       [
-        'field' => 'field_tags',
-        'query' => 'category[@domain="Policy" or @domain="Activity" or @domain="Theme" or @domain="Collection" or @domain="Tag"]/text()',
-        'options' => [
-          'term_search' => '0',
-          'autocreate' => 0,
-        ],
-      ],
-      [
         'field' => 'field_newsroom_item_id',
         'query' => 'infsonewsroom:BasicId',
         'unique' => 1,
