@@ -887,7 +887,6 @@ function nexteuropa_newsroom_field_group_info() {
       0 => 'field_newsroom_highlighted_topic',
       1 => 'field_newsroom_topics',
       2 => 'field_newsroom_primary_topic',
-      3 => 'field_tags',
     ),
     'format_type' => 'tab',
     'format_settings' => array(

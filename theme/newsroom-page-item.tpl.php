@@ -10,7 +10,8 @@
     <?php foreach($items as $item): ?>
     <li class="listing__item">
       <div class="listing__item__wrapper">
-        <?php echo drupal_render(node_view($item, 'newsroom_teaser')); ?>
+        <?php $node_view = node_view($item, 'newsroom_teaser'); ?>
+        <?php echo drupal_render($node_view); ?>
         <?php echo $item->related_items; ?>
       </div>
     </li>
