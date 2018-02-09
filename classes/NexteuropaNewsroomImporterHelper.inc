@@ -286,6 +286,18 @@ class NexteuropaNewsroomImporterHelper {
         ],
       ],
       [
+        'field' => 'field_newsroom_publication_date:start',
+        'query' => 'pubDate/text()',
+        'tamper' => [
+          'plugins' => [
+            'find_replace' => [
+              'replacement' => 'GMT',
+            ],
+            'strtotime' => [],
+          ],
+        ],
+      ],
+      [
         'field' => 'field_newsroom_private_img:uri',
         'query' => 'enclosure[@type="image/jpeg" and @schema="Private"]/@url',
       ],
