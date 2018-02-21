@@ -412,6 +412,12 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
     '#default_value' => variable_get('nexteuropa_newsroom_use_default_view_mode', 1),
   ];
 
+  $form['viewmodes']['nexteuropa_newsroom_redirect_short_items'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Redirect short items'),
+    '#default_value' => variable_get('nexteuropa_newsroom_redirect_short_items', 0),
+  ];
+
   // Attach a css to the admin settings form.
   $form['#attached']['css'] = [
     drupal_get_path('module', 'nexteuropa_newsroom') . '/styles/nexteuropa_newsroom_admin_setting.css',
