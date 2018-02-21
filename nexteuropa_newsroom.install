@@ -525,3 +525,19 @@ function nexteuropa_newsroom_update_7113() {
   variable_del('newsroom_display_agenda');
   variable_del('newsroom_summary_block_columns');
 }
+
+/**
+ * Remove field_tags.
+ */
+function nexteuropa_newsroom_update_7114() {
+  if ($instance = field_info_instance('node', 'field_tags', 'newsroom_item')) {
+    field_delete_instance($instance, TRUE);
+  }
+}
+
+/**
+ * Remove field group section.
+ */
+function nexteuropa_newsroom_update_7115() {
+  _nexteuropa_newsroom_remove_group(['group_newsroom_item_form_section|node|newsroom_item|form']);
+}
