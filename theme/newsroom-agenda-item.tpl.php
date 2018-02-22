@@ -17,12 +17,18 @@
                     <div class="listing__wrapper">
                             <div class="meta">
                         <span class="meta__item">
-                            <?php //if (!empty($item->end_date) && $item->end_date != $item->start_date): ?>
-                              <?php //echo t('From @start_date', ['@start_date' => $item->prepared_start_date]); ?>
-                              <?php //echo t('to @end_date', ['@end_date' => $item->prepared_end_date]); ?>
-                            <?php //else: ?>
-                              <?php //echo $item->prepared_start_date; ?>
-                            <?php //endif; ?>
+                            <?php
+// If (!empty($item->end_date) && $item->end_date != $item->start_date): ?>
+                              <?php
+// Echo t('From @start_date', ['@start_date' => $item->prepared_start_date]);. ?>
+                              <?php
+// Echo t('to @end_date', ['@end_date' => $item->prepared_end_date]);. ?>
+                            <?php
+// else: ?>
+                              <?php
+// Echo $item->prepared_start_date;. ?>
+                            <?php
+// endif;. ?>
                         </span>
                             </div>
                             <h3 class="listing__title">

@@ -197,7 +197,7 @@ class NexteuropaNewsroomAgenda {
    * Sets upcoming items.
    *
    * @param array $value
-   *    Upcoming agenda items.
+   *   Upcoming agenda items.
    */
   public function setUpcomingItems($value) {
     $this->upcomingItems = $this->prepareItemsOutput($value, NexteuropaNewsroomAgenda::AGENDA_TYPE_UPCOMING);
@@ -217,7 +217,7 @@ class NexteuropaNewsroomAgenda {
    * Sets past items.
    *
    * @param array $value
-   *    Past agenda items.
+   *   Past agenda items.
    */
   public function setPastItems($value) {
     $this->pastItems = $this->prepareItemsOutput($value, NexteuropaNewsroomAgenda::AGENDA_TYPE_PAST);
@@ -325,12 +325,12 @@ class NexteuropaNewsroomAgenda {
     else {
       $this->getBaseQuery();
       $items = $this->loadResult();
-      $start_time = microtime(true);
+      $start_time = microtime(TRUE);
       $data = $this->prepareDateObjects($items);
-      $end_time = microtime(true);
+      $end_time = microtime(TRUE);
       $total_time = $end_time - $start_time;
-      //var_dump($data);
-      //exit($total_time . ' seconds');
+      // var_dump($data);
+      // exit($total_time . ' seconds');.
       cache_set($cache_key, $data, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_agenda_result', 3600));
     }
 
@@ -377,18 +377,30 @@ class NexteuropaNewsroomAgenda {
     return $this->topics;
   }
 
+  /**
+   *
+   */
   protected function showNextEventMoreButton() {
     return $this->isShowNextEventMoreButton;
   }
 
+  /**
+   *
+   */
   protected function showPastEventMoreButton() {
     return $this->isShowPastEventMoreButton;
   }
 
+  /**
+   *
+   */
   protected function setNextEventMoreButton($value) {
     $this->isShowNextEventMoreButton = $value;
   }
 
+  /**
+   *
+   */
   protected function setPastEventMoreButton($value) {
     $this->isShowPastEventMoreButton = $value;
   }
@@ -492,16 +504,17 @@ class NexteuropaNewsroomAgenda {
         foreach ($items as $item) {
           $item_output[] = [
             'output' => theme('newsroom_agenda_item', [
-            'date' => theme('newsroom_agenda_date', [
-              'weekDay' => $this->getFormattedDatePartBy($item->start_date_obj, $item->end_date_obj, 'D'),
-              'day' => $this->getFormattedDatePartBy($item->start_date_obj, $item->end_date_obj, 'd'),
-              'month' =>  $this->getFormattedDatePartBy($item->start_date_obj, $item->end_date_obj, 'M'),
-              'year' =>  $this->getFormattedDatePartBy($item->start_date_obj, $item->end_date_obj, 'Y'),
-              'isPast' => $item->isPast,
+              'date' => theme('newsroom_agenda_date', [
+                'weekDay' => $this->getFormattedDatePartBy($item->start_date_obj, $item->end_date_obj, 'D'),
+                'day' => $this->getFormattedDatePartBy($item->start_date_obj, $item->end_date_obj, 'd'),
+                'month' => $this->getFormattedDatePartBy($item->start_date_obj, $item->end_date_obj, 'M'),
+                'year' => $this->getFormattedDatePartBy($item->start_date_obj, $item->end_date_obj, 'Y'),
+                'isPast' => $item->isPast,
+              ]),
+              'item' => $item,
             ]),
-            'item' => $item,
-          ]),
-            'visible' => $item->visible];
+            'visible' => $item->visible,
+          ];
 
         }
         $grouped_output = theme('newsroom_agenda_content_items', ['item_type' => $title, 'items' => $item_output, 'agenda_block' => $agenda_type]);
@@ -512,6 +525,9 @@ class NexteuropaNewsroomAgenda {
     return $output;
   }
 
+  /**
+   *
+   */
   protected function getFormattedDatePartBy($start_date, $end_date, $format) {
     $formatted_date_part = NULL;
     $isSameDates = $start_date->format('Y-m-d') === $end_date->format('Y-m-d');
@@ -624,7 +640,7 @@ class NexteuropaNewsroomAgenda {
    */
   protected function getUniqueCachePart() {
     return md5($this->getCurrentDate()
-        ->format(NexteuropaNewsroomAgenda::DATE_FORMAT) . $this->getTypeId() . implode('', $this->getTopicsId()));
+      ->format(NexteuropaNewsroomAgenda::DATE_FORMAT) . $this->getTypeId() . implode('', $this->getTopicsId()));
   }
 
   /**
@@ -748,15 +764,15 @@ class NexteuropaNewsroomAgenda {
     return $agenda_item;
   }
 
-/**
-* Creates agenda items based on blocks.
-*
-* @param string $blockName
-*   Block name.
-*
-* @return array of objects
-*   Array of objects.
-*/
+  /**
+   * Creates agenda items based on blocks.
+   *
+   * @param string $blockName
+   *   Block name.
+   *
+   * @return array of objects
+   *   Array of objects.
+   */
   protected function createAgendaItemsFor($blockName) {
     $items = [];
     $current_date = $this->getCurrentDate();
@@ -767,17 +783,19 @@ class NexteuropaNewsroomAgenda {
 
     foreach ($this->getResult() as $item) {
       switch ($blockName) {
-        case NexteuropaNewsroomAgenda::AGENDA_TYPE_CURRENT :
+        case NexteuropaNewsroomAgenda::AGENDA_TYPE_CURRENT:
           if ($item->start_date_obj <= $current_date && $item->end_date_obj >= $current_date) {
             $items[] = $this->getCacheAgendaItem($item);
           }
           break;
-        case NexteuropaNewsroomAgenda::AGENDA_TYPE_UPCOMING :
+
+        case NexteuropaNewsroomAgenda::AGENDA_TYPE_UPCOMING:
           if ($item->start_date_obj >= $upcoming_date_start) {
             $items[] = $this->getCacheAgendaItem($item);
           }
           break;
-        case NexteuropaNewsroomAgenda::AGENDA_TYPE_PAST :
+
+        case NexteuropaNewsroomAgenda::AGENDA_TYPE_PAST:
           if ($item->end_date_obj <= $past_date_start) {
             $item->isPast = TRUE;
             $items[] = $this->getCacheAgendaItem($item);
@@ -922,9 +940,9 @@ class NexteuropaNewsroomAgenda {
     $next_day = clone $this->getCurrentDate();
     $next_day->modify('+1 day');
 
-      $this->findCurrentItems();
-      $this->findUpcomingItems();
-      $this->findPastItems();
+    $this->findCurrentItems();
+    $this->findUpcomingItems();
+    $this->findPastItems();
   }
 
   /**
@@ -984,8 +1002,10 @@ class NexteuropaNewsroomAgenda {
     $this->setPastItems($past_items);
   }
 
-  protected function groupByType($items)
-  {
+  /**
+   *
+   */
+  protected function groupByType($items) {
     $type_id = 0;
     $types_array = [];
     $number_of_items = variable_get('nexteuropa_newsroom_agenda_list_items', 5);
@@ -1005,6 +1025,9 @@ class NexteuropaNewsroomAgenda {
     return $types_array;
   }
 
+  /**
+   *
+   */
   protected function checkItemsToAddMoreButton($grouped_items) {
     foreach ($grouped_items as $items) {
       foreach ($items as $item) {

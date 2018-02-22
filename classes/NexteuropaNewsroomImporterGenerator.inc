@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * @file
  * Code for the NexteuropaNewsroomImporterGenerator class.

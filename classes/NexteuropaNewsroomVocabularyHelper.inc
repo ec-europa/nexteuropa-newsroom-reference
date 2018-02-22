@@ -16,7 +16,7 @@ class NexteuropaNewsroomVocabularyHelper {
    * @param int $term_tid
    *   Term id.
    *
-   * @return array.
+   * @return array
    *   Tidss
    */
   public static function getTypeChildren($term_tid) {
