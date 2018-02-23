@@ -175,15 +175,15 @@ function nexteuropa_newsroom_proposal_form(array $form, array $form_state) {
  *   Rendable form array.
  */
 function nexteuropa_newsroom_newsletter_subscription_form(array $form, array &$form_state) {
-
   $args = $form_state['build_info']['args'][0];
+  $title = t('Subscribe to <em>@name</em>', ['@name' => $args['name']]);
   $form = [];
   $form['#prefix'] = '<div class="newsroom-newsletter-subscription">';
   $form['#suffix'] = '</div>';
   $form['#token'] = FALSE;
   $form['#action'] = NexteuropaNewsroomHelper::getNewsroomUrl('subscription-quick-generic.cfm');
   $form['intro'] = [
-    '#markup' => '<div class="newsroom-newsletter-subscription-title">' . t('Subscribe to <em>@name</em>', ['@name' => $args['name']]) . '&nbsp;-&nbsp;<a href="' . NexteuropaNewsroomHelper::getNewsroomUrl('newsletter-specific-archive.cfm?serviceId=' . $args['tid']) . '">' . t('See previous issues') . '</a></div>',
+    '#markup' => '<div class="newsroom-newsletter-subscription-title">' . $title . '&nbsp;-&nbsp;' . l(t('See previous issues'), NexteuropaNewsroomHelper::getNewsroomUrl('newsletter-specific-archive.cfm?serviceId=' . $args['tid'])) . '</div>',
   ];
   $form['label'] = [
     '#markup' => '<label for="email">' . t('Subscribe email') . '</label><div class="form-group newsroom-subscription-form-group">',
