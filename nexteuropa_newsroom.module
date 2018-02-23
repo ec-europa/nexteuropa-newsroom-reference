@@ -418,7 +418,8 @@ function nexteuropa_newsroom_views_data_alter(&$data) {
  * Implements hook_node_view().
  */
 function nexteuropa_newsroom_node_view($node, $view_mode, $langcode) {
-  if ($node->type == NEXTEUROPA_NEWSROOM_CONTENT_TYPE &&
+  $redirect = variable_get('nexteuropa_newsroom_redirect_short_items');
+  if (!empty($redirect) && $node->type == NEXTEUROPA_NEWSROOM_CONTENT_TYPE &&
     in_array($view_mode, ['full', 'newsroom_events', 'newsroom_default'])) {
 
     $type = NexteuropaNewsroomVocabularyHelper::getNewsroomType(NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid'));
