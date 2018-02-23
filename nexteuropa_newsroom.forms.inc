@@ -75,7 +75,7 @@ function nexteuropa_newsroom_form_newsroom_item_node_form_alter(&$form, &$form_s
  * @return array
  *   Rendable form array.
  */
-function nexteuropa_newsroom_proposal_form($form, $form_state) {
+function nexteuropa_newsroom_proposal_form(array $form, array $form_state) {
 
   global $user;
 
@@ -174,7 +174,7 @@ function nexteuropa_newsroom_proposal_form($form, $form_state) {
  * @return array
  *   Rendable form array.
  */
-function nexteuropa_newsroom_newsletter_subscription_form($form, &$form_state) {
+function nexteuropa_newsroom_newsletter_subscription_form(array $form, array &$form_state) {
 
   $args = $form_state['build_info']['args'][0];
   $form = [];
@@ -281,7 +281,7 @@ function _nexteuropa_newsroom_send_subscription_request($url, $service_id, $emai
  * @return array
  *   Ajax callback array.
  */
-function _nexteuropa_newsroom_newsletter_subscription_block_form_ajax($form, &$form_state) {
+function _nexteuropa_newsroom_newsletter_subscription_block_form_ajax(array $form, array &$form_state) {
   $form_id = $form['#form_id'];
   $selector = '#' . str_replace('_', '-', $form_id);
 
@@ -322,7 +322,7 @@ function _nexteuropa_newsroom_newsletter_subscription_block_form_ajax($form, &$f
  * @return array
  *   Rendable form array.
  */
-function nexteuropa_newsroom_agenda_filter_form($form, &$form_state, $type_id, $topic_id, $current_date, $result_topics) {
+function nexteuropa_newsroom_agenda_filter_form(array $form, array &$form_state, $type_id, $topic_id, $current_date, array $result_topics) {
   $topic_options = NexteuropaNewsroomHelper::getNewsroomTopicOptions($result_topics);
   $form = [];
   $form['type_id'] = [
@@ -366,7 +366,7 @@ function nexteuropa_newsroom_agenda_filter_form($form, &$form_state, $type_id, $
  * @param array $form_state
  *   Form state array.
  */
-function _nexteuropa_newsroom_agenda_form_submit(&$form, &$form_state) {
+function _nexteuropa_newsroom_agenda_form_submit(array &$form, array &$form_state) {
 
   $topic_id = !empty($form_state['values']['topic_id']) ? $form_state['values']['topic_id'] : NULL;
   $type_id = !empty($form_state['values']['type_id']) ? $form_state['values']['type_id'] : NULL;
@@ -391,7 +391,7 @@ function _nexteuropa_newsroom_agenda_form_submit(&$form, &$form_state) {
  * @return array
  *   Rendable form array.
  */
-function nexteuropa_newsroom_subscription_newsletter_form($form, $form_state, $service_id = NULL) {
+function nexteuropa_newsroom_subscription_newsletter_form(array $form, array $form_state, $service_id = NULL) {
   global $user;
 
   $form['#action'] = NexteuropaNewsroomHelper::getNewsroomUrl('subscription-quick-generic.cfm');
@@ -436,7 +436,7 @@ function nexteuropa_newsroom_subscription_newsletter_form($form, $form_state, $s
  * @return array
  *   Rendable form array.
  */
-function nexteuropa_newsroom_unsubscription_newsletter_form($form, $form_state, $url = NULL) {
+function nexteuropa_newsroom_unsubscription_newsletter_form(array $form, array $form_state, $url = NULL) {
   global $user;
   $form['#action'] = $url;
   $form['email'] = [
@@ -471,7 +471,7 @@ function nexteuropa_newsroom_unsubscription_newsletter_form($form, $form_state, 
  * @return array
  *   Ajax callback array.
  */
-function _nexteuropa_newsroom_newsletter_subscription_page_form_ajax($form, &$form_state) {
+function _nexteuropa_newsroom_newsletter_subscription_page_form_ajax(array $form, array &$form_state) {
   // @codingStandardsIgnoreLine
   $subscription = _nexteuropa_newsroom_send_subscription_request($form['#action'], $form_state['values']['service_id'], $form_state['input']['email']);
   $message = $subscription['feedbackMessage'];
@@ -507,7 +507,7 @@ function _nexteuropa_newsroom_newsletter_subscription_page_form_ajax($form, &$fo
  * @return array
  *   Ajax callback array.
  */
-function _nexteuropa_newsroom_newsletter_unsubscription_form_ajax($form, &$form_state) {
+function _nexteuropa_newsroom_newsletter_unsubscription_form_ajax(array $form, array &$form_state) {
   $subscription = _nexteuropa_newsroom_send_unsubscription_request($form['#action'], $form_state['values']['email']);
 
   if ($subscription && $subscription['SUCCESS'] == 1) {
@@ -546,7 +546,7 @@ function _nexteuropa_newsroom_newsletter_unsubscription_form_ajax($form, &$form_
  * @return array
  *   Rendable form array.
  */
-function nexteuropa_newsroom_page_filter_form($form, &$form_state, $type = NULL, $topic = NULL, $start_date = NULL, $end_date = NULL) {
+function nexteuropa_newsroom_page_filter_form(array $form, array &$form_state, $type = NULL, $topic = NULL, $start_date = NULL, $end_date = NULL) {
   $topic_options = NexteuropaNewsroomHelper::getNewsroomTopicOptions(NexteuropaNewsroomHelper::getPageUsedTopicsIds());
 
   $form = [];
@@ -605,7 +605,7 @@ function nexteuropa_newsroom_page_filter_form($form, &$form_state, $type = NULL,
  * @param array $form_state
  *   Form state array.
  */
-function _nexteuropa_newsroom_page_filter_form_submit(&$form, &$form_state) {
+function _nexteuropa_newsroom_page_filter_form_submit(array &$form, array &$form_state) {
   $topic_id = !empty($form_state['values']['topic_id']) ? $form_state['values']['topic_id'] : NULL;
   $type_id = !empty($form_state['values']['type_id']) ? $form_state['values']['type_id'] : NULL;
   $start_date = !empty($form_state['values']['start_date']) ? $form_state['values']['start_date'] : NULL;
@@ -623,7 +623,7 @@ function _nexteuropa_newsroom_page_filter_form_submit(&$form, &$form_state) {
  * @param array $form_state
  *   Form state.
  */
-function _nexteuropa_newsroom_validate_date(&$form, &$form_state) {
+function _nexteuropa_newsroom_validate_date(array &$form, array &$form_state) {
 
   $start_date = NULL;
   $end_date = NULL;

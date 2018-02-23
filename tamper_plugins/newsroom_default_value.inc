@@ -26,7 +26,7 @@ $plugin = [
  * @return array
  *   Form array.
  */
-function nexteuropa_newsroom_tamper_default_value_form($importer, $element_key, $settings) {
+function nexteuropa_newsroom_tamper_default_value_form($importer, $element_key, array $settings) {
   $form = [];
 
   $form['default_value'] = [
@@ -69,7 +69,7 @@ function nexteuropa_newsroom_tamper_default_value_form($importer, $element_key, 
  * @param string $source
  *   Source.
  */
-function nexteuropa_newsroom_tamper_default_value_callback($result, $item_key, $element_key, &$field, $settings, $source) {
+function nexteuropa_newsroom_tamper_default_value_callback(array $result, $item_key, $element_key, &$field, array $settings, $source) {
   // If the field is empty we set default value.
   if (!$field) {
     $trans = [];

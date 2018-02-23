@@ -72,7 +72,7 @@ class NexteuropaNewsroomVocabularyHelper {
    * @param array $behavior_types
    *   Behaviors.
    */
-  private static function findBehaviorType($behavior_types) {
+  private static function findBehaviorType(array $behavior_types) {
     $event_type_ids = [];
     $types = NexteuropaNewsroomVocabularyHelper::getNewsroomTypes();
     foreach ($types as $type) {
@@ -123,7 +123,7 @@ class NexteuropaNewsroomVocabularyHelper {
    * @return array
    *   Taxonomy terms.
    */
-  public static function findChildrenById($taxonomy_terms, $parent_tid) {
+  public static function findChildrenById(array $taxonomy_terms, $parent_tid) {
     $children = [];
     if ($taxonomy_terms) {
       foreach ($taxonomy_terms as $item) {
@@ -257,7 +257,7 @@ class NexteuropaNewsroomVocabularyHelper {
    * @return object
    *   Taxonomy term.
    */
-  public static function findTermById($taxonomy_terms, $tid) {
+  public static function findTermById(array $taxonomy_terms, $tid) {
     $taxonomy_term = NULL;
     if ($taxonomy_terms) {
       foreach ($taxonomy_terms as $item) {

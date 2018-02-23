@@ -19,7 +19,7 @@ class NexteuropaNewsroomHelper {
    * @return string
    *   Newsroom page URL.
    */
-  public static function getPageUrl($url_parts = []) {
+  public static function getPageUrl(array $url_parts = []) {
     return 'newsroom/' . implode('/', $url_parts);
   }
 
@@ -32,7 +32,7 @@ class NexteuropaNewsroomHelper {
    * @return string
    *   Newsroom rss URL.
    */
-  public static function getRssUrl($url_parts = []) {
+  public static function getRssUrl(array $url_parts = []) {
     return 'newsroom-rss/' . implode('/', $url_parts);
   }
 
@@ -266,7 +266,7 @@ class NexteuropaNewsroomHelper {
    * @return array
    *   Drop down options array.
    */
-  public static function getNewsroomTopicOptions($used_topics = [], $add_empty_value = TRUE) {
+  public static function getNewsroomTopicOptions(array $used_topics = [], $add_empty_value = TRUE) {
     $topic_options = self::getTaxonomyTermOptions(NexteuropaNewsroomVocabularyHelper::getNewsroomTopics());
     if (!empty($used_topics)) {
       foreach ($topic_options as $key => $topic) {
@@ -290,7 +290,7 @@ class NexteuropaNewsroomHelper {
    * @return array
    *   Array of nodes' ids.
    */
-  public static function getNodeRelatedToTopic($topic_ids = []) {
+  public static function getNodeRelatedToTopic(array $topic_ids = []) {
     $cache_key = 'get_node_related_to_topic:' . md5(implode('', $topic_ids));
     if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
       $data = $cache->data;
@@ -445,7 +445,7 @@ class NexteuropaNewsroomHelper {
    * @return array
    *   Dropdown options.
    */
-  public static function getTaxonomyTermOptions($terms) {
+  public static function getTaxonomyTermOptions(array $terms) {
     $options = [];
     if ($terms) {
       foreach ($terms as $term) {

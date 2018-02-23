@@ -30,7 +30,7 @@ class NexteuropaNewsroomSummaryBlock {
    * @param array $value
    *   Newsroom topics.
    */
-  public function setTopics($value) {
+  public function setTopics(array $value) {
     $this->topics = $value;
   }
 
@@ -40,7 +40,7 @@ class NexteuropaNewsroomSummaryBlock {
    * @param array $value
    *   Newsroom types.
    */
-  public function setTypes($value) {
+  public function setTypes(array $value) {
     $this->types = $value;
   }
 

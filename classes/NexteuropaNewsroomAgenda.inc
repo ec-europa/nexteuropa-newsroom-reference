@@ -33,15 +33,13 @@ class NexteuropaNewsroomAgenda {
   protected $query = NULL;
   protected $urlParts = [];
   protected $isBlock = FALSE;
-  protected $isShowNextEventMoreButton = FALSE;
-  protected $isShowPastEventMoreButton = FALSE;
 
   /**
    * NexteuropaNewsroomAgenda constructor.
    *
    * @param object $type
    *   Newsroom type.
-   * @param array $topics
+   * @param mixed $topics
    *   Newsroom topic.
    * @param object $current_day
    *   Current date.
@@ -179,7 +177,7 @@ class NexteuropaNewsroomAgenda {
    * @param array $value
    *   Current agenda items.
    */
-  public function setCurrentItems($value) {
+  public function setCurrentItems(array $value) {
     $this->currentItems = $this->prepareItemsOutput($value, NexteuropaNewsroomAgenda::AGENDA_TYPE_CURRENT);
   }
 
@@ -199,7 +197,7 @@ class NexteuropaNewsroomAgenda {
    * @param array $value
    *   Upcoming agenda items.
    */
-  public function setUpcomingItems($value) {
+  public function setUpcomingItems(array $value) {
     $this->upcomingItems = $this->prepareItemsOutput($value, NexteuropaNewsroomAgenda::AGENDA_TYPE_UPCOMING);
   }
 
@@ -219,7 +217,7 @@ class NexteuropaNewsroomAgenda {
    * @param array $value
    *   Past agenda items.
    */
-  public function setPastItems($value) {
+  public function setPastItems(array $value) {
     $this->pastItems = $this->prepareItemsOutput($value, NexteuropaNewsroomAgenda::AGENDA_TYPE_PAST);
   }
 
@@ -363,7 +361,7 @@ class NexteuropaNewsroomAgenda {
    * @param array $value
    *   Newsroom topic terms array.
    */
-  public function setTopics($value) {
+  public function setTopics(array $value) {
     $this->topics = $value;
   }
 
@@ -375,34 +373,6 @@ class NexteuropaNewsroomAgenda {
    */
   public function getTopics() {
     return $this->topics;
-  }
-
-  /**
-   *
-   */
-  protected function showNextEventMoreButton() {
-    return $this->isShowNextEventMoreButton;
-  }
-
-  /**
-   *
-   */
-  protected function showPastEventMoreButton() {
-    return $this->isShowPastEventMoreButton;
-  }
-
-  /**
-   *
-   */
-  protected function setNextEventMoreButton($value) {
-    $this->isShowNextEventMoreButton = $value;
-  }
-
-  /**
-   *
-   */
-  protected function setPastEventMoreButton($value) {
-    $this->isShowPastEventMoreButton = $value;
   }
 
   /**
@@ -486,7 +456,7 @@ class NexteuropaNewsroomAgenda {
   /**
    * Prepares agenda items for presenation.
    *
-   * @param array $items
+   * @param array $grouped_items
    *   Agenda items.
    * @param string $agenda_type
    *   Agenda type : current, upcoming, past.
@@ -494,7 +464,7 @@ class NexteuropaNewsroomAgenda {
    * @return string
    *   Output string.
    */
-  protected function prepareItemsOutput($grouped_items, $agenda_type) {
+  protected function prepareItemsOutput(array $grouped_items, $agenda_type) {
     $output = [];
     $output['visible_items'] = NULL;
     $grouped_output = NULL;
@@ -517,7 +487,12 @@ class NexteuropaNewsroomAgenda {
           ];
 
         }
-        $grouped_output = theme('newsroom_agenda_content_items', ['item_type' => $title, 'items' => $item_output, 'agenda_block' => $agenda_type]);
+        $grouped_output = theme('newsroom_agenda_content_items',
+          [
+            'item_type' => $title,
+            'items' => $item_output,
+            'agenda_block' => $agenda_type,
+          ]);
 
         $output['visible_items'] .= $grouped_output;
       }
@@ -526,7 +501,17 @@ class NexteuropaNewsroomAgenda {
   }
 
   /**
+   * Returns formatted date part.
    *
+   * @param object $start_date
+   *   Start date.
+   * @param object $end_date
+   *   End date.
+   * @param string $format
+   *   End date.
+   *
+   * @return string
+   *   Formatted date part string.
    */
   protected function getFormattedDatePartBy($start_date, $end_date, $format) {
     $formatted_date_part = NULL;
@@ -555,7 +540,7 @@ class NexteuropaNewsroomAgenda {
    * @return array
    *   Group agenda items.
    */
-  protected function groupItems($items, $agenda_type) {
+  protected function groupItems(array $items, $agenda_type) {
     $count = 0;
     $type_id = 0;
     $number_of_items = variable_get('nexteuropa_newsroom_agenda_list_items', 10);
@@ -735,12 +720,12 @@ class NexteuropaNewsroomAgenda {
   }
 
   /**
-   * Creates agenda item based on current date.
+   * Adds additional info and caches agenda item.
    *
-   * @param object $current_date
-   *   Current date object.
+   * @param object $item
+   *   Current data object.
    *
-   * @return NexteuropaNewsroomAgendaItem
+   * @return object
    *   Agenda item.
    */
   protected function getCacheAgendaItem(&$item) {
@@ -765,13 +750,13 @@ class NexteuropaNewsroomAgenda {
   }
 
   /**
-   * Creates agenda items based on blocks.
+   * Creates agenda items based on blocks and specific date criteria.
    *
    * @param string $blockName
    *   Block name.
    *
-   * @return array of objects
-   *   Array of objects.
+   * @return array
+   *   Array of items.
    */
   protected function createAgendaItemsFor($blockName) {
     $items = [];
@@ -816,7 +801,7 @@ class NexteuropaNewsroomAgenda {
    * @return array
    *   Prepared agenda items.
    */
-  protected function prepareDateObjects($items) {
+  protected function prepareDateObjects(array $items) {
     if (!empty($items)) {
       foreach ($items as $key => $item) {
         $items[$key]->new = NexteuropaNewsroomHelper::isNewItem($item->created, $item->nid);
@@ -1003,9 +988,15 @@ class NexteuropaNewsroomAgenda {
   }
 
   /**
+   * Groups agenda items by item type.
    *
+   * @param array $items
+   *   Array of agenda items.
+   *
+   * @return array
+   *   Grouped array of items.
    */
-  protected function groupByType($items) {
+  protected function groupByType(array $items) {
     $type_id = 0;
     $types_array = [];
     $number_of_items = variable_get('nexteuropa_newsroom_agenda_list_items', 5);
@@ -1026,9 +1017,15 @@ class NexteuropaNewsroomAgenda {
   }
 
   /**
+   * Groups agenda items by item type.
    *
+   * @param array $grouped_items
+   *   Array of grouped agenda items.
+   *
+   * @return bool
+   *   flag to determine if we need to add more button.
    */
-  protected function checkItemsToAddMoreButton($grouped_items) {
+  protected function checkItemsToAddMoreButton(array $grouped_items) {
     foreach ($grouped_items as $items) {
       foreach ($items as $item) {
         if (!$item->visible) {

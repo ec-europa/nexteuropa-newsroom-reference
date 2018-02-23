@@ -142,7 +142,7 @@ function _nexteuropa_newsroom_newsletters_page() {
  * @return array
  *   Newsletter items prepared for output.
  */
-function _nexteuropa_newsroom_prepare_newsletters($newsletters = [], $subscriptions = []) {
+function _nexteuropa_newsroom_prepare_newsletters(array $newsletters = [], array $subscriptions = []) {
   $output = [];
   if (!empty($newsletters)) {
     foreach ($newsletters as $newsletter) {

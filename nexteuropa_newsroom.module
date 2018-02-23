@@ -253,7 +253,7 @@ function nexteuropa_newsroom_post_features_enable_feature($component) {
  * @return field_instances
  *   Array.
  */
-function _nexteuropa_newsroom_get_real_modes($field_instances, $modes = ['teaser', 'full'], $bundle = NEXTEUROPA_NEWSROOM_CONTENT_TYPE) {
+function _nexteuropa_newsroom_get_real_modes(array $field_instances, array $modes = ['teaser', 'full'], $bundle = NEXTEUROPA_NEWSROOM_CONTENT_TYPE) {
   // Get the current instances.
   $fields = field_info_instances('node', $bundle);
 
@@ -287,7 +287,7 @@ function _nexteuropa_newsroom_get_real_modes($field_instances, $modes = ['teaser
  * @return array
  *   Array.
  */
-function _nexteuropa_newsroom_get_real_groups($modes = ['teaser', 'full'], $bundle = NEXTEUROPA_NEWSROOM_CONTENT_TYPE) {
+function _nexteuropa_newsroom_get_real_groups(array $modes = ['teaser', 'full'], $bundle = NEXTEUROPA_NEWSROOM_CONTENT_TYPE) {
   $groups = [];
   foreach ($modes as $mode) {
     $groups[$mode] = field_group_info_groups('node', $bundle, $mode, TRUE);
@@ -702,7 +702,7 @@ function nexteuropa_newsroom_feeds_after_save(FeedsSource $source, $entity, $ite
  * @param string $default_language
  *   Default language code.
  */
-function _nexteuropa_newsroom_set_image_meta_info($image_field, $entity, $source, $item, $languages, $default_language) {
+function _nexteuropa_newsroom_set_image_meta_info($image_field, $entity, $source, array $item, array $languages, $default_language) {
   if ($fid = NexteuropaNewsroomHelper::getFieldValue($entity, $image_field, 'fid')) {
     if ($file = file_load($fid)) {
       $fields = [

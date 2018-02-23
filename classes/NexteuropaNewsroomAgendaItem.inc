@@ -30,7 +30,7 @@ class NexteuropaNewsroomAgendaItem {
    * @param array $value
    *   Agenda items.
    */
-  public function setItem($value) {
+  public function setItem(array $value) {
     $this->item = $value;
   }
 

@@ -18,7 +18,7 @@
   <?php endforeach; ?>
   <?php if (count($items) > $items_number_to_show_more_button) : ?>
       <div id="display-more-link" onclick="return Drupal.behaviors.nexteuropa_newsroom.showHiddenAgendaItems('<?php echo drupal_strtolower(sprintf('newsroom-%s-%s', $agenda_block, $item_type)); ?>', this)" class="newsroom-display-more btn btn-ctn">
-        <?php echo t(sprintf('Display more %s %s items', $agenda_block, drupal_strtolower($item_type))); ?>
+        <?php echo t('Display more @agenda_block @item_type items', ['agenda_block' => $agenda_block, 'item_type' => drupal_strtolower($item_type)]); ?>
       </div>
   <?php endif; ?>
 <?php endif; ?>

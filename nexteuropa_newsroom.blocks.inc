@@ -311,7 +311,7 @@ function _nexteuropa_newsroom_get_related_content($field_name, $node) {
  * @return array
  *   Array of objects to display.
  */
-function _nexteuropa_newsroom_prepare_related_content_array($ids) {
+function _nexteuropa_newsroom_prepare_related_content_array(array $ids) {
   $items = [];
   if (!empty($ids)) {
     foreach ($ids as $id) {
