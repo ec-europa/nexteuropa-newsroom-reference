@@ -173,7 +173,7 @@ function nexteuropa_newsroom_uninstall() {
   variable_del('nexteuropa_newsroom_page_items_number');
 
   variable_del('nexteuropa_newsroom_use_default_view_mode');
-  variable_del('nexteuropa_newsroom_redirect_short_items';
+  variable_del('nexteuropa_newsroom_redirect_short_items');
 }
 
 /**
