@@ -1118,4 +1118,5 @@ class NexteuropaNewsroomAgenda {
   private function sortAgendaItems($obj1, $obj2) {
     return $obj1->weight < $obj2->weight;
   }
+
 }
