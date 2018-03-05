@@ -325,7 +325,6 @@ class NexteuropaNewsroomAgenda {
       $data = $this->prepareDateObjects($items);
       cache_set($cache_key, $data, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_agenda_result', 3600));
     }
-
     $this->result = $data;
   }
 
@@ -589,10 +588,8 @@ class NexteuropaNewsroomAgenda {
     }
     else {
       $this->prepareAgenda();
-
       $items = $this->getCurrentItems();
       $next_items = $this->getUpcomingItems();
-
       $content = NULL;
       if (!empty($items) || !empty($next_items)) {
         $content = theme('newsroom_agenda_page', [
@@ -693,7 +690,6 @@ class NexteuropaNewsroomAgenda {
     $agenda_item = new NexteuropaNewsroomAgendaItem();
     $agenda_item->setDate(clone $current_date);
     $cache_key = 'get_agenda:create_agenda:' . $this->getUniqueCachePart() . $current_date->getTimestamp();
-
     if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
       $agenda_item = $cache->data;
     }
@@ -707,7 +703,6 @@ class NexteuropaNewsroomAgenda {
       }
       cache_set($cache_key, $agenda_item, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_agenda_build', 3600));
     }
-
     return $agenda_item;
   }
 
@@ -734,10 +729,8 @@ class NexteuropaNewsroomAgenda {
       $item->prepared_start_date = $item->start_date_obj->format(NexteuropaNewsroomAgenda::OUTPUT_DATE_FORMAT);
       $item->prepared_end_date = $item->end_date_obj->format(NexteuropaNewsroomAgenda::OUTPUT_DATE_FORMAT);
       $agenda_item = $item;
-
       cache_set($cache_key, $item, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_agenda_build', 3600));
     }
-
     return $agenda_item;
   }
 
@@ -779,7 +772,7 @@ class NexteuropaNewsroomAgenda {
     }
 
     $count = 0;
-    $total = 50;
+    $total = 20;
     foreach ($this->getResult() as $item) {
       switch ($blockName) {
         case NexteuropaNewsroomAgenda::AGENDA_TYPE_CURRENT:
@@ -805,12 +798,10 @@ class NexteuropaNewsroomAgenda {
           }
           break;
       }
-
       if ($count >= $total) {
         break;
       }
     }
-
     return $items;
   }
 
@@ -829,7 +820,6 @@ class NexteuropaNewsroomAgenda {
         $items[$key]->new = NexteuropaNewsroomHelper::isNewItem($item->created, $item->nid);
         $items[$key]->isPast = FALSE;
         $items[$key]->visible = TRUE;
-
         $start_date = new DateTime();
         $start_date->setTimestamp($item->start_date);
         $start_date->setTime(0, 0, 0);
@@ -841,11 +831,9 @@ class NexteuropaNewsroomAgenda {
         if (!empty($item->end_date)) {
           $end_date->setTimestamp($item->end_date);
         }
-
         $items[$key]->end_date_obj = $end_date;
       }
     }
-
     return $items;
   }
 
@@ -994,7 +982,6 @@ class NexteuropaNewsroomAgenda {
    */
   protected function findPastItems() {
     $past_items = NULL;
-
     $past_items = $this->createAgendaItemsFor(NexteuropaNewsroomAgenda::AGENDA_TYPE_PAST);
 
     $past_items = $this->groupByType($past_items);
@@ -1012,12 +999,10 @@ class NexteuropaNewsroomAgenda {
    *   Grouped array of items.
    */
   protected function groupByType(array $items) {
-    usort($items, array($this, 'sortAgendaItems'));
     $type_id = 0;
     $types_array = [];
     $number_of_items = variable_get('nexteuropa_newsroom_agenda_list_items', 5);
     $count = 0;
-
     foreach ($items as $item) {
       if ($type_id != $item->type_id) {
         $type_id = $item->type_id;
@@ -1028,7 +1013,6 @@ class NexteuropaNewsroomAgenda {
       $types_array[$item->name][] = $item;
       $count++;
     }
-
     return $types_array;
   }
 
@@ -1100,23 +1084,7 @@ class NexteuropaNewsroomAgenda {
     if ($this->getTopicName()) {
       $page_title .= ' ' . t('about !topic_title', ['!topic_title' => $this->getTopicName()]);
     }
-
     return $page_title;
-  }
-
-  /**
-   * Sorts agenda items.
-   *
-   * @param object $obj1
-   *   First object to compare.
-   * @param object $obj2
-   *   Second object to compare.
-   *
-   * @return bool
-   *   Comparison flag.
-   */
-  private function sortAgendaItems($obj1, $obj2) {
-    return $obj1->weight < $obj2->weight;
   }
 
 }
