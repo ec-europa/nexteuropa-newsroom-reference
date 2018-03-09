@@ -521,61 +521,6 @@ class NexteuropaNewsroomAgenda {
   }
 
   /**
-   * Group news items by type for agenda item.
-   *
-   * @param array $items
-   *   News items.
-   * @param string $agenda_type
-   *   Agenda type: upcoming, current, past.
-   *
-   * @return array
-   *   Group agenda items.
-   */
-  protected function groupItems(array $items, $agenda_type) {
-    $count = 0;
-    $type_id = 0;
-    $number_of_items = variable_get('nexteuropa_newsroom_agenda_list_items', 10);
-    $types_array = [];
-
-    foreach ($items as $item) {
-      if ($type_id != $item->type_id) {
-        $type_id = $item->type_id;
-        $count = 0;
-      }
-
-      $types_array[$item->type_id]['title'] = $item->name;
-
-      if ($agenda_type == NexteuropaNewsroomAgenda::AGENDA_TYPE_CURRENT) {
-        if ($count < $number_of_items) {
-          $types_array[$item->type_id]['visible_items'][] = $item;
-        }
-        else {
-          $types_array[$item->type_id]['invisible_items'][] = $item;
-        }
-
-        $count++;
-      }
-      else {
-        $types_array[$item->type_id]['visible_items'][] = $item;
-      }
-    }
-
-    foreach ($types_array as $key => &$type) {
-
-      $type['visible_output'] = !empty($type['visible_items']) ? theme('newsroom_agenda_content_items',
-        ['items' => $type['visible_items']]) : NULL;
-      $type['invisible_output'] = !empty($type['invisible_items']) ? theme('newsroom_agenda_content_items',
-      [
-        'items' => $type['invisible_items'],
-        'agenda_type' => $agenda_type,
-        'type_id' => $key,
-      ]) : NULL;
-    }
-
-    return $types_array;
-  }
-
-  /**
    * Generates content for Agenda block.
    *
    * @return string
@@ -678,35 +623,6 @@ class NexteuropaNewsroomAgenda {
   }
 
   /**
-   * Creates agenda item based on current date.
-   *
-   * @param object $current_date
-   *   Current date object.
-   *
-   * @return NexteuropaNewsroomAgendaItem
-   *   Agenda item.
-   */
-  protected function createAgendaItem($current_date) {
-    $agenda_item = new NexteuropaNewsroomAgendaItem();
-    $agenda_item->setDate(clone $current_date);
-    $cache_key = 'get_agenda:create_agenda:' . $this->getUniqueCachePart() . $current_date->getTimestamp();
-    if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
-      $agenda_item = $cache->data;
-    }
-    else {
-      // Search for items in result which start date is less than current and
-      // the end date is bigger than current.
-      foreach ($this->getResult() as $item) {
-        if ($item->start_date_obj <= $current_date && $item->end_date_obj >= $current_date) {
-          $agenda_item->addItem($item);
-        }
-      }
-      cache_set($cache_key, $agenda_item, NEXTEUROPA_NEWSROOM_CACHE_TABLE, time() + variable_get('nexteuropa_newsroom_ct_agenda_build', 3600));
-    }
-    return $agenda_item;
-  }
-
-  /**
    * Creates agenda items based on blocks and specific date criteria.
    *
    * @param string $blockName
@@ -736,108 +652,76 @@ class NexteuropaNewsroomAgenda {
       $isShowUpcomingBlock = FALSE;
       $isShowCurrentBlock = FALSE;
     }
-
     // Filter in the future.
-    if ($current_date > $real_current_date) {
+    if ($in_future = $current_date > $real_current_date) {
       $upcoming_date_start = $current_date;
       $isShowPastBlock = FALSE;
       $isShowCurrentBlock = FALSE;
     }
 
     $query_results = $this->getResult();
-    $countUpcoming = $countCurrent = $countPast = 0;
-    $total = 10;
-    switch ($blockName) {
-      case NexteuropaNewsroomAgenda::AGENDA_TYPE_CURRENT:
-        if ($isShowCurrentBlock == TRUE) {
-          $numEvents = $numProposals = $numTenders = $numConsultation = 0;
-          $event = $proposal = $tender = $consultation = array();
-          foreach ($query_results as $item) {
-            if ($item->start_date_obj->format('Ymd') <= $current_date->format('Ymd') && $item->end_date_obj->format('Ymd') >= $current_date->format('Ymd')) {
-              if ($item->name == 'Event' && $numEvents <= $total) {
-                $event[] = $this->getCacheAgendaItem($item);
-                ++$numEvents;
-              }
-              elseif ($item->name == 'Call for proposals' && $numProposals <= $total) {
-                $proposal[] = $this->getCacheAgendaItem($item);
-                ++$numProposals;
-              }
-              elseif ($item->name == 'Call for tenders' && $numTenders <= $total) {
-                $tender[] = $this->getCacheAgendaItem($item);
-                ++$numTenders;
-              }
-              elseif ($item->name == 'Consultation' && $numConsultation <= $total) {
-                $consultation[] = $this->getCacheAgendaItem($item);
-                ++$numConsultation;
-              }
-            }
-          }
-          $items = array_merge($event, $proposal, $tender, $consultation);
-          unset($current_date);
-        }
-        break;
+    $items_by_types = $this->getDistinctItemTypesArray($query_results);
+    $total = 35;
+    $show_items_total = variable_get('nexteuropa_newsroom_agenda_list_items', 5);
 
-      case NexteuropaNewsroomAgenda::AGENDA_TYPE_UPCOMING:
-        if ($isShowUpcomingBlock == TRUE) {
-          $numEvents = $numProposals = $numTenders = $numConsultation = 0;
-          $event = $proposal = $tender = $consultation = array();
-          foreach ($query_results as $item) {
-            if ($item->start_date_obj->format('Ymd') >= $upcoming_date_start->format('Ymd')) {
-              $item->isPast = FALSE;
-              if ($item->name == 'Event' && $numEvents < $total) {
-                $event[] = $this->getCacheAgendaItem($item);
-                ++$numEvents;
-              }
-              elseif ($item->name == 'Call for proposals' && $numProposals < $total) {
-                $proposal[] = $this->getCacheAgendaItem($item);
-                ++$numProposals;
-              }
-              elseif ($item->name == 'Call for tenders' && $numTenders < $total) {
-                $tender[] = $this->getCacheAgendaItem($item);
-                ++$numTenders;
-              }
-              elseif ($item->name == 'Consultation' && $numConsultation < $total) {
-                $consultation[] = $this->getCacheAgendaItem($item);
-                ++$numConsultation;
-              }
-            }
-          }
-          $items = array_merge($event, $proposal, $tender, $consultation);
-          unset($current_date);
-        }
-        break;
 
-      case NexteuropaNewsroomAgenda::AGENDA_TYPE_PAST:
-        if ($isShowPastBlock == TRUE) {
-          $numEvents = $numProposals = $numTenders = $numConsultation = 0;
-          $event = $proposal = $tender = $consultation = array();
-          foreach ($query_results as $item) {
-            if ($item->end_date_obj->format('Ymd') <= $past_date_start->format('Ymd')) {
-              $item->isPast = TRUE;
-              if ($item->name == 'Event' && $numEvents < $total) {
-                $event[] = $this->getCacheAgendaItem($item);
-                ++$numEvents;
-              }
-              elseif ($item->name == 'Call for proposals' && $numProposals < $total) {
-                $proposal[] = $this->getCacheAgendaItem($item);
-                ++$numProposals;
-              }
-              elseif ($item->name == 'Call for tenders' && $numTenders < $total) {
-                $tender[] = $this->getCacheAgendaItem($item);
-                ++$numTenders;
-              }
-              elseif ($item->name == 'Consultation' && $numConsultation < $total) {
-                $consultation[] = $this->getCacheAgendaItem($item);
-                ++$numConsultation;
-              }
-            }
-          }
-          $items = array_merge($event, $proposal, $tender, $consultation);
-          unset($current_date);
-        }
-        break;
+    if (NexteuropaNewsroomAgenda::AGENDA_TYPE_UPCOMING == $blockName) {
+      //We need to sort the items in ascending order for Upcoming events.
+      usort($query_results, array($this, "sortByDate"));
     }
-    return $items;
+
+    foreach ($query_results as $item) {
+      $temp_item = NULL;
+      switch ($blockName) {
+        case NexteuropaNewsroomAgenda::AGENDA_TYPE_CURRENT:
+          if ($isShowCurrentBlock && $item->start_date_obj->format('Ymd') <= $current_date->format('Ymd') && $item->end_date_obj->format('Ymd') >= $current_date->format('Ymd')) {
+            $temp_item = $this->getCacheAgendaItem($item);
+          }
+          break;
+        case NexteuropaNewsroomAgenda::AGENDA_TYPE_UPCOMING:
+          // If filter set to current date.
+          $condition_future = $item->start_date_obj->format('Ymd') >= $upcoming_date_start->format('Ymd');
+          // If filter set to future date.
+          if ($in_future) {
+            $condition_future = ($item->start_date_obj->format('Ymd') >= $upcoming_date_start->format('Ymd') || $item->end_date_obj->format('Ymd') >= $upcoming_date_start->format('Ymd'));
+          }
+          if ($isShowUpcomingBlock && $condition_future) {
+            $temp_item = $this->getCacheAgendaItem($item);
+          }
+          break;
+        case NexteuropaNewsroomAgenda::AGENDA_TYPE_PAST:
+          if ($isShowPastBlock && $item->end_date_obj->format('Ymd') <= $past_date_start->format('Ymd')) {
+              $item->isPast = TRUE;
+              $temp_item = $this->getCacheAgendaItem($item);
+            }
+          break;
+      }
+
+      if ($temp_item) {
+        $temp_item->visible = count($items_by_types[$temp_item->name]) < $show_items_total;
+        //We count no more than $total number of items per item type (for hiding).
+        if (count($items_by_types[$temp_item->name]) < $total) {
+          $items_by_types[$temp_item->name][] = $temp_item;
+        }
+        else {
+          break;
+        }
+      }
+    }
+
+    return $items_by_types;
+  }
+
+  function getDistinctItemTypesArray($items) {
+    $type_id = 0;
+    $types_array = [];
+    foreach ($items as $item) {
+      if ($type_id != $item->type_id) {
+        $type_id = $item->type_id;
+        $types_array[$item->name] = [];
+      }
+    }
+    return $types_array;
   }
 
   /**
@@ -1019,11 +903,7 @@ class NexteuropaNewsroomAgenda {
    */
   protected function findCurrentItems() {
     $current_items = NULL;
-
     $current_items = $this->createAgendaItemsFor(NexteuropaNewsroomAgenda::AGENDA_TYPE_CURRENT);
-
-    $current_items = $this->groupByType($current_items);
-
     $this->setCurrentItems($current_items);
   }
 
@@ -1032,11 +912,7 @@ class NexteuropaNewsroomAgenda {
    */
   protected function findUpcomingItems() {
     $upcoming_items = NULL;
-
     $upcoming_items = $this->createAgendaItemsFor(NexteuropaNewsroomAgenda::AGENDA_TYPE_UPCOMING);
-
-    $upcoming_items = $this->groupByType($upcoming_items);
-
     $this->setUpcomingItems($upcoming_items);
   }
 
@@ -1046,37 +922,7 @@ class NexteuropaNewsroomAgenda {
   protected function findPastItems() {
     $past_items = NULL;
     $past_items = $this->createAgendaItemsFor(NexteuropaNewsroomAgenda::AGENDA_TYPE_PAST);
-
-    $past_items = $this->groupByType($past_items);
-
     $this->setPastItems($past_items);
-  }
-
-  /**
-   * Groups agenda items by item type.
-   *
-   * @param array $items
-   *   Array of agenda items.
-   *
-   * @return array
-   *   Grouped array of items.
-   */
-  protected function groupByType(array $items) {
-    $type_id = 0;
-    $types_array = [];
-    $number_of_items = variable_get('nexteuropa_newsroom_agenda_list_items', 5);
-    $count = 0;
-    foreach ($items as $item) {
-      if ($type_id != $item->type_id) {
-        $type_id = $item->type_id;
-        $types_array[$item->name] = [];
-        $count = 0;
-      }
-      $item->visible = $number_of_items > $count;
-      $types_array[$item->name][] = $item;
-      $count++;
-    }
-    return $types_array;
   }
 
   /**
@@ -1148,6 +994,10 @@ class NexteuropaNewsroomAgenda {
       $page_title .= ' ' . t('about !topic_title', ['!topic_title' => $this->getTopicName()]);
     }
     return $page_title;
+  }
+
+  protected function sortByDate($item1, $item2) {
+    return $item1->start_date_obj > $item2->start_date_obj;
   }
 
 }
