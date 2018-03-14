@@ -419,8 +419,7 @@ function nexteuropa_newsroom_views_data_alter(&$data) {
  * Implements hook_node_view().
  */
 function nexteuropa_newsroom_node_view($node, $view_mode, $langcode) {
-  $redirect = variable_get('nexteuropa_newsroom_redirect_short_items');
-  if (!empty($redirect) && $node->type == NEXTEUROPA_NEWSROOM_CONTENT_TYPE &&
+  if ($node->type == NEXTEUROPA_NEWSROOM_CONTENT_TYPE &&
     in_array($view_mode, ['full', 'newsroom_events', 'newsroom_default'])) {
 
     $type = NexteuropaNewsroomVocabularyHelper::getNewsroomType(NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid'));
@@ -1036,8 +1035,8 @@ function nexteuropa_newsroom_block_view_alter(&$data, $block) {
 function nexteuropa_newsroom_preprocess_node(&$variables) {
   if ($variables['type'] == NEXTEUROPA_NEWSROOM_CONTENT_TYPE) {
     $node = $variables['node'];
-
-    if (in_array($variables['view_mode'],
+    $redirect = variable_get('nexteuropa_newsroom_redirect_short_items');
+    if (!empty($redirect) && in_array($variables['view_mode'],
       ['full', 'newsroom_events', 'newsroom_default'])) {
       $type = NexteuropaNewsroomVocabularyHelper::getNewsroomType(NexteuropaNewsroomHelper::getFieldValue($node, 'field_newsroom_item_type', 'tid'));
       $main_link_url = NexteuropaNewsroomHelper::getFieldTranslatedValue($node, 'field_newsroom_item_main_link', 'url');
