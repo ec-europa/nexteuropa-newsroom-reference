@@ -114,7 +114,7 @@ class NexteuropaNewsroomImporterHelper {
    *   Importer ID.
    *
    * @return string
-   *    Taxonomy term redirect URL.
+   *   Taxonomy term redirect URL.
    */
   public static function getTaxonomyTermImportPath($type, $newsroom_id, $importer_id) {
     $url = self::getImporterUrl($importer_id) . variable_get('nexteuropa_newsroom_single_' . $type . '_import_segment') . $newsroom_id;
@@ -143,7 +143,7 @@ class NexteuropaNewsroomImporterHelper {
   /**
    * Importers list.
    *
-   * @return array $importers
+   * @return array
    *   Returns an array of Importers IDs.
    */
   public static function returnImporters() {
