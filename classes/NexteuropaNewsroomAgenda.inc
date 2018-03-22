@@ -660,7 +660,7 @@ class NexteuropaNewsroomAgenda {
 
     $query_results = $this->getResult();
     $items_by_types = $this->getDistinctItemTypesArray($query_results);
-    $total = 40;
+    $total = 30;
     $show_items_total = variable_get('nexteuropa_newsroom_agenda_list_items', 5);
 
     if (NexteuropaNewsroomAgenda::AGENDA_TYPE_UPCOMING == $blockName) {
@@ -670,6 +670,10 @@ class NexteuropaNewsroomAgenda {
 
     foreach ($query_results as $item) {
       $temp_item = NULL;
+      // Reduce the page loading time by breaking/continuing for each item type.
+      if (count($items_by_types[$item->name]) >= $total) {
+        continue;
+      }
       switch ($blockName) {
         case NexteuropaNewsroomAgenda::AGENDA_TYPE_CURRENT:
           if ($isShowCurrentBlock && $item->start_date_obj->format('Ymd') <= $current_date->format('Ymd') &&
@@ -684,7 +688,7 @@ class NexteuropaNewsroomAgenda {
           $condition_future = $item->start_date_obj->format('Ymd') >= $upcoming_date_start->format('Ymd');
           // If filter set to future date.
           if ($in_future) {
-            $condition_future = ($item->start_date_obj->format('Ymd') >= $upcoming_date_start->format('Ymd') ||
+            $condition_future = ($item->start_date_obj->format('Ymd') >= $upcoming_date_start->format('Ymd') &&
               $item->end_date_obj->format('Ymd') >= $upcoming_date_start->format('Ymd'));
           }
           if ($isShowUpcomingBlock && $condition_future) {
@@ -712,10 +716,6 @@ class NexteuropaNewsroomAgenda {
         // No more than $total number of items per item type (for hiding).
         if (count($items_by_types[$temp_item->name]) < $total) {
           $items_by_types[$temp_item->name][] = $temp_item;
-        }
-        else {
-          // Reduce the page loading time by breaking for each item type.
-          break;
         }
       }
     }
