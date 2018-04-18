@@ -56,7 +56,7 @@ function nexteuropa_newsroom_tamper_default_value_form($importer, $element_key, 
 /**
  * Processes the value.
  *
- * @param array $result
+ * @param FeedsParserResult $result
  *   Parsed results.
  * @param string $item_key
  *   Current item key.
@@ -69,7 +69,7 @@ function nexteuropa_newsroom_tamper_default_value_form($importer, $element_key, 
  * @param string $source
  *   Source.
  */
-function nexteuropa_newsroom_tamper_default_value_callback(array $result, $item_key, $element_key, &$field, array $settings, $source) {
+function nexteuropa_newsroom_tamper_default_value_callback(FeedsParserResult $result, $item_key, $element_key, &$field, array $settings, $source) {
   // If the field is empty we set default value.
   if (!$field) {
     $trans = [];
