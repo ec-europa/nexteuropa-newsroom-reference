@@ -16,7 +16,7 @@
  * @return array
  *   Form array.
  */
-function nexteuropa_newsroom_admin_settings($form, &$form_state) {
+function nexteuropa_newsroom_admin_settings(array $form, array &$form_state) {
   // Be aware about the selected content types in the fields fieldset.
   $sel_ct = NexteuropaNewsroomHelper::getFieldInstances('select');
   $top_ct = NexteuropaNewsroomHelper::getFieldInstances('topic');
@@ -481,7 +481,7 @@ function nexteuropa_newsroom_admin_settings($form, &$form_state) {
  * @param array $form_state
  *   Form state array.
  */
-function _nexteuropa_newsroom_admin_settings_form_validate($form, &$form_state) {
+function _nexteuropa_newsroom_admin_settings_form_validate(array $form, array &$form_state) {
   // If we are not during a confirm or this has happened right before.
   if (empty($form_state['storage']['confirm']) && empty($form_state['confirm']['processed'])) {
     $check_values = _nexteuropa_newsroom_admin_prepare_check($form_state['fields_form'], $form_state['values']);
@@ -512,7 +512,7 @@ function _nexteuropa_newsroom_admin_settings_form_validate($form, &$form_state) 
  * @param array $form_state
  *   Form state array.
  */
-function _nexteuropa_newsroom_admin_settings_form_submit($form, &$form_state) {
+function _nexteuropa_newsroom_admin_settings_form_submit(array $form, array &$form_state) {
   $universe_id = NexteuropaNewsroomHelper::getUniverseId();
   if (empty($universe_id) && $form_state['values']['nexteuropa_newsroom_universe_id']) {
     variable_set('nexteuropa_newsroom_universe_id', $form_state['values']['nexteuropa_newsroom_universe_id']);
@@ -569,7 +569,7 @@ function _nexteuropa_newsroom_admin_settings_form_submit($form, &$form_state) {
  * @return array
  *   Confirmation form array.
  */
-function _nexteuropa_newsroom_admin_delete_confirm($form, &$form_state) {
+function _nexteuropa_newsroom_admin_delete_confirm(array $form, array &$form_state) {
   $form_state['confirm']['processed'] = TRUE;
   $values = $form_state['confirm']['values'];
   $desc = '<div class="messages error"><h3>' . t('Part of the form has not been submitted yet. You have:') . '</h3></br><i>';
@@ -597,7 +597,7 @@ function _nexteuropa_newsroom_admin_delete_confirm($form, &$form_state) {
  * @param array $form_state
  *   Form state.
  */
-function _nexteuropa_newsroom_admin_universe_id_validate($element, &$form_state) {
+function _nexteuropa_newsroom_admin_universe_id_validate(array $element, array &$form_state) {
   if (!NexteuropaNewsroomHelper::validateUniverse($form_state['values']['nexteuropa_newsroom_universe_id'])) {
     form_error($element, t('You must enter a valid Newsroom Universe ID.'));
   }
@@ -611,7 +611,7 @@ function _nexteuropa_newsroom_admin_universe_id_validate($element, &$form_state)
  * @param array $form_state
  *   Form state.
  */
-function _nexteuropa_newsroom_admin_subsite_validate($element, &$form_state) {
+function _nexteuropa_newsroom_admin_subsite_validate(array $element, array &$form_state) {
   if (!NexteuropaNewsroomHelper::validateSubsite($form_state['values']['nexteuropa_newsroom_subsite'])) {
     form_error($element, t("This subsite doesn't seem to exist, please check the value you entered."));
   }
@@ -625,7 +625,7 @@ function _nexteuropa_newsroom_admin_subsite_validate($element, &$form_state) {
  * @param array $form_state
  *   Form state.
  */
-function _nexteuropa_newsroom_admin_type_root_validate($element, &$form_state) {
+function _nexteuropa_newsroom_admin_type_root_validate(array $element, array &$form_state) {
   $value = preg_replace('@^/|/$@', '', $element['#value']);
   $value_array = explode('/', $value);
   $pattern = '';
@@ -663,7 +663,7 @@ function _nexteuropa_newsroom_admin_type_root_validate($element, &$form_state) {
  * @return array
  *   Pathes.
  */
-function _nexteuropa_newsroom_admin_reset_paths($form, &$form_state) {
+function _nexteuropa_newsroom_admin_reset_paths(array $form, array &$form_state) {
   foreach (NexteuropaNewsroomVocabularyHelper::getNewsroomTypes() as $type) {
     $type_name = pathauto_cleanstring($type->name);
     $parents = taxonomy_get_parents($type->tid);
@@ -693,7 +693,7 @@ function _nexteuropa_newsroom_admin_clean_cache() {
  * @param array $sel_ct
  *   Array of content types machine names.
  */
-function _nexteuropa_newsroom_admin_add_fields($type = 'topic', $sel_ct = []) {
+function _nexteuropa_newsroom_admin_add_fields($type = 'topic', array $sel_ct = []) {
   $field_name = 'field_newsroom_associated_' . $type;
   if (!empty($sel_ct)) {
 
@@ -791,7 +791,7 @@ function _nexteuropa_newsroom_admin_field_group($machine_name) {
  * @param array $sel_ct
  *   Array of content types machine names.
  */
-function _nexteuropa_newsroom_admin_remove_fields($type = 'topic', $sel_ct = []) {
+function _nexteuropa_newsroom_admin_remove_fields($type = 'topic', array $sel_ct = []) {
   // This function runs after checking for existing field values in the databas.
   $field_name = 'field_newsroom_associated_' . $type;
   // All is the parameter we get when an user want to delete all the instances.
@@ -829,7 +829,7 @@ function _nexteuropa_newsroom_admin_remove_fields($type = 'topic', $sel_ct = [])
  * @return array
  *   Information about the field name and nodes found.
  */
-function _nexteuropa_newsroom_admin_check_deletion($type, $checks = []) {
+function _nexteuropa_newsroom_admin_check_deletion($type, array $checks = []) {
   $nodes = [];
   // "All" is the parameter we get to delete all the instances.
   if ($checks == NEXTEUROPA_NEWSROOM_ALL) {
@@ -954,7 +954,7 @@ function _nexteuropa_newsroom_delete_items_confirm_submit(array $form, array &$f
  * @return array
  *   Confirmatio form.
  */
-function _nexteuropa_newsroom_delete_items_confirm($form) {
+function _nexteuropa_newsroom_delete_items_confirm(array $form) {
   return confirm_form($form,
     t('Are you sure you want to clear newsroom items?'),
     'admin/config/content/newsroom',
@@ -966,7 +966,7 @@ function _nexteuropa_newsroom_delete_items_confirm($form) {
 /**
  * Submit handler, delete items.
  */
-function _nexteuropa_newsroom_delete_items($form, &$form_state) {
+function _nexteuropa_newsroom_delete_items(array $form, array &$form_state) {
   drupal_goto('admin/config/content/newsroom/delete');
   drupal_exit();
 }

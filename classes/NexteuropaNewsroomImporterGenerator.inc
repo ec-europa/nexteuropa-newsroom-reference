@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * @file
  * Code for the NexteuropaNewsroomImporterGenerator class.
@@ -44,7 +43,7 @@ class NexteuropaNewsroomImporterGenerator {
    * @param int $import_period
    *   Import period in seconds.
    */
-  public function __construct($id, $field_mapping, $title, $description, $rss_context, $entity_type, $bundle, $import_period) {
+  public function __construct($id, array $field_mapping, $title, $description, $rss_context, $entity_type, $bundle, $import_period) {
     $this->setId($id);
     $this->setFieldMapping($field_mapping);
     $this->setTitle($title);
@@ -94,7 +93,7 @@ class NexteuropaNewsroomImporterGenerator {
    * @param array $field_mapping
    *   Field mapping settings.
    */
-  private function setFieldMapping($field_mapping) {
+  private function setFieldMapping(array $field_mapping) {
     $this->fieldMapping = $field_mapping;
   }
 
@@ -264,7 +263,7 @@ class NexteuropaNewsroomImporterGenerator {
    * @param array $field_info
    *   Field info.
    */
-  private function setFieldInfo($field_info) {
+  private function setFieldInfo(array $field_info) {
     $this->fieldInfo = $field_info;
   }
 
@@ -311,7 +310,7 @@ class NexteuropaNewsroomImporterGenerator {
    * @param string $language
    *   Language code.
    */
-  protected function addMapper($field_mapping, $language = NULL) {
+  protected function addMapper(array $field_mapping, $language = NULL) {
 
     $mapper = [
       'source' => !empty($field_mapping['source']) ? $field_mapping['source'] : $this->getXpathString(),
@@ -357,7 +356,7 @@ class NexteuropaNewsroomImporterGenerator {
    * @return bool
    *   Is transltable field.
    */
-  protected function isTranslatableField($field_mapping) {
+  protected function isTranslatableField(array $field_mapping) {
     $is_translatable = FALSE;
     $fields = $this->getFieldInfo();
     $attribute = strrchr($field_mapping['field'], ':');
@@ -478,7 +477,7 @@ class NexteuropaNewsroomImporterGenerator {
    * @param array $field_mapping
    *   Field mapping settings.
    */
-  private function addTampers($field_mapping) {
+  private function addTampers(array $field_mapping) {
     if (empty($field_mapping['tamper'])) {
       return;
     }

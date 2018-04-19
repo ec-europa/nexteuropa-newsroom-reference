@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * nexteuropa_newsroom.features.field_base.inc
@@ -597,7 +598,7 @@ function nexteuropa_newsroom_field_default_field_bases() {
       ),
       'repeat' => 0,
       'timezone_db' => 'UTC',
-      'todate' => '',
+      'todate' => 'optional',
       'tz_handling' => 'site',
     ),
     'translatable' => 0,

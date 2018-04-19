@@ -44,7 +44,7 @@ class NexteuropaNewsroomBlock extends NexteuropaNewsroomBlockBase {
    * @param array $value
    *   Block items.
    */
-  public function setItems($value) {
+  public function setItems(array $value) {
     $this->items = $value;
   }
 

@@ -6,37 +6,19 @@
  */
 ?>
 <?php if (!empty($items)): ?>
-    <?php if (!empty($agenda_type)): ?>
-        <div id="display-more-link-<?php echo $agenda_type; ?>-<?php echo $type_id; ?>" class="newsroom-display-more btn btn-ctn"><?php echo t('Display more'); ?></div>
-        <div id="display-more-container-<?php echo $agenda_type; ?>-<?php echo $type_id; ?>" class="newsroom-display-more-container" style="display: none;">
+  <h3><?php echo $item_type; ?></h3>
+  <?php foreach ($items as $item): ?>
+    <?php if (!$item['visible']) : ?>
+      <div id="display-more-container" class="newsroom-<?php echo drupal_strtolower(sprintf('%s-%s', $agenda_block, str_replace(' ', '_', $item_type))); ?>" style="display: none;">
+        <?php echo $item['output']; ?>
+      </div>
+    <?php else: ?>
+      <?php echo $item['output']; ?>
     <?php endif; ?>
-    <div class="listing__column-main">
-        <div class="listing__wrapper">
-            <ul class="listing listing--no-border">
-                <?php foreach ($items as $item): ?>
-                    <div class="meta">
-                        <span class="meta__item">
-                            <?php if (!empty($item->end_date) && $item->end_date != $item->start_date): ?>
-                                <?php echo t('From @start_date', ['@start_date' => $item->prepared_start_date]); ?>
-                                <?php echo t('to @end_date', ['@end_date' => $item->prepared_end_date]); ?>
-                            <?php else: ?>
-                                <?php echo $item->prepared_start_date; ?>
-                            <?php endif; ?>
-                        </span>
-                    </div>
-                    <h3 class="listing__title">
-                    <?php $title_text = check_plain($item->title); ?>
-                    <?php echo l($title_text, $item->url, [
-                      'html' => TRUE,
-                      'absolute' => TRUE,
-                    ]); ?>
-                    </h3>
-                    <?php echo $item->related_items; ?>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </div>
-    <?php if (!empty($agenda_type)): ?>
-        </div>
-    <?php endif; ?>
+  <?php endforeach; ?>
+  <?php if (count($items) > $items_number_to_show_more_button) : ?>
+      <div id="display-more-link" onclick="return Drupal.behaviors.nexteuropa_newsroom.showHiddenAgendaItems('<?php echo drupal_strtolower(sprintf('newsroom-%s-%s', $agenda_block, str_replace(' ', '_', $item_type))); ?>', this)" class="newsroom-display-more btn btn-ctn">
+        <?php echo t('Display more !agenda_block !item_type items', ['!agenda_block' => $agenda_block, '!item_type' => drupal_strtolower($item_type)]); ?>
+      </div>
+  <?php endif; ?>
 <?php endif; ?>
