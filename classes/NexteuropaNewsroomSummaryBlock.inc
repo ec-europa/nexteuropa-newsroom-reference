@@ -267,7 +267,7 @@ class NexteuropaNewsroomSummaryBlock {
       $value = $a->getHighlighted() > $b->getHighlighted() ? -1 : 1;
     }
     elseif ($agenda_after_highlights && $a->getIsAgenda() != $b->getIsAgenda()) {
-      $value = ((int)$a->getIsAgenda()) > ((int)$b->getIsAgenda()) ? -1 : 1;
+      $value = ((int) $a->getIsAgenda()) > ((int) $b->getIsAgenda()) ? -1 : 1;
     }
     elseif ($order_by_last_update && $a->getLatestDate() != $b->getLatestDate()) {
       $value = $a->getLatestDate() > $b->getLatestDate() ? -1 : 1;
@@ -276,7 +276,7 @@ class NexteuropaNewsroomSummaryBlock {
       $value = 1;
     }
     elseif ($type && $a->getType()->depth > $b->getType()->depth) {
-      $value =  -1;
+      $value = -1;
     }
     elseif ($type && $a->getType()->weight < $b->getType()->weight) {
       $value = -1;
