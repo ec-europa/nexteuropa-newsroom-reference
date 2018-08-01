@@ -285,8 +285,8 @@ class NexteuropaNewsroomVocabularyHelper {
       250 => t('Events'),
       520 => t('Consultations'),
       253 => t('Funding opportunities'),
-      826 => t('Call for proposals'),
-      825 => t('Call for tenders'),
+      826 => t('Calls for proposals'),
+      825 => t('Calls for tenders'),
     ];
 
     return $plurals[$the_type->field_newsroom_type_id[LANGUAGE_NONE][0]['value']];
