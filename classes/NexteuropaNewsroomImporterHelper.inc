@@ -389,11 +389,11 @@ class NexteuropaNewsroomImporterHelper {
       ],
       [
         'field' => 'field_newsroom_documents:url',
-        'query' => 'enclosure[not(@type="image/jpeg") and not(@external_app="DocsRoom")]/@url',
+        'query' => 'enclosure[not(@schema="Public") and not(@external_app="DocsRoom")]/@url',
       ],
       [
         'field' => 'field_newsroom_documents:title',
-        'query' => 'enclosure[not(@type="image/jpeg") and not(@external_app="DocsRoom")]/@title',
+        'query' => 'enclosure[not(@schema="Public") and not(@external_app="DocsRoom")]/@title',
       ],
       [
         'field' => 'promote',
