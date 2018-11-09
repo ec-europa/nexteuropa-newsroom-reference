@@ -34,10 +34,6 @@
                         </p>
                       <?php if ($item->form): ?>
                           <div class="form">
-                              <div class="gdpr_checkbox checkbox europa-checkbox">
-                                  <input name="privacy_box" id="privacy_box" class="checkbox" value="" type="checkbox"><label for="privacy_box">By checking this box, I confirm that I want to register for this service. <br> and I agree with the <a href="https://ec.europa.eu/digital-single-market/en/legal-notice#newsroom">privacy statement</a>
-                                  </label>
-                              </div>
                             <?php echo $item->form; ?>
                           </div>
                       <?php endif; ?>
