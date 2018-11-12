@@ -414,7 +414,7 @@ function nexteuropa_newsroom_subscription_newsletter_form(array $form, array $fo
   $form['checkboxes'] = [
     '#type' => 'checkboxes',
     '#options' => [
-      'gdpr' => $gdpr_line
+      'gdpr' => $gdpr_line,
     ],
     '#prefix' => '<div class="gdpr_checkbox checkbox europa-checkbox">',
     '#suffix' => '</div>',
