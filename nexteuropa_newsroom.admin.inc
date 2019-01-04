@@ -449,6 +449,13 @@ function nexteuropa_newsroom_admin_settings(array $form, array &$form_state) {
       '#access' => user_access(NEXTEUROPA_NEWSROOM_ADMIN_ACCESS),
       '#weight' => 11,
     ];
+    $form['actions']['clean_files'] = [
+      '#type' => 'submit',
+      '#value' => 'Clean files',
+      '#submit' => ['_nexteuropa_newsroom_admin_clean_files'],
+      '#access' => user_access(NEXTEUROPA_NEWSROOM_ADMIN_ACCESS),
+      '#weight' => 12,
+    ];
     $form['actions']['clean_cache'] = [
       '#type' => 'submit',
       '#value' => 'Clean cache',
@@ -470,6 +477,43 @@ function nexteuropa_newsroom_admin_settings(array $form, array &$form_state) {
   // Normal form.
   else {
     return system_settings_form($form);
+  }
+}
+
+/**
+ * Deletes files duplication.
+ */
+function _nexteuropa_newsroom_admin_clean_files() {
+  $result = db_select('node')
+    ->fields(NULL, ['nid'])
+    ->condition('type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE)
+    ->execute()->fetchAll();
+
+  if (!empty($result)) {
+    $operations = [];
+
+    foreach ($result as $nid) {
+      $operations[] = array(
+        '_nexteuropa_newsroom_file_cleanup_batch_process',
+        array(
+          $nid->nid,
+        ),
+      );
+    }
+
+    $batch = [
+      'operations' => $operations,
+      'title' => t('Clean up files'),
+      'init_message' => t('Starting...'),
+      'error_message' => t('An error occurred'),
+      'finished' => '_nexteuropa_newsroom_file_cleanup_batch_finish',
+    ];
+
+    // Start the batch job.
+    batch_set($batch);
+  }
+  else {
+    drupal_set_message(t('There are no newsroom items'), 'error');
   }
 }
 
