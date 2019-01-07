@@ -224,6 +224,7 @@ function nexteuropa_newsroom_admin_settings(array $form, array &$form_state) {
     '#title' => t('IP addresses allowed for import'),
     '#default_value' => variable_get('nexteuropa_newsroom_allowed_ips', '127.0.0.1,158.167.165.192,158.167.165.191,158.167.209.222,158.167.240.147,158.167.209.223,158.167.210.159,158.167.210.158'),
     '#description' => t('Comma separated list of IP addresses where the importer can be launched from.'),
+    '#maxlength' => 512,
   ];
 
   $form['newsroom_universe']['nexteuropa_newsroom_item_import_script'] = [
