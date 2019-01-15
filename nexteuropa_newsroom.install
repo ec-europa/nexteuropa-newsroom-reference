@@ -547,4 +547,5 @@ function nexteuropa_newsroom_update_7115() {
  */
 function nexteuropa_newsroom_update_7116() {
   variable_set('nexteuropa_newsroom_allowed_ips', '127.0.0.1,158.167.165.192,158.167.165.191,158.167.209.222,158.167.210.159,158.167.210.158,158.167.239.142,158.167.236.249');
+  variable_get('nexteuropa_newsroom_base_url', NEXTEUROPA_NEWSROOM_BASE_URL);
 }

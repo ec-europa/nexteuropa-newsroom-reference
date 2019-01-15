@@ -485,21 +485,32 @@ function nexteuropa_newsroom_admin_settings(array $form, array &$form_state) {
  * Deletes files duplication.
  */
 function _nexteuropa_newsroom_admin_clean_files() {
-  $result = db_select('node')
-    ->fields(NULL, ['nid'])
-    ->condition('type', NEXTEUROPA_NEWSROOM_CONTENT_TYPE)
+  $result = db_select('field_data_field_newsroom_illustrative_img')
+    ->fields(NULL, ['entity_id', 'field_newsroom_illustrative_img_fid'])
+    ->condition('bundle', NEXTEUROPA_NEWSROOM_CONTENT_TYPE)
+    ->orderBy('entity_id', 'DEC')
     ->execute()->fetchAll();
 
   if (!empty($result)) {
-    $operations = [];
+    $cache_key = 'get_agenda:clean_files';
+    $items = [];
+    if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
+      $items = $cache->data;
+    }
 
+    $operations = [];
     foreach ($result as $nid) {
-      $operations[] = array(
+      // We cleaned it already. Skip it.
+      if (in_array($nid->entity_id, $items)) {
+        continue;
+      }
+
+      $operations[] = [
         '_nexteuropa_newsroom_file_cleanup_batch_process',
-        array(
-          $nid->nid,
-        ),
-      );
+        [
+          $nid->entity_id,
+        ],
+      ];
     }
 
     $batch = [
