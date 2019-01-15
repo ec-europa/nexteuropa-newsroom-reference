@@ -224,6 +224,7 @@ function nexteuropa_newsroom_admin_settings(array $form, array &$form_state) {
     '#title' => t('IP addresses allowed for import'),
     '#default_value' => variable_get('nexteuropa_newsroom_allowed_ips', '127.0.0.1,158.167.165.192,158.167.165.191,158.167.209.222,158.167.240.147,158.167.209.223,158.167.210.159,158.167.210.158'),
     '#description' => t('Comma separated list of IP addresses where the importer can be launched from.'),
+    '#maxlength' => 512,
   ];
 
   $form['newsroom_universe']['nexteuropa_newsroom_item_import_script'] = [
@@ -449,6 +450,13 @@ function nexteuropa_newsroom_admin_settings(array $form, array &$form_state) {
       '#access' => user_access(NEXTEUROPA_NEWSROOM_ADMIN_ACCESS),
       '#weight' => 11,
     ];
+    $form['actions']['clean_files'] = [
+      '#type' => 'submit',
+      '#value' => 'Clean files',
+      '#submit' => ['_nexteuropa_newsroom_admin_clean_files'],
+      '#access' => user_access(NEXTEUROPA_NEWSROOM_ADMIN_ACCESS),
+      '#weight' => 12,
+    ];
     $form['actions']['clean_cache'] = [
       '#type' => 'submit',
       '#value' => 'Clean cache',
@@ -470,6 +478,54 @@ function nexteuropa_newsroom_admin_settings(array $form, array &$form_state) {
   // Normal form.
   else {
     return system_settings_form($form);
+  }
+}
+
+/**
+ * Deletes files duplication.
+ */
+function _nexteuropa_newsroom_admin_clean_files() {
+  $result = db_select('field_data_field_newsroom_illustrative_img')
+    ->fields(NULL, ['entity_id', 'field_newsroom_illustrative_img_fid'])
+    ->condition('bundle', NEXTEUROPA_NEWSROOM_CONTENT_TYPE)
+    ->orderBy('entity_id', 'DEC')
+    ->execute()->fetchAll();
+
+  if (!empty($result)) {
+    $cache_key = 'get_agenda:clean_files';
+    $items = [];
+    if ($cache = cache_get($cache_key, NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
+      $items = $cache->data;
+    }
+
+    $operations = [];
+    foreach ($result as $nid) {
+      // We cleaned it already. Skip it.
+      if (in_array($nid->entity_id, $items)) {
+        continue;
+      }
+
+      $operations[] = [
+        '_nexteuropa_newsroom_file_cleanup_batch_process',
+        [
+          $nid->entity_id,
+        ],
+      ];
+    }
+
+    $batch = [
+      'operations' => $operations,
+      'title' => t('Clean up files'),
+      'init_message' => t('Starting...'),
+      'error_message' => t('An error occurred'),
+      'finished' => '_nexteuropa_newsroom_file_cleanup_batch_finish',
+    ];
+
+    // Start the batch job.
+    batch_set($batch);
+  }
+  else {
+    drupal_set_message(t('There are no newsroom items'), 'error');
   }
 }
 
