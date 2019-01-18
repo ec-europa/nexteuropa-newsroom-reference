@@ -485,6 +485,8 @@ function nexteuropa_newsroom_admin_settings(array $form, array &$form_state) {
  * Deletes files duplication.
  */
 function _nexteuropa_newsroom_admin_clean_files() {
+  $operations = [];
+
   $result = db_select('field_data_field_newsroom_illustrative_img')
     ->fields(NULL, ['entity_id', 'field_newsroom_illustrative_img_fid'])
     ->condition('bundle', NEXTEUROPA_NEWSROOM_CONTENT_TYPE)
@@ -498,7 +500,6 @@ function _nexteuropa_newsroom_admin_clean_files() {
       $items = $cache->data;
     }
 
-    $operations = [];
     foreach ($result as $nid) {
       // We cleaned it already. Skip it.
       if (in_array($nid->entity_id, $items)) {
@@ -512,7 +513,31 @@ function _nexteuropa_newsroom_admin_clean_files() {
         ],
       ];
     }
+  }
 
+  $query = db_select('file_managed', 'fm');
+  $query->fields('fm', ['fid']);
+  $query->join('file_usage', 'fu', 'fm.fid = fu.fid');
+  $query->leftJoin('node', 'n', "n.nid = fu.id AND n.type = '" . NEXTEUROPA_NEWSROOM_CONTENT_TYPE . "'");
+  $query->condition('fu.type', 'node');
+  $query->condition('fm.type', 'image');
+  $query->condition('fm.uri', '%newsroom%', 'LIKE');
+  $query->isNull('n.nid');
+
+  $result = $query->execute()->fetchAll();
+
+  if (!empty($result)) {
+    foreach ($result as $fid) {
+      $operations[] = [
+        '_nexteuropa_newsroom_remove_file_batch_process',
+        [
+          $fid->fid,
+        ],
+      ];
+    }
+  }
+
+  if (!empty($operations)) {
     $batch = [
       'operations' => $operations,
       'title' => t('Clean up files'),
@@ -525,7 +550,7 @@ function _nexteuropa_newsroom_admin_clean_files() {
     batch_set($batch);
   }
   else {
-    drupal_set_message(t('There are no newsroom items'), 'error');
+    drupal_set_message(t('Nothing to do'), 'status');
   }
 }
 

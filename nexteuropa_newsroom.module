@@ -1284,6 +1284,30 @@ function _nexteuropa_newsroom_file_cleanup_batch_process($nid, &$context) {
 }
 
 /**
+ * Remove file.
+ *
+ * @param int $fid
+ *   File id.
+ * @param array $context
+ *   Batch context.
+ */
+function _nexteuropa_newsroom_remove_file_batch_process($fid, &$context) {
+  if (!isset($context['results']['cnt'])) {
+    $context['results']['cnt'] = 0;
+  }
+
+  $file_to_delete = file_load($fid);
+  if (!empty($file_to_delete)) {
+    $context['message'] = t('Deleting file "!fid"', ['!fid' => $fid]);
+    file_delete($file_to_delete, TRUE);
+    $context['results']['cnt'] += 1;
+  }
+  else {
+    $context['message'] = t('File is not found');
+  }
+}
+
+/**
  * Displays messages after the batch has finished.
  *
  * @param bool $success
