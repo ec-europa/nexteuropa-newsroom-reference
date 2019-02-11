@@ -645,12 +645,7 @@ function nexteuropa_newsroom_entity_presave($entity, $type) {
  * Implements hook_feeds_after_save().
  */
 function nexteuropa_newsroom_feeds_after_save(FeedsSource $source, $entity, $item, $entity_id) {
-  if ($source->importer()->fetcher->id == 'newsroom_unpublished_items') {
-    $node = node_load($entity_id);
-    $node->status = 0;
-    node_save($node);
-  }
-  elseif ($source->importer()->fetcher->id == 'newsroom_deleted_items') {
+  if ($source->importer()->fetcher->id == 'newsroom_unpublished_items' || $source->importer()->fetcher->id == 'newsroom_deleted_items') {
     NexteuropaNewsroomHelper::deleteEntityTranslations($entity, $entity_id);
     entity_delete('node', $entity_id);
   }
@@ -703,7 +698,7 @@ function nexteuropa_newsroom_feeds_after_save(FeedsSource $source, $entity, $ite
 function _nexteuropa_newsroom_clean_files($node, $field) {
   $count = 0;
 
-  if (!empty($node->$field)) {
+  if (!empty($node->$field[LANGUAGE_NONE][0]['fid'])) {
     $file = file_load($node->$field[LANGUAGE_NONE][0]['fid']);
 
     if (!empty($file)) {
@@ -911,13 +906,14 @@ function nexteuropa_newsroom_field_default_field_instances_alter(&$fields) {
  * @see FeedsProcessor::existingEntityId()
  */
 function _nexteuropa_newsroom_use_as_guid(FeedsSource $source, $entity_type, $bundle, $target, array $values) {
-  list($field_name, $column) = explode(':', $target . ':value');
+
   // Example for if the target is a field.
   $query = new EntityFieldQuery();
   $result = $query
     ->entityCondition('entity_type', $entity_type)
     ->entityCondition('bundle', $bundle)
-    ->fieldCondition($field_name, $column, $values)
+    ->fieldCondition($target, 'value', $values)
+    ->addTag('DANGEROUS_ACCESS_CHECK_OPT_OUT')
     ->execute();
 
   if (!empty($result[$entity_type])) {
@@ -969,7 +965,7 @@ function nexteuropa_newsroom_feeds_after_parse(FeedsSource $source, FeedsParserR
 
     // If end date is empty we change it to start date.
     foreach ($result->items as &$item) {
-      if (empty($item[$end_date_exp])) {
+      if (empty($item[$end_date_exp]) && !empty($item[$start_date_exp])) {
         $item[$end_date_exp] = $item[$start_date_exp];
       }
     }
