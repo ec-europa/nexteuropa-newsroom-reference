@@ -677,7 +677,7 @@ function nexteuropa_newsroom_feeds_after_save(FeedsSource $source, $entity, $ite
 
     $image_fields = [
       'field_newsroom_illustrative_img',
-      'field_newsroom_private_img'
+      'field_newsroom_private_img',
     ];
 
     foreach ($image_fields as $image_field) {
@@ -727,7 +727,6 @@ function _nexteuropa_newsroom_clean_files($node, $field) {
       }
     }
   }
-
 
   return $count;
 }
@@ -1250,7 +1249,7 @@ function _nexteuropa_newsroom_ds_content_info() {
 function _nexteuropa_newsroom_file_cleanup_batch_process($nid, &$context) {
   $image_fields = [
     'field_newsroom_illustrative_img',
-    'field_newsroom_private_img'
+    'field_newsroom_private_img',
   ];
 
   if (!isset($context['results']['cnt'])) {
@@ -1316,9 +1315,7 @@ function _nexteuropa_newsroom_remove_file_batch_process($fid, &$context) {
 function _nexteuropa_newsroom_file_cleanup_batch_finish($success, array $results, array $operations) {
   if ($success) {
     drupal_set_message(t('@count files deleted.', [
-          '@count' => $results['cnt'],
-        ]
-      )
-    );
+      '@count' => $results['cnt'],
+    ]));
   }
 }
