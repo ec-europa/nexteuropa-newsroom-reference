@@ -393,7 +393,6 @@ function _nexteuropa_newsroom_agenda_form_submit(array &$form, array &$form_stat
  */
 function nexteuropa_newsroom_subscription_newsletter_form(array $form, array $form_state, $service_id = NULL) {
   global $user;
-  $guid = uniqid();
 
   $form['#action'] = NexteuropaNewsroomHelper::getNewsroomUrl('subscription-quick-generic.cfm');
   $form['email'] = [
