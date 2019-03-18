@@ -7,6 +7,7 @@ dependencies[] = feeds_et
 dependencies[] = feeds_tamper_ui
 dependencies[] = feeds_xpathparser
 dependencies[] = field_group
+dependencies[] = geofield
 dependencies[] = pathauto
 dependencies[] = title
 configure = admin/config/content/newsroom
