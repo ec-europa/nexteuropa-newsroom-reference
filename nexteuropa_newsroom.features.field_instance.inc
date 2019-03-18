@@ -1942,7 +1942,7 @@ function nexteuropa_newsroom_field_default_field_instances() {
       'title_value' => 'Read full text',
       'url' => 0,
       'user_register_form' => FALSE,
-      'validate_url' => 1,
+      'validate_url' => 0,
     ),
     'widget' => array(
       'active' => 0,

@@ -697,8 +697,8 @@ function nexteuropa_newsroom_feeds_after_save(FeedsSource $source, $entity, $ite
 function _nexteuropa_newsroom_clean_files($node, $field) {
   $count = 0;
 
-  if (!empty($node->$field[LANGUAGE_NONE][0]['fid'])) {
-    $file = file_load($node->$field[LANGUAGE_NONE][0]['fid']);
+  if (!empty($node->{$field}[LANGUAGE_NONE][0]['fid'])) {
+    $file = file_load($node->{$field}[LANGUAGE_NONE][0]['fid']);
 
     if (!empty($file)) {
       $query = db_select('file_managed', 'f');
