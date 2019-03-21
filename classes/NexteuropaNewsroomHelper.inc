@@ -267,14 +267,17 @@ class NexteuropaNewsroomHelper {
    *   Drop down options array.
    */
   public static function getNewsroomTopicOptions(array $used_topics = [], $add_empty_value = TRUE) {
-    $topic_options = self::getTaxonomyTermOptions(NexteuropaNewsroomVocabularyHelper::getNewsroomTopics());
-    if (!empty($used_topics)) {
-      foreach ($topic_options as $key => $topic) {
-        if (!in_array($key, $used_topics)) {
-          unset($topic_options[$key]);
-        }
+    $topics = NexteuropaNewsroomVocabularyHelper::getNewsroomTopics();
+    foreach ($topics as $key => $topic) {
+      // Filter out not used topics and Team responsilbe topics.
+      if (!in_array($topic->tid, $used_topics) ||
+      NexteuropaNewsroomHelper::getFieldValue($topic,'field_newsroom_category_domain') == 'Responsible'
+      ) {
+        unset($topics[$key]);
       }
     }
+
+    $topic_options = self::getTaxonomyTermOptions($topics);
     if ($add_empty_value) {
       $topic_options = [t('- None -')] + $topic_options;
     }
