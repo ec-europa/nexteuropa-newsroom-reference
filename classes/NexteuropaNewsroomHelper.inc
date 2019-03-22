@@ -271,7 +271,7 @@ class NexteuropaNewsroomHelper {
     foreach ($topics as $key => $topic) {
       // Filter out not used topics and Team responsilbe topics.
       if (!in_array($topic->tid, $used_topics) ||
-      NexteuropaNewsroomHelper::getFieldValue($topic,'field_newsroom_category_domain') == 'Responsible'
+      NexteuropaNewsroomHelper::getFieldValue($topic, 'field_newsroom_category_domain') == 'Responsible'
       ) {
         unset($topics[$key]);
       }
