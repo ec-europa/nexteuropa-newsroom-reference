@@ -401,7 +401,7 @@ class NexteuropaNewsroomImporterHelper {
       ],
       [
         'field' => 'field_newsroom_topics',
-        'query' => 'category[@domain!="Newsletter" and @domain!="Tag"]/@infsonewsroom:TopicId',
+        'query' => 'category[@domain!="Newsletter"]/@infsonewsroom:TopicId',
         'options' => [
           'term_search' => '1',
           'autocreate' => 0,
@@ -418,7 +418,7 @@ class NexteuropaNewsroomImporterHelper {
       ],
       [
         'field' => 'field_newsroom_primary_topic',
-        'query' => 'category[@infsonewsroom:TopicPrimary="1" and @domain!="Newsletter" and @domain!="Tag"]/@infsonewsroom:TopicId',
+        'query' => 'category[@infsonewsroom:TopicPrimary="1" and @domain!="Newsletter"]/@infsonewsroom:TopicId',
         'options' => [
           'term_search' => '1',
           'autocreate' => 0,
@@ -491,7 +491,7 @@ class NexteuropaNewsroomImporterHelper {
       ],
       [
         'field' => 'field_newsroom_highlighted_topic',
-        'query' => 'category[@infsonewsroom:TopicHighlight="1" and @domain!="Newsletter" and @domain!="Tag"]/@infsonewsroom:TopicId',
+        'query' => 'category[@infsonewsroom:TopicHighlight="1" and @domain!="Newsletter"]/@infsonewsroom:TopicId',
         'options' => [
           'term_search' => '1',
           'autocreate' => 0,
@@ -658,7 +658,7 @@ class NexteuropaNewsroomImporterHelper {
         $description = 'Imports Topics from the Newsroom service';
         $entity_type = 'taxonomy_term';
         $bundle = NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY;
-        $rss_context = '//channel/item[infsonewsroom:BasicSvType="Newsroom service"]/category[@domain!="Newsletter" and @domain!="Tag" and @lang="' . NexteuropaNewsroomHelper::getDefaultLanguageUppercase() . '"]';
+        $rss_context = '//channel/item[infsonewsroom:BasicSvType="Newsroom service"]/category[@domain!="Newsletter" and @lang="' . NexteuropaNewsroomHelper::getDefaultLanguageUppercase() . '"]';
         $field_mapping = self::getTopicImporterMappings();
         break;
 
