@@ -5,6 +5,8 @@
  * Code for the NewsroomHelper class.
  */
 
+module_load_include('inc', 'feeds', 'mappers/file');
+
 /**
  * NexteuropaNewsroomImporterHelper class.
  */
@@ -300,10 +302,9 @@ class NexteuropaNewsroomImporterHelper {
       [
         'field' => 'field_newsroom_private_img:uri',
         'query' => 'enclosure[@type="image/jpeg" and @schema="Private"]/@url',
-      ],
-      [
-        'field' => 'field_newsroom_illustrative_img:uri',
-        'query' => 'enclosure[@type="image/jpeg" and @schema="Public"]/@url',
+        'options' => [
+          'file_exists' => FEEDS_FILE_EXISTS_SKIP,
+        ],
       ],
       [
         'field' => 'field_newsroom_private_img:title',
@@ -328,6 +329,9 @@ class NexteuropaNewsroomImporterHelper {
       [
         'field' => 'field_newsroom_illustrative_img:uri',
         'query' => 'enclosure[@type="image/jpeg" and @schema="Public"]/@url',
+        'options' => [
+          'file_exists' => FEEDS_FILE_EXISTS_SKIP,
+        ],
       ],
       [
         'field' => 'field_newsroom_illustrative_img:title',
@@ -818,6 +822,9 @@ class NexteuropaNewsroomImporterHelper {
       [
         'field' => 'field_newsroom_service_image:uri',
         'query' => 'infsonewsroom:BasicSvVisuUrl/text()',
+        'options' => [
+          'file_exists' => FEEDS_FILE_EXISTS_SKIP,
+        ],
       ],
       [
         'field' => 'parentguid',
@@ -842,7 +849,7 @@ class NexteuropaNewsroomImporterHelper {
     $importers = self::returnImporters();
 
     foreach ($importers as $importer) {
-      // WE drop all tampers for the current importer.
+      // We drop all tampers for the current importer.
       db_delete('feeds_tamper')
         ->condition('importer', $importer)
         ->execute();
