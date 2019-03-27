@@ -269,8 +269,8 @@ class NexteuropaNewsroomHelper {
   public static function getNewsroomTopicOptions(array $used_topics = [], $add_empty_value = TRUE) {
     $topics = NexteuropaNewsroomVocabularyHelper::getNewsroomTopics();
     foreach ($topics as $key => $topic) {
-      // Filter out not used topics and Team responsilbe topics.
-      if (!in_array($topic->tid, $used_topics) ||
+      // Filter out not used topics and Team responsible topics.
+      if (!empty($used_topics) && !in_array($topic->tid, $used_topics) ||
       NexteuropaNewsroomHelper::getFieldValue($topic, 'field_newsroom_category_domain') == 'Responsible'
       ) {
         unset($topics[$key]);
