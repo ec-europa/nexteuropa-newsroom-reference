@@ -18,8 +18,11 @@ function nexteuropa_newsroom_enable() {
   if (!db_table_exists(NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
     db_create_table(NEXTEUROPA_NEWSROOM_CACHE_TABLE, drupal_get_schema_unprocessed('system', 'cache'));
   }
-  // Add to solR.
-  multisite_drupal_toolbox_config_solr_bundle(NEXTEUROPA_NEWSROOM_CONTENT_TYPE, 'add');
+
+  if (module_exists('multisite_drupal_toolbox')) {
+    // Add to solR.
+    multisite_drupal_toolbox_config_solr_bundle(NEXTEUROPA_NEWSROOM_CONTENT_TYPE, 'add');
+  }
 }
 
 /**
@@ -30,8 +33,11 @@ function nexteuropa_newsroom_disable() {
   if (db_table_exists(NEXTEUROPA_NEWSROOM_CACHE_TABLE)) {
     db_drop_table(NEXTEUROPA_NEWSROOM_CACHE_TABLE);
   }
-  // Delete from solR.
-  multisite_drupal_toolbox_config_solr_bundle(NEXTEUROPA_NEWSROOM_CONTENT_TYPE, 'delete');
+
+  if (module_exists('multisite_drupal_toolbox')) {
+    // Delete from solR.
+    multisite_drupal_toolbox_config_solr_bundle(NEXTEUROPA_NEWSROOM_CONTENT_TYPE, 'delete');
+  }
 }
 
 /**
@@ -615,4 +621,13 @@ function nexteuropa_newsroom_update_7117() {
   field_purge_batch(1000);
 
   node_type_delete($type);
+}
+
+/**
+ * Set author as translatable.
+ */
+function nexteuropa_newsroom_update_7118() {
+  $info = field_info_field('field_newsroom_author');
+  $info['translatable'] = 1;
+  field_update_field($info);
 }
