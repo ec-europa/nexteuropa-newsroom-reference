@@ -165,7 +165,7 @@ function _nexteuropa_newsroom_agenda_block() {
  *   Content.
  */
 function _nexteuropa_newsroom_share_block() {
-  if (!module_exists("nexteuropa_webtools")) {
+  if (!module_exists('nexteuropa_webtools')) {
     drupal_add_js('//europa.eu/webtools/load.js', 'file');
   }
   $output = '<div class="social-media-links--webtool-horizontal">';
