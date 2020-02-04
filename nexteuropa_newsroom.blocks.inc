@@ -165,7 +165,6 @@ function _nexteuropa_newsroom_agenda_block() {
  *   Content.
  */
 function _nexteuropa_newsroom_share_block() {
-  drupal_add_js('//europa.eu/webtools/load.js', 'file');
   $output = '<div class="social-media-links--webtool-horizontal">';
   $output .= '<span class="social-media-links__label">' . t('Share this page') . '</span>';
   $output .= '<div class="shareThis hideWhenSmall">';
