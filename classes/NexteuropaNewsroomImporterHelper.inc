@@ -289,7 +289,7 @@ class NexteuropaNewsroomImporterHelper {
       ],
       [
         'field' => 'field_newsroom_publication_date:start',
-        'query' => 'pubDate/text()',
+        'query' => 'infsonewsroom:BasicReferenceDate/text()',
         'tamper' => [
           'plugins' => [
             'find_replace' => [
@@ -439,7 +439,7 @@ class NexteuropaNewsroomImporterHelper {
       ],
       [
         'field' => 'created',
-        'query' => 'infsonewsroom:BasicReferenceDate/text()',
+        'query' => 'pubDate/text()',
         'tamper' => [
           'plugins' => [
             'find_replace' => [
