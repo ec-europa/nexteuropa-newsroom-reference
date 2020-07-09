@@ -462,12 +462,30 @@ class NexteuropaNewsroomImporterHelper {
         'query' => 'infsonewsroom:pubTeaserOnly/text()',
       ],
       [
-        'field' => 'field_newsroom_related_content',
+        'field' => 'field_newsroom_related_content:etid',
         'query' => 'infsonewsroom:slave/@id',
+        'tamper' => [
+          'plugins' => [
+            'efq_finder' => [
+              'entity_type' => 'node',
+              'bundle' => NEXTEUROPA_NEWSROOM_CONTENT_TYPE,
+              'field' => 'field_newsroom_item_id',
+            ],
+          ],
+        ],
       ],
       [
-        'field' => 'field_newsroom_parent_content',
+        'field' => 'field_newsroom_parent_content:etid',
         'query' => 'infsonewsroom:master/@id',
+        'tamper' => [
+          'plugins' => [
+            'efq_finder' => [
+              'entity_type' => 'node',
+              'bundle' => NEXTEUROPA_NEWSROOM_CONTENT_TYPE,
+              'field' => 'field_newsroom_item_id',
+            ],
+          ],
+        ],
       ],
       [
         'field' => 'field_newsroom_project_acr',
