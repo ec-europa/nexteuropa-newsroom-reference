@@ -5,10 +5,10 @@
  * Summary block item.
  */
 ?>
-<?php if (!empty($items)) : ?>
+<?php if (!empty($items)): ?>
   <div class="view view-newsroom-page-content">
     <div class="view-content">
-      <?php foreach ($items as $item) : ?>
+      <?php foreach ($items as $item): ?>
         <div class="views-row">
           <span class="newsroom_type"><?php echo $item->name; ?>: </span>
           <div class="newsroom_title">
