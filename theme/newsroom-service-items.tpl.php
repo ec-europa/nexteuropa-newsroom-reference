@@ -6,11 +6,11 @@
  */
 ?>
 
-<?php if (!empty($items)) : ?>
+<?php if (!empty($items)): ?>
     <h2><?php echo $title; ?></h2>
     <div class="listing__wrapper">
         <ul class="listing ">
-        <?php foreach ($items as $item) : ?>
+        <?php foreach ($items as $item): ?>
             <li class="listing__item">
                 <div class="listing__item__wrapper">
                     <div class="listing__column-second">
