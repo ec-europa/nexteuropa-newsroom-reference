@@ -6,6 +6,7 @@
  */
 
 include_once 'nexteuropa_newsroom.features.inc';
+
 /**
  * @file
  * Code for the Nexteuropa Newsroom feature.
@@ -38,17 +39,16 @@ define('NEXTEUROPA_NEWSROOM_TYPE_IMPORTER', 'newsroom_types_multilingual');
 define('NEXTEUROPA_NEWSROOM_ITEM_IMPORTER', 'newsroom_items_multilingual');
 define('NEXTEUROPA_NEWSROOM_NEWSLETTER_IMPORTER', 'newsroom_newsletter_multilingual');
 
-define('NEXTEUROPA_NEWSROOM_ITEM_SCRIPT', 'fullrss-multilingual.cfm');
-define('NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT', 'rss-issue-multilingual.cfm');
-define('NEXTEUROPA_NEWSROOM_UNPUBLISH', 'fullrss-unpublished.cfm');
-define('NEXTEUROPA_NEWSROOM_DELETE', 'fullrss-deleted.cfm');
-define('NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT', 'rss-service-multilingual.cfm');
-define('NEXTEUROPA_NEWSROOM_TYPE_SCRIPT', 'rss-item-type-multilingual.cfm');
+define('NEXTEUROPA_NEWSROOM_ITEM_SCRIPT', 'feed/full');
+define('NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT', 'feed/newsletter-issues');
+define('NEXTEUROPA_NEWSROOM_UNPUBLISH', 'feed/unpublished');
+define('NEXTEUROPA_NEWSROOM_DELETE', 'feed/deleted');
+define('NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT', 'feed/services');
+define('NEXTEUROPA_NEWSROOM_TYPE_SCRIPT', 'feed/item-types');
 define('NEXTEUROPA_NEWSROOM_ITEM_SEGMENT', '&item_id=');
 define('NEXTEUROPA_NEWSROOM_TOPIC_SEGMENT', '?topic_id=');
 define('NEXTEUROPA_NEWSROOM_SERVICE_SEGMENT', '?service_id=');
 define('NEXTEUROPA_NEWSROOM_TYPE_SEGMENT', '?item_type_id=');
-define('NEXTEUROPA_NEWSROOM_ITEM_EDIT_SEGMENT', 'item.cfm?item_id=');
 
 define('NEXTEUROPA_NEWSROOM_PROPOSAL_ACCESS', 'send newsroom item proposal');
 define('NEXTEUROPA_NEWSROOM_IMPORT_ACCESS', 'import newsroom feeds');
