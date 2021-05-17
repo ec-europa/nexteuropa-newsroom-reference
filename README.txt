@@ -1,7 +1,6 @@
 Readme file for the nexteuropa newsroom feature.
 ---------------------------------------------
 
-
 The [FPFIS] Newsroom feature provides an integration between
 your project in the FPFIS CMS and the Newsroom service.
 Newsroom project stores and manages Newsroom items and related data

@@ -342,7 +342,7 @@ function _nexteuropa_newsroom_tools() {
     if (user_access(NEXTEUROPA_NEWSROOM_EDIT_ACCESS)) {
       $links['edit'] = [
         'text' => '<span class="glyphicon glyphicon-edit"></span> Edit item in the Newsroom',
-        'path' => NexteuropaNewsroomHelper::getNewsroomUrl(variable_get('nexteuropa_newsroom_single_item_edit_segment', NEXTEUROPA_NEWSROOM_ITEM_EDIT_SEGMENT) . $newsroom_id),
+        'path' => variable_get('nexteuropa_newsroom_base_url', NEXTEUROPA_NEWSROOM_BASE_URL) . 'eui/' . variable_get('nexteuropa_newsroom_universe_id', FALSE) . '/item/' . $newsroom_id . '/edit',
         'options' => [
           'external' => TRUE,
           'html' => TRUE,

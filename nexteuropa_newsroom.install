@@ -57,7 +57,6 @@ function nexteuropa_newsroom_install() {
   variable_set('nexteuropa_newsroom_single_type_import_segment', NEXTEUROPA_NEWSROOM_TYPE_SEGMENT);
   variable_set('nexteuropa_newsroom_service_import_script', NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT);
   variable_set('nexteuropa_newsroom_single_service_import_segment', NEXTEUROPA_NEWSROOM_SERVICE_SEGMENT);
-  variable_set('nexteuropa_newsroom_single_item_edit_segment', NEXTEUROPA_NEWSROOM_ITEM_EDIT_SEGMENT);
   variable_set('nexteuropa_newsroom_summary_block_num_items', 3);
   variable_set('nexteuropa_newsroom_summary_block_num_highlighted_items', 3);
   variable_set('nexteuropa_newsroom_summary_home_block_num_agenda', 3);
@@ -630,4 +629,17 @@ function nexteuropa_newsroom_update_7118() {
   $info = field_info_field('field_newsroom_author');
   $info['translatable'] = 1;
   field_update_field($info);
+}
+
+/**
+ * Update feed rss urls.
+ */
+function nexteuropa_newsroom_update_7119() {
+  variable_set('nexteuropa_newsroom_item_import_script', NEXTEUROPA_NEWSROOM_ITEM_SCRIPT);
+  variable_set('nexteuropa_newsroom_newsletter_import_script', NEXTEUROPA_NEWSROOM_NEWSLETTER_SCRIPT);
+  variable_set('nexteuropa_newsroom_topic_import_script', NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT);
+  variable_set('nexteuropa_newsroom_type_import_script', NEXTEUROPA_NEWSROOM_TYPE_SCRIPT);
+  variable_set('nexteuropa_newsroom_service_import_script', NEXTEUROPA_NEWSROOM_TOPIC_SCRIPT);
+
+  NexteuropaNewsroomImporterHelper::rebuildImporters();
 }

@@ -181,7 +181,7 @@ class NexteuropaNewsroomImporterHelper {
         'tamper' => [
           'plugins' => [
             'find_replace' => [
-              'replacement' => 'GMT',
+              'replacement' => 'CET',
             ],
             'strtotime' => [],
           ],
@@ -269,7 +269,7 @@ class NexteuropaNewsroomImporterHelper {
         'tamper' => [
           'plugins' => [
             'find_replace' => [
-              'replacement' => 'GMT',
+              'replacement' => 'CET',
             ],
             'strtotime' => [],
           ],
@@ -281,7 +281,7 @@ class NexteuropaNewsroomImporterHelper {
         'tamper' => [
           'plugins' => [
             'find_replace' => [
-              'replacement' => 'GMT',
+              'replacement' => 'CET',
             ],
             'strtotime' => [],
           ],
@@ -293,7 +293,7 @@ class NexteuropaNewsroomImporterHelper {
         'tamper' => [
           'plugins' => [
             'find_replace' => [
-              'replacement' => 'GMT',
+              'replacement' => 'CET',
             ],
             'strtotime' => [],
           ],
@@ -443,7 +443,7 @@ class NexteuropaNewsroomImporterHelper {
         'tamper' => [
           'plugins' => [
             'find_replace' => [
-              'replacement' => 'GMT',
+              'replacement' => 'CET',
             ],
             'strtotime' => [],
           ],
@@ -606,7 +606,7 @@ class NexteuropaNewsroomImporterHelper {
         'tamper' => [
           'plugins' => [
             'find_replace' => [
-              'replacement' => 'GMT',
+              'replacement' => 'CET',
             ],
             'strtotime' => [],
           ],

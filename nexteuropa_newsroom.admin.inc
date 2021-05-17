@@ -255,12 +255,6 @@ function nexteuropa_newsroom_admin_settings(array $form, array &$form_state) {
     '#default_value' => variable_get('nexteuropa_newsroom_single_service_import_segment', NEXTEUROPA_NEWSROOM_SERVICE_SEGMENT),
   ];
 
-  $form['newsroom_universe']['nexteuropa_newsroom_single_item_edit_segment'] = [
-    '#type' => 'textfield',
-    '#title' => t('URL chunk to edit an item in the Newsroom'),
-    '#default_value' => variable_get('nexteuropa_newsroom_single_item_edit_segment', NEXTEUROPA_NEWSROOM_ITEM_EDIT_SEGMENT),
-  ];
-
   $form['newsroom_universe']['nexteuropa_newsroom_proposal_script'] = [
     '#type' => 'textfield',
     '#title' => t('Newsroom proposal script'),
