@@ -328,7 +328,7 @@ class NexteuropaNewsroomImporterHelper {
       ],
       [
         'field' => 'field_newsroom_illustrative_img:uri',
-        'query' => 'enclosure[@type="image/jpeg" and @schema="Public"]/@url',
+        'query' => 'enclosure[@nrdoctype="image"]/@url',
         'options' => [
           'file_exists' => FEEDS_FILE_EXISTS_SKIP,
         ],
@@ -393,11 +393,11 @@ class NexteuropaNewsroomImporterHelper {
       ],
       [
         'field' => 'field_newsroom_documents:url',
-        'query' => 'enclosure[not(@type="image/jpeg") and not(@external_app="DocsRoom")]/@url',
+        'query' => 'enclosure[@nrdoctype="document" and not(@external_app="DocsRoom")]/@url',
       ],
       [
         'field' => 'field_newsroom_documents:title',
-        'query' => 'enclosure[not(@type="image/jpeg") and not(@external_app="DocsRoom")]/@title',
+        'query' => 'enclosure[@nrdoctype="document" and not(@external_app="DocsRoom")]/@title',
       ],
       [
         'field' => 'promote',

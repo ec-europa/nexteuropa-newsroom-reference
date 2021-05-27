@@ -643,3 +643,10 @@ function nexteuropa_newsroom_update_7119() {
 
   NexteuropaNewsroomImporterHelper::rebuildImporters();
 }
+
+/**
+ * Rebuild importers to add support of different image formats.
+ */
+function nexteuropa_newsroom_update_7120() {
+  NexteuropaNewsroomImporterHelper::rebuildImporters();
+}
