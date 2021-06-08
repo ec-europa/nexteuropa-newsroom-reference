@@ -180,9 +180,6 @@ class NexteuropaNewsroomImporterHelper {
         'query' => 'pubDate/text()',
         'tamper' => [
           'plugins' => [
-            'find_replace' => [
-              'replacement' => 'CET',
-            ],
             'strtotime' => [],
           ],
         ],
@@ -268,9 +265,6 @@ class NexteuropaNewsroomImporterHelper {
         'query' => 'infsonewsroom:BasicDate/text()',
         'tamper' => [
           'plugins' => [
-            'find_replace' => [
-              'replacement' => 'CET',
-            ],
             'strtotime' => [],
           ],
         ],
@@ -280,9 +274,6 @@ class NexteuropaNewsroomImporterHelper {
         'query' => 'infsonewsroom:BasictoDate/text()',
         'tamper' => [
           'plugins' => [
-            'find_replace' => [
-              'replacement' => 'CET',
-            ],
             'strtotime' => [],
           ],
         ],
@@ -292,9 +283,6 @@ class NexteuropaNewsroomImporterHelper {
         'query' => 'infsonewsroom:BasicReferenceDate/text()',
         'tamper' => [
           'plugins' => [
-            'find_replace' => [
-              'replacement' => 'CET',
-            ],
             'strtotime' => [],
           ],
         ],
@@ -442,9 +430,6 @@ class NexteuropaNewsroomImporterHelper {
         'query' => 'pubDate/text()',
         'tamper' => [
           'plugins' => [
-            'find_replace' => [
-              'replacement' => 'CET',
-            ],
             'strtotime' => [],
           ],
         ],
@@ -605,9 +590,6 @@ class NexteuropaNewsroomImporterHelper {
         'query' => 'infsonewsroom:pubUpdateDate/text()',
         'tamper' => [
           'plugins' => [
-            'find_replace' => [
-              'replacement' => 'CET',
-            ],
             'strtotime' => [],
           ],
         ],
@@ -680,7 +662,7 @@ class NexteuropaNewsroomImporterHelper {
         $description = 'Imports Topics from the Newsroom service';
         $entity_type = 'taxonomy_term';
         $bundle = NEXTEUROPA_NEWSROOM_TOPIC_VOCABULARY;
-        $rss_context = '//channel/item[infsonewsroom:BasicSvType="Newsroom service"]/category[@domain!="Newsletter" and @lang="' . NexteuropaNewsroomHelper::getDefaultLanguageUppercase() . '"]';
+        $rss_context = '//channel/item[infsonewsroom:BasicSvType="Newsroom Central Service"]/category[@lang="' . NexteuropaNewsroomHelper::getDefaultLanguageUppercase() . '"]';
         $field_mapping = self::getTopicImporterMappings();
         break;
 
