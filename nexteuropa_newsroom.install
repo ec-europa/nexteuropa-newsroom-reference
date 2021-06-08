@@ -650,3 +650,10 @@ function nexteuropa_newsroom_update_7119() {
 function nexteuropa_newsroom_update_7120() {
   NexteuropaNewsroomImporterHelper::rebuildImporters();
 }
+
+/**
+ * Rebuild importers to fix topics importers.
+ */
+function nexteuropa_newsroom_update_7121() {
+  NexteuropaNewsroomImporterHelper::rebuildImporters();
+}

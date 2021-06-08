@@ -294,7 +294,7 @@ class NexteuropaNewsroomImporterGenerator {
    */
   protected function addTranslatableQuery($query, $language) {
     if ($this->getId() == NEXTEUROPA_NEWSROOM_TOPIC_IMPORTER) {
-      $query = ($language == NexteuropaNewsroomHelper::getDefaultLanguage()) ? $query : '//channel/item[infsonewsroom:BasicSvType="Newsroom service"]/category[@domain!="Newsletter" and @lang="' . $language . '" and @infsonewsroom:TopicId="$Temporary target 1"]/' . $query;
+      $query = ($language == NexteuropaNewsroomHelper::getDefaultLanguage()) ? $query : '//channel/item[infsonewsroom:BasicSvType="Newsroom Central Service"]/category[@lang="' . $language . '" and @infsonewsroom:TopicId="$Temporary target 1"]/' . $query;
     }
     else {
       $query = $query . '[@lang="' . $language . '"]/text()';
