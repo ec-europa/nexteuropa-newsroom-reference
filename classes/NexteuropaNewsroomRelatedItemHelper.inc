@@ -48,6 +48,13 @@ class NexteuropaNewsroomRelatedItemHelper {
    */
   public static function getEventsRelatedItems($nid, $exclude_id = NULL) {
     $related_items = [];
+
+    // Skip if we don't have event types.
+    $event_terms = NexteuropaNewsroomVocabularyHelper::getEventsTermsIds();
+    if (empty($event_terms)) {
+        return $related_items;
+    }
+
     $query = db_select('field_data_field_newsroom_related_content', 'n');
     $query->fields('n', ['entity_id']);
     $query->fields('tt', ['name']);
@@ -61,7 +68,7 @@ class NexteuropaNewsroomRelatedItemHelper {
       $query->condition('n.entity_id', $exclude_id, '<>');
     }
     $query->condition('n.bundle', NEXTEUROPA_NEWSROOM_CONTENT_TYPE);
-    $query->condition('item_type1.field_newsroom_item_type_tid', NexteuropaNewsroomVocabularyHelper::getEventsTermsIds());
+    $query->condition('item_type1.field_newsroom_item_type_tid', $event_terms);
 
     if ($items = $query->execute()->fetchAll()) {
       foreach ($items as $item) {
